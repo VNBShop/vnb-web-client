@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Products",
+    "url": "/products"
+  },
+  {
+    "title": "Racket",
+    "url": "/products/racket"
+  },
+  {
+    "title": "Shoe",
+    "url": "/products/shoe"
+  },
+  {
+    "title": "Skirt",
+    "url": "/products/shirt"
+  },
+  {
+    "title": "Backpack",
+    "url": "/products/bag"
+  }
+]
