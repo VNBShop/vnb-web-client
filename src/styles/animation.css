@@ -1,0 +1,211 @@
+@keyframes appear1 {
+  0%,
+  16.667%,
+  100% {
+    opacity: 1;
+  }
+
+  33.333%,
+  83.333% {
+    opacity: 0;
+  }
+}
+
+@keyframes appear2 {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  33.333%,
+  50% {
+    opacity: 1;
+  }
+
+  16.667%,
+  66.667% {
+    opacity: 0;
+  }
+}
+
+@keyframes appear3 {
+  0%,
+  50%,
+  100% {
+    opacity: 0;
+  }
+
+  66.667%,
+  83.333% {
+    opacity: 1;
+  }
+}
+
+.animation-color-blue-shadow {
+  background-image: linear-gradient(
+    165deg,
+    oklch(59.59% 0.24 255.09156059071347),
+    oklch(81.58% 0.189 190.74037768509325)
+  );
+  background-clip: padding-box;
+  animation: appear1 8s infinite;
+}
+
+.animation-color-blue {
+  background-image: linear-gradient(
+    165deg,
+    oklch(59.59% 0.24 255.09156059071347),
+    oklch(81.58% 0.189 190.74037768509325)
+  );
+  animation: appear1 8s infinite;
+}
+
+.animation-color-blue-shadow::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 12px solid transparent;
+  filter: blur(36px);
+  z-index: -1;
+  background-image: linear-gradient(
+    165deg,
+    oklch(59.59% 0.24 255.09156059071347),
+    oklch(81.58% 0.189 190.74037768509325)
+  );
+  background-clip: padding-box;
+  animation: appear1 8s infinite;
+  opacity: 0.5;
+  inset: 0;
+}
+
+.animation-color-pink {
+  background-image: linear-gradient(
+    165deg,
+    oklch(49.07% 0.272 300.45),
+    oklch(64.53% 0.292 2.47)
+  );
+  animation: appear2 8s infinite;
+}
+
+.animation-color-pink-shadow {
+  background-image: linear-gradient(
+    165deg,
+    oklch(49.07% 0.272 300.45),
+    oklch(64.53% 0.292 2.47)
+  );
+  animation: appear2 8s infinite;
+}
+
+.animation-color-pink-shadow::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 12px solid transparent;
+  filter: blur(36px);
+  z-index: -1;
+  background-image: linear-gradient(
+    165deg,
+    oklch(49.07% 0.272 300.45),
+    oklch(64.53% 0.292 2.47)
+  );
+  background-clip: padding-box;
+  animation: appear2 8s infinite;
+  opacity: 0.5;
+  inset: 0;
+}
+
+.animation-color-orange-shadow {
+  background-image: linear-gradient(
+    165deg,
+    oklch(67.3% 0.266 25.039656026515278),
+    oklch(85.82% 0.201 91.19)
+  );
+  animation: appear3 8s infinite;
+}
+
+.animation-color-orange {
+  background-image: linear-gradient(
+    165deg,
+    oklch(67.3% 0.266 25.039656026515278),
+    oklch(85.82% 0.201 91.19)
+  );
+  animation: appear3 8s infinite;
+}
+
+.animation-color-orange-shadow::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 12px solid transparent;
+  filter: blur(36px);
+  z-index: -1;
+  background-image: linear-gradient(
+    165deg,
+    oklch(67.3% 0.266 25.039656026515278),
+    oklch(85.82% 0.201 91.19)
+  );
+  background-clip: padding-box;
+  animation: appear3 8s infinite;
+  opacity: 0.5;
+  inset: 0;
+}
+
+.h1-animation-first::before {
+  position: absolute;
+  content: 'Diverse';
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  z-index: 0;
+  inset: 0;
+  display: block;
+}
+
+/* .dark .h1-animation-first::before {
+  background-color: #ffffff;
+} */
+
+.h1-animation-second::before {
+  position: absolute;
+  content: 'Trustworthy';
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  inset: 0;
+  display: block;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  z-index: 0;
+}
+
+.h1-animation-third::before {
+  position: absolute;
+  content: 'Professional';
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  z-index: 0;
+  inset: 0;
+  display: block;
+}
+
+@media screen and (max-width: 1023.8px) {
+  .dark .h1-animation-first::before {
+    background-color: #ffffff;
+  }
+
+  .dark .h1-animation-third::before {
+    background-color: #ffffff;
+  }
+
+  .dark .h1-animation-second::before {
+    background-color: #ffffff;
+  }
+}

@@ -70,10 +70,10 @@ export default function Icon({
         >
           <g
             fill="none"
-            fill-rule="evenodd"
+            fillRule="evenodd"
             stroke={color}
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
             <circle cx="8.5" cy="8.5" r="5" />
             <path d="M17.571 17.5L12 12" />
@@ -167,10 +167,25 @@ export default function Icon({
           <path
             fill="none"
             stroke={color}
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M5 8h22M5 16h22M5 24h22"
+          />
+        </svg>
+      )
+    }
+    case 'Cart': {
+      return (
+        <svg
+          width={height}
+          height={height}
+          viewBox="0 0 16 16"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill={color}
+            d="M2.5 2a.5.5 0 0 0 0 1h.246a.5.5 0 0 1 .48.363l1.586 5.55A1.5 1.5 0 0 0 6.254 10h4.569a1.5 1.5 0 0 0 1.393-.943l1.474-3.686A1 1 0 0 0 12.762 4H4.448l-.261-.912A1.5 1.5 0 0 0 2.746 2H2.5Zm4 12a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3Zm4 0a1.5 1.5 0 1 0 0-3a1.5 1.5 0 0 0 0 3Z"
           />
         </svg>
       )
@@ -189,3 +204,4 @@ export type IconName =
   | 'Backpack'
   | 'Products'
   | 'Hamburger'
+  | 'Cart'
