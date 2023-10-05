@@ -41,7 +41,7 @@ export default function AuthLayout({
             {children}
           </article>
         </section>
-        <div className=" absolute -z-[1] hidden h-[calc(100vh)] w-full bg-[url('/common/bg-tailwind.webp')] bg-no-repeat dark:translate-x-[380px] lg:block" />
+        <div className=" absolute -z-[1] hidden h-[calc(100vh)] w-full bg-[url('/common/bg-tailwind.webp')] bg-no-repeat lg:block" />
       </section>
     </>
   )

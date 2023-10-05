@@ -4,7 +4,7 @@ import Link from 'next/link'
 export default function Feature() {
   return (
     <section className="max-w-[1100px] mx-auto px-4 grid md:grid-cols-3 md:grid-rows-[250px_50px_250px] gap-5 mt-28 grid-cols-1 grid-rows-[250px_250px_250px_250px_250px]">
-      <div className="col-span-1 row-span-3 rounded-lg bg-black onlyTablet:col-span-2 onlyTablet:row-span-1 mobile:col-span-1 mobile:row-span-1 flex items-center justify-center relative">
+      <article className="col-span-1 lg:col-span-1 lg:row-span-3 rounded-lg bg-black md:col-span-2 md:row-span-1  row-span-1 flex items-center justify-center relative">
         <article className="flex items-center justify-center flex-col">
           <h2 className="text-4xl font-semibold text-white text-center">
             VNB&apos;s partners
@@ -14,9 +14,9 @@ export default function Feature() {
           </p>
         </article>
         <div className="absolute w-full h-full"></div>
-      </div>
+      </article>
 
-      <div className="col-span-1 row-span-2 rounded-lg mobile:col-span-1 mobile:row-span-1 p-4 flex flex-col justify-between shadow-f">
+      <article className="col-span-1 row-span-1 rounded-lg p-4 flex flex-col justify-between shadow-f lg:row-span-2">
         <figure className="w-[100px]">
           <Image
             className="w-full tablet:w-[80px]"
@@ -38,15 +38,16 @@ export default function Feature() {
           <p className="text-gray-500 text-start  text-color">
             Yonex Co., Ltd. is a Japanese sports equipment manufacturing
             company. Yonex produces equipment and apparel for tennis, badminton,
-            golf, and running.{' '}
-            <span className="tablet:hidden">
+            golf.
+            <span className="hidden lg:block">
               Its range of products manufactured and commercialised includes
               equipment for badminton and tennis and golf.
             </span>
           </p>
         </article>
-      </div>
-      <div className="col-span-1 row-span-1 rounded-lg p-4 flex flex-col justify-between shadow-s">
+      </article>
+
+      <article className="col-span-1 row-span-1 md:row-span-2 lg:row-span-1 rounded-lg p-4 flex flex-col justify-between shadow-s">
         <figure className="w-[100px] tablet:w-[85px]">
           <Image
             className="w-full"
@@ -70,8 +71,9 @@ export default function Feature() {
             first carbon racket in 1983 named
           </p>
         </article>
-      </div>
-      <div className="col-span-1 row-span-2 rounded-lg mobile:col-span-1 mobile:row-span-1 p-4 flex flex-col justify-between shadow-t">
+      </article>
+
+      <article className="col-span-1 row-span-1 md:row-span-2 rounded-lg p-4 flex flex-col justify-between shadow-t">
         <figure className="w-[100px]">
           <Image
             className="w-full mt-[-10px] ml-[-12px] tablet:w-[80px]"
@@ -93,13 +95,14 @@ export default function Feature() {
           <p className="text-gray-500 text-start  text-color">
             Li-Ning Company Limited is a Chinese sportswear and sports equipment
             company founded by former Olympic gymnast Li Ning.{' '}
-            <span className="tablet:hidden">
+            <span className="hidden lg:block">
               The company endorses a number of athletes and teams worldwide
             </span>
           </p>
         </article>
-      </div>
-      <div className="rounded-lg mobile:col-span-1 mobile:row-span-1 p-4 flex flex-col justify-between shadow-fo">
+      </article>
+
+      <article className="rounded-lg p-4 flex row-span-2 lg:row-span-1 flex-col justify-between shadow-fo">
         <figure className="w-[60px] tablet:w-[40px]">
           <Image
             className="w-full"
@@ -123,7 +126,7 @@ export default function Feature() {
             headquartered in Herzogenaurach, Bavaria.
           </p>
         </article>
-      </div>
+      </article>
     </section>
   )
 }

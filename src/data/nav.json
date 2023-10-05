@@ -1,5 +1,9 @@
 [
   {
+    "title": "Forum",
+    "url": "/forum"
+  },
+  {
     "title": "Products",
     "url": "/products"
   },

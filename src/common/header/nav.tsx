@@ -52,7 +52,11 @@ export default function Nav() {
               className=" group relative px-4 flex items-center"
             >
               <Link
-                className="text-sm font-medium flex items-center gap-1"
+                className={`text-sm font-medium flex items-center gap-1 ${
+                  item.url === '/forum'
+                    ? ' text-transparent bg-messenger bg-clip-text font-semibold'
+                    : ''
+                }`}
                 href={item.url}
               >
                 <Icon name={item.title as IconName} width={18} height={18} />

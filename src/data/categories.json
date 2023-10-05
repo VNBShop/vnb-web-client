@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Racket",
+    "href": "/product/racket",
+    "imageSrc": "/home/racket.webp"
+  },
+  {
+    "name": "Shoes",
+    "href": "/badminton-shoes",
+    "imageSrc": "/home/shoes.webp"
+  },
+  {
+    "name": "Shirt",
+    "href": "/badminton-shirt",
+    "imageSrc": "/home/shirt.webp"
+  },
+  {
+    "name": "Skirt",
+    "href": "/badminton-skirt",
+    "imageSrc": "/home/skirt.webp"
+  },
+  {
+    "name": "Pants",
+    "href": "/badminton-pants",
+    "imageSrc": "/home/paint.webp"
+  },
+  {
+    "name": "Bag",
+    "href": "/badminton-bag",
+    "imageSrc": "/home/bag.webp"
+  },
+  {
+    "name": "Backpack",
+    "href": "/badminton-backpack",
+    "imageSrc": "/home/balo.webp"
+  },
+  {
+    "name": "Badminton Accessories",
+    "href": "/badminton-accessories",
+    "imageSrc": "/home/equip.webp"
+  }
+]
