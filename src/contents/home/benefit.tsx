@@ -1,33 +1,35 @@
+import Icon from '@/common/icons'
+
 export default function Benefits() {
   return (
-    <section className="flex flex-wrap items-center gap-3 max-w-main mx-auto mt-28">
-      <div className="w-[calc(100%/4-9px)] flex items-center justify-center gap-4 border border-[#3644b7] p-2 rounded-lg onlyTablet:w-[calc(100%/2-9px)] mobile:w-full mobile:justify-start">
-        <i className="fa-solid fa-truck-fast text-2xl text-[#3644b7]"></i>
+    <section className="grid grid-cols-1 md:grid-cols-2 w-full px-4 lg:grid-cols-4 gap-5 max-w-[1100px] mx-auto mt-28">
+      <div className="flex w-full items-start gap-4 border border-[#3644b7] p-2 rounded-lg">
+        <Icon name="Shipping" width={30} height={30} color="#3644b7" />
         <div>
           <h3 className="font-medium text-[#3644b7]">Nationwide shipping</h3>
           <p className="text-sm text-gray-500">Payment on delivery</p>
         </div>
       </div>
-      <div className="w-[calc(100%/4-9px)] flex items-center justify-center gap-4 border border-[#925ff6] p-2 rounded-lg onlyTablet:w-[calc(100%/2-9px)] mobile:w-full mobile:justify-start">
-        <i className="fa-sharp fa-solid fa-chart-line text-2xl text-[#925ff6]"></i>
+      <div className="flex w-full items-start gap-4 border border-[#925ff6] p-2 rounded-lg ">
+        <Icon name="Chart" width={30} height={30} color="#925ff6" />
         <div>
           <h3 className="font-medium text-[#925ff6]">Quality assurance</h3>
           <p className="text-sm text-gray-500">100% original products</p>
         </div>
       </div>
 
-      <div className="w-[calc(100%/4-9px)] flex items-center justify-center gap-4 border border-[#d781f0] p-2 rounded-lg onlyTablet:w-[calc(100%/2-9px)] mobile:w-full mobile:justify-start">
-        <i className="fa-solid fa-credit-card text-2xl text-[#d781f0]"></i>
+      <div className="flex w-full items-start gap-4 border border-[#d781f0] p-2 rounded-lg ">
+        <Icon name="Wallet" width={30} height={30} color="#d781f0" />
         <div>
           <h3 className="font-medium text-[#d781f0]">Payment</h3>
           <p className="text-sm text-gray-500">More payment methods</p>
         </div>
       </div>
 
-      <div className="w-[calc(100%/4-9px)] flex items-center justify-center gap-4 border border-colorPrimary p-2 rounded-lg onlyTablet:w-[calc(100%/2-9px)] mobile:w-full mobile:justify-start">
-        <i className="fa-solid fa-coins text-2xl text-colorPrimary"></i>
+      <div className="flex w-full items-start gap-4 border border-[#FF52A2] p-2 rounded-lg ">
+        <Icon name="Coin" width={30} height={30} color="#FF52A2" />
         <div>
-          <h3 className="font-medium text-colorPrimary">Product return </h3>
+          <h3 className="font-medium text-[#FF52A2]">Product return </h3>
           <p className="text-sm text-gray-500">If errors</p>
         </div>
       </div>

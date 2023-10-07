@@ -15,10 +15,13 @@ export default function Search() {
   return (
     <>
       <div
-        className="text-xs flex-1 h-9 rounded-full w-[200px] cursor-pointer border text-gray-500  flex items-center p-3"
+        className="flex-1 h-9 rounded-full lg:w-[200px] w-9 cursor-pointer justify-center lg:justify-normal border gap-1 flex items-center lg:p-3"
         onClick={handleOpenSearchPopup}
       >
-        Search product...
+        <Icon name="Search" width={20} height={20} color="gray" />
+        <span className="text-gray-500 text-xs hidden lg:block">
+          Search product...
+        </span>
       </div>
 
       <Modal
