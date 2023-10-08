@@ -34,11 +34,11 @@ export default function Nav() {
 
   useEffect(() => {
     if (navMobile) {
-      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
     }
 
     return () => {
-      document.body.style.overflow = 'unset'
+      document.documentElement.style.overflow = 'unset'
     }
   }, [navMobile])
 
@@ -76,17 +76,17 @@ export default function Nav() {
       </button>
       <Transition
         show={navMobile}
-        enter="transition-all duration-300 ease-in-out"
-        enterFrom="opacity-0 -translate-x-[100%]"
-        enterTo="opacity-100 translate-x-0"
-        leave="transition-all duration-300 ease-in-out"
-        leaveFrom="opacity-100 translate-x-0"
-        leaveTo="opacity-0 -translate-x-[100%]"
         className="nav-mobile fixed lg:hidden top-0 left-0 bottom-0 right-0 bg-clip-padding bg-opacity-30 bg-gray-100 backdrop-blur-sm"
         onClick={handleCloseOutSide}
       >
-        <nav
+        <Transition.Child
           ref={refNavMobile}
+          enter="transition-all duration-300 ease-in-out"
+          enterFrom="opacity-0 -translate-x-[100%]"
+          enterTo="opacity-100 translate-x-0"
+          leave="transition-all duration-300 ease-in-out"
+          leaveFrom="opacity-100 translate-x-0"
+          leaveTo="opacity-0 -translate-x-[100%]"
           className="w-[75%] md:w-[40%] absolute top-0 left-0 bottom-0 bg-white p-4"
         >
           <section className="flex items-center justify-between">
@@ -120,7 +120,7 @@ export default function Nav() {
               </li>
             ))}
           </ul>
-        </nav>
+        </Transition.Child>
       </Transition>
 
       <Button

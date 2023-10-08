@@ -47,7 +47,6 @@ export default function ProductCard({
 
           <section className="flex items-center gap-2">
             <Icon name="HeartOutline" width={23} height={23} />
-            <Icon name="Cart" width={23} height={23} color="#232D3F" />
           </section>
         </section>
       </section>
