@@ -4,3 +4,8 @@ export type Products = {
   image: string
   price: number
 }
+
+export type Brands = {
+  id: number
+  name: string
+}

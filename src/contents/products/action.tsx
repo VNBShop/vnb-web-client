@@ -5,11 +5,28 @@ import { HTMLAttributes, useEffect, useRef, useState } from 'react'
 import Icon from '@/common/icons'
 import { Button } from '@/components/ui/button'
 import { Slider } from '@/components/ui/slider'
+import { ProductProps } from '.'
+import { Checkbox } from '@/components/ui/checkbox'
+import { useSearchParams } from 'next/navigation'
+import { Label } from '@/components/ui/label'
 
-export default function ProductAction() {
+type ProductActionProps = {
+  brands?: ProductProps['brands']
+}
+
+export default function ProductAction({ brands }: ProductActionProps) {
+  const searchParams = useSearchParams()
+
+  const brand_ids = searchParams?.get('brand_ids')
+
   const filterContainerRef = useRef<HTMLDivElement>(null)
 
   const [filterContainer, setFilterContainer] = useState(false)
+
+  const [brandIds, setBrandIds] = useState<number[] | null>(
+    brand_ids?.split('.').map(Number) ?? null
+  )
+
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 20000000])
 
   useEffect(() => {
@@ -55,7 +72,7 @@ export default function ProductAction() {
           leave="transition-all duration-300 ease-in-out"
           leaveFrom="opacity-100 translate-x-0"
           leaveTo="opacity-0 -translate-x-[100%]"
-          className="absolute top-0 left-0 bottom-0 lg:w-[25%] w-[75%] md:w-[40%] bg-white p-4 shadow-md"
+          className="absolute top-0 left-0 bottom-0 overflow-auto lg:w-[25%] w-[75%] md:w-[40%] bg-white p-4 shadow-md"
         >
           <section className="flex items-center justify-between border-b pb-4">
             <h3 className=" font-medium md:text-lg">Filters</h3>
@@ -92,11 +109,40 @@ export default function ProductAction() {
               />
             </div>
 
-            <div className="space-y-4">
-              <h3 className="text-sm font-medium tracking-wide text-foreground">
-                Brands
-              </h3>
-            </div>
+            {brands && brands.length ? (
+              <div className="space-y-4">
+                <h3 className="text-sm font-medium tracking-wide text-foreground">
+                  Brands
+                </h3>
+
+                <ul className="space-y-4 max-h-[240px] overflow-auto">
+                  {brands.map((brand) => (
+                    <li key={brand.id} className="flex items-center gap-2">
+                      <Checkbox
+                        id={`brand-${brand.id}`}
+                        checked={brandIds?.includes(brand.id) ?? false}
+                        onCheckedChange={(value) => {
+                          if (value) {
+                            setBrandIds([...(brandIds ?? []), brand.id])
+                          } else {
+                            setBrandIds(
+                              brandIds?.filter((id) => id !== brand.id) ?? null
+                            )
+                          }
+                        }}
+                      />
+
+                      <Label
+                        htmlFor={`brand-${brand.id}`}
+                        className="font-normal hover:cursor-pointer"
+                      >
+                        {brand.name}
+                      </Label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </section>
         </Transition.Child>
       </Transition>

@@ -1,5 +1,6 @@
 import Products from '@/contents/products'
 import type { Metadata } from 'next'
+import { Brands } from '../../../../types/products'
 
 export const meta: Metadata = {
   title: 'Products',
@@ -23,7 +24,28 @@ export default function ProductsPage() {
     arr.push(fakeData)
   }
 
-  console.log(arr)
+  const brands: Brands[] = [
+    {
+      id: 1,
+      name: 'VNB',
+    },
+    {
+      id: 2,
+      name: 'Yonex',
+    },
+    {
+      id: 3,
+      name: 'Lining',
+    },
+    {
+      id: 4,
+      name: 'Kawasaki',
+    },
+    {
+      id: 5,
+      name: 'Adidas',
+    },
+  ]
 
   return (
     <section className="mx-auto max-w-main mt-10 px-4">
@@ -31,6 +53,7 @@ export default function ProductsPage() {
         title="Products"
         desciption="Buy products from our stores"
         products={arr}
+        brands={brands}
       />
     </section>
   )
