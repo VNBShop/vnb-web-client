@@ -1,14 +1,15 @@
 import Link from 'next/link'
-import { Brands, Products } from '../../../types/products'
 import ProductCard from '../../components/ui/card.product'
 import ProductHeader from './header'
 import ProductAction from './action'
+import { BrandProps, ProductProps, StoreProps } from '../../../types/products'
 
-export type ProductProps = {
+export type ProductPageProps = {
   title?: string
   desciption?: string
-  products: Products[]
-  brands?: Brands[]
+  products: ProductProps[]
+  brands?: BrandProps[]
+  stores?: StoreProps[]
 }
 
 export default function Products({
@@ -16,12 +17,13 @@ export default function Products({
   desciption,
   products,
   brands,
-}: ProductProps) {
+  stores,
+}: ProductPageProps) {
   return (
     <>
       <section className=" flex items-end justify-between">
         <ProductHeader title={title} desciption={desciption} />
-        <ProductAction brands={brands} />
+        <ProductAction brands={brands} stores={stores} />
       </section>
       <ul className=" grid gap-6 lg:grid-cols-5 md:grid-cols-3 grid-cols-2 mt-7">
         {products && products.length
