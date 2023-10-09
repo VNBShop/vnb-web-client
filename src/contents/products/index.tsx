@@ -30,7 +30,7 @@ export default function Products({
           ? products.map((product) => {
               return (
                 <li key={product.id}>
-                  <Link href="/">
+                  <Link href={`/product/${product.id}`}>
                     <ProductCard
                       name={product.name}
                       image={product.image}

@@ -27,6 +27,9 @@ const config: Config = {
       maxWidth: {
         main: '1370px',
       },
+      colors: {
+        secondary: '#ff2461',
+      },
     },
   },
   plugins: [],

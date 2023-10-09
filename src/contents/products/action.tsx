@@ -52,10 +52,9 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
-  console.log('search parmas', searchParams.getAll('sort'))
-
   const brand_ids = searchParams?.get('brand_ids')
   const store_ids = searchParams?.get('store_ids')
+  const price_range = searchParams?.get('price_range')
   const sort = searchParams?.get('sort')
 
   const filterContainerRef = useRef<HTMLDivElement>(null)
@@ -134,6 +133,23 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
   return (
     <>
       <section className=" flex items-center gap-2">
+        {brand_ids || store_ids || sort || price_range ? (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.history.replaceState(null, '', pathname)
+              }
+              setBrandIds(null)
+              setPriceRange([0, 20000000])
+              setStoreIds(null)
+            }}
+          >
+            Clear filter
+          </Button>
+        ) : null}
+
         <Button
           className=" shadow-none bg-black text-white"
           size="sm"
