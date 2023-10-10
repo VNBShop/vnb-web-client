@@ -1,8 +1,10 @@
 import Link from 'next/link'
-import ProductCard from '../../components/ui/card.product'
-import ProductHeader from './header'
+
 import ProductAction from './action'
+import ProductHeader from './header'
+
 import { BrandProps, ProductProps, StoreProps } from '../../../types/products'
+import ProductCard from '../../components/ui/card.product'
 
 export type ProductPageProps = {
   title?: string

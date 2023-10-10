@@ -59,7 +59,6 @@ export default function Nav() {
                 }`}
                 href={item.url}
               >
-                <Icon name={item.title as IconName} width={18} height={18} />
                 {item.title}
               </Link>
 

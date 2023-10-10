@@ -318,6 +318,68 @@ export default function Icon({
         </svg>
       )
     }
+    case 'Endow': {
+      return (
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 256 256"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill={color}
+            d="M216 72h-35.08c.39-.33.79-.65 1.17-1A29.53 29.53 0 0 0 192 49.57A32.62 32.62 0 0 0 158.44 16A29.53 29.53 0 0 0 137 25.91a54.94 54.94 0 0 0-9 14.48a54.94 54.94 0 0 0-9-14.48A29.53 29.53 0 0 0 97.56 16A32.62 32.62 0 0 0 64 49.57A29.53 29.53 0 0 0 73.91 71c.38.33.78.65 1.17 1H40a16 16 0 0 0-16 16v32a16 16 0 0 0 16 16v64a16 16 0 0 0 16 16h60a4 4 0 0 0 4-4v-92H40V88h80v32h16V88h80v32h-80v92a4 4 0 0 0 4 4h60a16 16 0 0 0 16-16v-64a16 16 0 0 0 16-16V88a16 16 0 0 0-16-16ZM84.51 59a13.69 13.69 0 0 1-4.5-10a16.62 16.62 0 0 1 16.58-17h.49a13.69 13.69 0 0 1 10 4.5c8.39 9.48 11.35 25.2 12.39 34.92C109.71 70.39 94 67.43 84.51 59Zm87 0c-9.49 8.4-25.24 11.36-35 12.4C137.7 60.89 141 45.5 149 36.51a13.69 13.69 0 0 1 10-4.5h.49A16.62 16.62 0 0 1 176 49.08a13.69 13.69 0 0 1-4.51 9.92Z"
+          />
+        </svg>
+      )
+    }
+    case 'Minus': {
+      return (
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path fill={color} d="M19 12.998H5v-2h14z" />
+        </svg>
+      )
+    }
+    case 'Plus': {
+      return (
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path fill={color} d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
+        </svg>
+      )
+    }
+    case 'Star': {
+      return (
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          >
+            <path d="M0 0h24v24H0z" />
+            <path
+              fill={color}
+              d="m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0L8.243 7.34z"
+            />
+          </g>
+        </svg>
+      )
+    }
   }
 }
 
@@ -332,6 +394,8 @@ export type IconName =
   | 'Backpack'
   | 'Products'
   | 'Hamburger'
+  | 'Minus'
+  | 'Plus'
   | 'Cart'
   | 'Shipping'
   | 'Chart'
@@ -341,3 +405,5 @@ export type IconName =
   | 'Heart'
   | 'Checked'
   | 'ChevronDown'
+  | 'Endow'
+  | 'Star'

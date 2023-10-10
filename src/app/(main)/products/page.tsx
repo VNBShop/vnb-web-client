@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
 
+import Empty from '@/common/empty'
 import Products from '@/contents/products'
+
 import { BrandProps } from '../../../../types/products'
 
 export const meta: Metadata = {
@@ -113,13 +115,17 @@ export default function ProductsPage() {
 
   return (
     <section className="mx-auto max-w-main mt-10 px-4">
-      <Products
-        title="Products"
-        desciption="Buy products from our stores"
-        products={arr}
-        brands={brands}
-        stores={stores}
-      />
+      {arr?.length ? (
+        <Products
+          title="Products"
+          desciption="Buy products from our stores"
+          products={arr}
+          brands={brands}
+          stores={stores}
+        />
+      ) : (
+        <Empty message="Product is empty!" />
+      )}
     </section>
   )
 }

@@ -2,6 +2,45 @@
   "plugins": ["@typescript-eslint"],
   "extends": ["next/core-web-vitals"],
   "rules": {
-    "prefer-const": "error"
+    "prefer-const": "error",
+    "semi": ["error", "never"],
+    "import/order": [
+      "warn",
+      {
+        "groups": [
+          "external",
+          "builtin",
+          "internal",
+          "sibling",
+          "parent",
+          "index"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          },
+          {
+            "pattern": "routes/",
+            "group": "internal"
+          },
+          {
+            "pattern": "features/",
+            "group": "internal"
+          },
+          {
+            "pattern": "components/**",
+            "group": "internal"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react"],
+        "newlines-between": "always-and-inside-groups",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ]
   }
 }

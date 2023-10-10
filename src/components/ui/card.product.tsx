@@ -1,7 +1,9 @@
+import { HTMLAttributes } from 'react'
+
+import Image from 'next/image'
+
 import Icon from '@/common/icons'
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
-import { HTMLAttributes } from 'react'
 
 export type ProductCardProps = HTMLAttributes<HTMLDivElement> & {
   name: string

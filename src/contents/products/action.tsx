@@ -1,5 +1,4 @@
 'use client'
-import { Menu, Transition } from '@headlessui/react'
 import {
   Fragment,
   useCallback,
@@ -9,13 +8,17 @@ import {
   useTransition,
 } from 'react'
 
+import { Menu, Transition } from '@headlessui/react'
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
 import Icon from '@/common/icons'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import { useDebounce } from '@/hooks/useDebounce'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
 import { ProductPageProps } from '.'
 
 type ProductActionProps = {
@@ -132,7 +135,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
 
   return (
     <>
-      <section className=" flex items-center gap-2">
+      <section className="flex items-center gap-2">
         {brand_ids || store_ids || sort || price_range ? (
           <Button
             variant="outline"

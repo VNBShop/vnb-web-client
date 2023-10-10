@@ -1,9 +1,12 @@
 'use client'
 
-import { cn } from '@/lib/utils'
-import { Transition } from '@headlessui/react'
-import { VariantProps, cva } from 'class-variance-authority'
 import { HTMLAttributes, ReactNode, forwardRef, useEffect, useRef } from 'react'
+
+import { Transition } from '@headlessui/react'
+
+import { VariantProps, cva } from 'class-variance-authority'
+
+import { cn } from '@/lib/utils'
 
 const modalVariants = cva('bg-white shadow-box w-full', {
   variants: {
