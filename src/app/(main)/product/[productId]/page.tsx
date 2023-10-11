@@ -63,10 +63,10 @@ const product = {
 }
 export default function ProductPage({ params }: ProductPageProps) {
   return (
-    <section className="max-w-main px-4 mt-10 mx-auto flex gap-7 items-start">
-      <section className="w-[75%] flex items-start flex-col gap-7">
-        <section className="flex items-start">
-          <figure className=" w-[45%]">
+    <section className="max-w-main px-4 mt-10 mx-auto flex flex-col lg:flex-row gap-7 items-start">
+      <section className="lg:w-[75%] flex items-start flex-col gap-7">
+        <section className="flex flex-col lg:flex-row items-start w-full">
+          <figure className="lg:w-[45%] w-full">
             <Image
               src={product.image}
               alt={product.name}
@@ -78,7 +78,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             />
           </figure>
 
-          <article className="flex-1 space-y-3">
+          <article className="flex-1 space-y-3 w-full">
             <h1 className="text-2xl font-medium">{product?.name}</h1>
 
             <h2 className="text-sm">
@@ -189,7 +189,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         </section>
       </section>
 
-      <section className="p-4 flex-1 sticky top-[80px] border-dashed border rounded-md">
+      <section className="p-4 flex-1 relative lg:sticky top-[80px] border-dashed border rounded-md w-full">
         <ul className=" bg-black mt-3">
           {product?.stores?.length
             ? product.stores.map((store) => (
