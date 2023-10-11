@@ -3,7 +3,7 @@
   "extends": ["next/core-web-vitals"],
   "rules": {
     "prefer-const": "error",
-    "semi": ["error", "never"],
+    "semi": ["warn", "never"],
     "import/order": [
       "warn",
       {

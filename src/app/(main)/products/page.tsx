@@ -16,13 +16,12 @@ export const meta: Metadata = {
 export default function ProductsPage() {
   const arr = []
 
-  // Sử dụng vòng lặp để tạo và thêm các đối tượng giả mạo vào mảng
   for (let i = 0; i < 10; i++) {
     const fakeData = {
       id: i + 1,
       image: '/common/fake.webp',
       name: `Lining racket HC1200 ${i + 1}`,
-      price: Math.floor(Math.random() * 9900001) + 100000, // Tuổi giả mạo từ 20 đến 49
+      price: Math.floor(Math.random() * 9900001) + 100000,
     }
     arr.push(fakeData)
   }

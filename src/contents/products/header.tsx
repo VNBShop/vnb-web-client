@@ -1,9 +1,9 @@
-import { ProductProps } from '.'
+import { ProductPageProps } from '.'
 
 export default function ProductHeader({
   title,
   desciption,
-}: Pick<ProductProps, 'title' | 'desciption'>) {
+}: Pick<ProductPageProps, 'title' | 'desciption'>) {
   return (
     <header>
       <h1 className=" text-2xl font-medium">{title}</h1>

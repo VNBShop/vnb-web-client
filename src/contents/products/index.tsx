@@ -23,7 +23,7 @@ export default function Products({
 }: ProductPageProps) {
   return (
     <>
-      <section className=" flex items-end justify-between">
+      <section className=" flex flex-col md:flex-row md:items-end md:justify-between gap-y-4">
         <ProductHeader title={title} desciption={desciption} />
         <ProductAction brands={brands} stores={stores} />
       </section>

@@ -50,7 +50,7 @@ const CartDrawer = ({
         leave="transition-all duration-300 ease-in-out"
         leaveFrom="opacity-100 translate-x-0"
         leaveTo="opacity-0 -translate-x-[100%]"
-        className="w-[100%] flex flex-col md:w-[70%] lg:w-[37%] absolute top-0 h-full left-0 bottom-0 shadow-md bg-white p-4"
+        className="w-[100%] flex flex-col md:w-[70%] lg:w-[40%] absolute top-0 h-full left-0 bottom-0 shadow-md bg-white p-4"
       >
         <section className="flex items-center justify-between">
           <h2 className="text-lg font-medium">Cart</h2>
