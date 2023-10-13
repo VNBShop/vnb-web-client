@@ -1,15 +1,33 @@
 'use client'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
+import { z } from 'zod'
+
+import { orderSchema } from '@/lib/validations/product'
+
+import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
+import { Label } from '../ui/label'
 
+type Inputs = z.infer<typeof orderSchema>
 export default function OrderForm() {
-  const form = useForm()
+  const form = useForm<Inputs>({
+    resolver: zodResolver(orderSchema),
+  })
+
+  const onSubmit = (values: Inputs) => {
+    console.log('value', values)
+  }
+
   return (
     <Form {...form}>
-      <form>
-        <section className=" space-x-5">
+      <form className="space-y-4">
+        <div className="flex justify-end">
+          <Button className="h-9">Order</Button>
+        </div>
+        <section className=" space-x-5 flex">
           <section className="w-[55%] space-y-4">
             <FormField
               name="fullname"
@@ -48,8 +66,6 @@ export default function OrderForm() {
               )}
             />
           </section>
-
-          <section></section>
         </section>
       </form>
     </Form>
