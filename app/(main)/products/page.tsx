@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import Empty from '@/common/empty'
 import Products from '@/contents/products'
 
-import { BrandProps } from '../../../../types/products'
+import { BrandProps } from '../../../types/products'
 
 export const meta: Metadata = {
   title: 'Products',
