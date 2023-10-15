@@ -1,12 +1,13 @@
 {
-    "semi": false,
-    "trailingComma": "es5",
-    "singleQuote": true,
-    "tabWidth": 2,
-    "useTabs": false,
-    "extends": [
-        "next/core-web-vitals",
-        "plugin:@typescript-eslint/recommended",
-        "prettier"
-    ]
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "semi": false,
+  "trailingComma": "es5",
+  "singleQuote": true,
+  "tabWidth": 2,
+  "useTabs": false,
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ]
 }

@@ -16,14 +16,15 @@ type UserLayoutProps = {
 
 export default function UserLayout({ children, params }: UserLayoutProps) {
   return (
-    <>
+    <div className=" absolute inset-0 flex flex-col">
       <Header />
-      <section className="mt-7 max-w-secondary mx-auto px-4">
-        <section className="flex items-end justify-between">
-          <div className="flex gap-5 items-center">
-            <figure className=" w-[110px] h-[110px] rounded-full">
+
+      <section className="mx-auto w-full max-w-secondary">
+        <section className="mt-7 flex items-end justify-between">
+          <div className="flex items-center gap-5">
+            <figure className=" h-[110px] w-[110px] rounded-full">
               {/* <Image src={''} /> */}
-              <p className="text-5xl font-medium rounded-full bg-black text-white w-full h-full flex items-center justify-center">
+              <p className="flex h-full w-full items-center justify-center rounded-full bg-black text-5xl font-medium text-white">
                 D
               </p>
             </figure>
@@ -46,10 +47,12 @@ export default function UserLayout({ children, params }: UserLayoutProps) {
             </Button>
           </div>
         </section>
-
+        <hr className="mb-1 mt-4" />
         <UserNavigation userId="jungjung261" />
+      </section>
+      <section className="flex-1 border border-t bg-gray-100">
         {children}
       </section>
-    </>
+    </div>
   )
 }

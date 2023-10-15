@@ -1,3 +1,5 @@
+import AddPost from '@/components/add-post'
+
 export type UserPageProps = {
   params: {
     userId: string
@@ -5,5 +7,14 @@ export type UserPageProps = {
 }
 
 export default function UserPage({ params }: UserPageProps) {
-  return <section className="mt-10">{params.userId}</section>
+  return (
+    <section className="mx-auto mt-10 flex max-w-secondary items-start gap-4">
+      <section className="w-[38%] rounded-md bg-white p-4 py-3 shadow-box">
+        <h2 className=" font-medium">Information</h2>
+      </section>
+      <section className="flex-1">
+        <AddPost />
+      </section>
+    </section>
+  )
 }
