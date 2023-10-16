@@ -4,6 +4,7 @@ import Image from 'next/image'
 
 import Header from '@/common/header'
 import Icon from '@/common/icons'
+import Avatar from '@/components/avatar'
 import { Button } from '@/components/ui/button'
 import UserNavigation from '@/contents/user/navigation'
 
@@ -22,12 +23,12 @@ export default function UserLayout({ children, params }: UserLayoutProps) {
       <section className="mx-auto w-full max-w-secondary">
         <section className="mt-7 flex items-end justify-between">
           <div className="flex items-center gap-5">
-            <figure className=" h-[110px] w-[110px] rounded-full">
-              {/* <Image src={''} /> */}
-              <p className="flex h-full w-full items-center justify-center rounded-full bg-black text-5xl font-medium text-white">
-                D
-              </p>
-            </figure>
+            <Avatar
+              src="/asas.jpeg"
+              username="D"
+              className="h-[110px] w-[110px]"
+              nameSize={36}
+            />
 
             <article className=" space-y-1">
               <p className=" text-2xl font-semibold">Dzung</p>

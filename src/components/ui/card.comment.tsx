@@ -1,5 +1,7 @@
 import Image from 'next/image'
 
+import Avatar from '../avatar'
+
 export type CommnentCardProps = {
   avatar?: string
   name: string
@@ -14,30 +16,10 @@ export default function CommnentCard({
   createAt,
 }: CommnentCardProps) {
   return (
-    <article className="flex items-start gap-4">
-      <figure
-        className={`w-10 h-10 rounded-full ${
-          avatar ? '' : 'flex items-center justify-center bg-black'
-        }`}
-      >
-        {avatar ? (
-          <Image
-            src={avatar}
-            alt={name}
-            title={name}
-            width="0"
-            height="0"
-            sizes="100vw"
-            className="w-full h-full rounded-full object-cover"
-          />
-        ) : (
-          <span className="font-semibold text-white">
-            {name.charAt(0).toUpperCase()}
-          </span>
-        )}
-      </figure>
+    <article className="inline-flex items-start gap-2">
+      <Avatar src="/casc.png" username={name} />
       <section className="flex-1">
-        <div className="bg-gray-100 p-2 px-4 rounded-2xl">
+        <div className="rounded-2xl bg-gray-100 p-2 px-4">
           <h3 className="text-sm font-medium">{name}</h3>
           <p className="text-sm">{comment}</p>
         </div>

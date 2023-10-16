@@ -14,7 +14,7 @@ import { Form, FormControl, FormField, FormItem } from '../ui/form'
 
 type Inputs = z.infer<typeof commentSchema>
 
-export default function CommentForm() {
+export default function PostCommentForm() {
   const form = useForm<Inputs>({
     resolver: zodResolver(commentSchema),
   })
@@ -38,7 +38,7 @@ export default function CommentForm() {
   return (
     <Form {...form}>
       <form
-        className="max-w-[500px] border rounded-md p-3 pb-0"
+        className="flex-1 rounded-md border p-3 pb-0"
         onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
       >
         <FormField
@@ -58,7 +58,7 @@ export default function CommentForm() {
                     }
                   }}
                   {...field}
-                  className="text-sm w-full focus:outline-none resize-none"
+                  className="w-full resize-none text-sm focus:outline-none"
                 ></textarea>
               </FormItem>
             </FormControl>

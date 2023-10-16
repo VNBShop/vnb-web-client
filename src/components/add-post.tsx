@@ -3,6 +3,7 @@ import { useState } from 'react'
 
 import Icon from '@/common/icons'
 
+import AddPostForm from './form/add-post'
 import { Modal } from './ui/modal'
 
 export default function AddPost() {
@@ -59,6 +60,8 @@ export default function AddPost() {
             <p className="text-xs">@jungjung261</p>
           </article>
         </section>
+
+        <AddPostForm />
       </Modal>
     </>
   )

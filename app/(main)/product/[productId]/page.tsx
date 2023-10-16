@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 import Icon from '@/common/icons'
 import AddToCardForm from '@/components/form/add-to-card'
-import CommentForm from '@/components/form/comment'
+import CommentForm from '@/components/form/product-comment'
 import CommnentCard from '@/components/ui/card.comment'
 
 type ProductPageProps = {
@@ -63,22 +63,22 @@ const product = {
 }
 export default function ProductPage({ params }: ProductPageProps) {
   return (
-    <section className="max-w-main px-4 mt-10 mx-auto flex flex-col lg:flex-row gap-7 items-start">
-      <section className="lg:w-[75%] flex items-start flex-col gap-7">
-        <section className="flex flex-col lg:flex-row items-start w-full">
-          <figure className="lg:w-[45%] w-full">
+    <section className="mx-auto mt-10 flex max-w-main flex-col items-start gap-7 px-4 lg:flex-row">
+      <section className="flex flex-col items-start gap-7 lg:w-[75%]">
+        <section className="flex w-full flex-col items-start lg:flex-row">
+          <figure className="w-full lg:w-[45%]">
             <Image
               src={product.image}
               alt={product.name}
               title={product.name}
               width="0"
               height="0"
-              className=" object-contain w-full h-full"
+              className=" h-full w-full object-contain"
               sizes="100vw"
             />
           </figure>
 
-          <article className="flex-1 space-y-3 w-full">
+          <article className="w-full flex-1 space-y-3">
             <h1 className="text-2xl font-medium">{product?.name}</h1>
 
             <h2 className="text-sm">
@@ -89,14 +89,14 @@ export default function ProductPage({ params }: ProductPageProps) {
               <h2>
                 Brand: <span className=" text-secondary">{product?.brand}</span>
               </h2>
-              <div className="w-[1px] h-4 bg-gray-500" />
+              <div className="h-4 w-[1px] bg-gray-500" />
               <h2>
                 Status:{' '}
                 <span className="text-secondary">{product?.status}</span>
               </h2>
             </div>
 
-            <div className="flex gap-4 items-end">
+            <div className="flex items-end gap-4">
               <h2 className="text-xl font-medium text-secondary">
                 {product?.price?.toLocaleString()}đ
               </h2>
@@ -131,11 +131,11 @@ export default function ProductPage({ params }: ProductPageProps) {
               ))}
             </ul>
 
-            <div className="border border-dashed relative p-4 rounded-md !my-7">
+            <div className="relative !my-7 rounded-md border border-dashed p-4">
               <ul className="space-y-3">
                 {product.endows.map((endow, index) => (
                   <li
-                    className="text-sm text-gray-600 flex items-start gap-2"
+                    className="flex items-start gap-2 text-sm text-gray-600"
                     key={index}
                   >
                     <Icon name="Checked" width={20} height={20} /> {endow}
@@ -152,8 +152,8 @@ export default function ProductPage({ params }: ProductPageProps) {
           </article>
         </section>
 
-        <section className="w-full mt-10">
-          <header className="flex items-center gap-2 mb-5">
+        <section className="mt-10 w-full">
+          <header className="mb-5 flex items-center gap-2">
             <h2 className="text-xl font-medium">Descriptions</h2>
             <hr className="flex-1" />
           </header>
@@ -166,10 +166,10 @@ export default function ProductPage({ params }: ProductPageProps) {
           />
         </section>
         <hr className="w-full" />
-        <section className="w-full mt-4">
+        <section className="mt-4 w-full">
           <CommentForm />
 
-          <ul className="space-y-7 mt-10 max-w-[500px]">
+          <ul className="mt-10 max-w-[500px] space-y-7">
             {!product?.comments?.length ? (
               product.comments.map((comment) => (
                 <li key={comment.id}>
@@ -189,12 +189,12 @@ export default function ProductPage({ params }: ProductPageProps) {
         </section>
       </section>
 
-      <section className="p-4 flex-1 relative lg:sticky top-[80px] border-dashed border rounded-md w-full">
-        <ul className=" bg-black mt-3">
+      <section className="relative top-[80px] w-full flex-1 rounded-md border border-dashed p-4 lg:sticky">
+        <ul className=" mt-3 bg-black">
           {product?.stores?.length
             ? product.stores.map((store) => (
                 <li
-                  className="text-white border-b border-gray-300 p-1 px-2 text-sm"
+                  className="border-b border-gray-300 p-1 px-2 text-sm text-white"
                   key={store.id}
                 >
                   {store.name}
@@ -203,7 +203,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             : null}
         </ul>
 
-        <div className=" absolute -top-[16px] p-2 py-1 rounded-md border text-sm font-medium bg-white">
+        <div className=" absolute -top-[16px] rounded-md border bg-white p-2 py-1 text-sm font-medium">
           Available at
         </div>
       </section>

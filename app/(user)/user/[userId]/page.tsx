@@ -1,4 +1,5 @@
 import AddPost from '@/components/add-post'
+import PostItem from '@/components/post/post-item'
 
 export type UserPageProps = {
   params: {
@@ -14,6 +15,10 @@ export default function UserPage({ params }: UserPageProps) {
       </section>
       <section className="flex-1">
         <AddPost />
+
+        <section className="mt-5">
+          <PostItem />
+        </section>
       </section>
     </section>
   )
