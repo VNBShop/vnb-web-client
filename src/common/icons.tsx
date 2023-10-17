@@ -510,6 +510,46 @@ export default function Icon({
         </svg>
       )
     }
+
+    case 'ChevronLeft': {
+      return (
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill="none"
+            stroke={color}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="m15 6l-6 6l6 6"
+          />
+        </svg>
+      )
+    }
+
+    case 'ChevronRight': {
+      return (
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill="none"
+            stroke={color}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="m9 6l6 6l-6 6"
+          />
+        </svg>
+      )
+    }
   }
 }
 
@@ -536,6 +576,8 @@ export type IconName =
   | 'Heart'
   | 'Checked'
   | 'ChevronDown'
+  | 'ChevronLeft'
+  | 'ChevronRight'
   | 'Endow'
   | 'Star'
   | 'Trash'

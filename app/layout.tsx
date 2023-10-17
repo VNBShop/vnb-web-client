@@ -1,10 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 
 import './../src/styles/globals.css'
-import { siteConfig } from '@/config/site'
+import dynamic from 'next/dynamic'
 
-const inter = Inter({ subsets: ['latin'] })
+import { siteConfig } from '@/config/site'
 
 export const metadata: Metadata = {
   title: {
@@ -15,6 +14,10 @@ export const metadata: Metadata = {
   icons: '/common/icon.png',
 }
 
+const Gallery = dynamic(() => import('@/components/carousel'), {
+  ssr: false,
+})
+
 export default function RootLayout({
   children,
 }: {
@@ -22,7 +25,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className="scroll-smooth font-sans antialiased">
+        {children}
+        <Gallery />
+      </body>
     </html>
   )
 }

@@ -20,23 +20,23 @@ export default function UserLayout({ children, params }: UserLayoutProps) {
     <div className=" absolute inset-0 flex flex-col">
       <Header />
 
-      <section className="mx-auto w-full max-w-secondary">
-        <section className="mt-7 flex items-end justify-between">
-          <div className="flex items-center gap-5">
+      <section className="mx-auto w-full max-w-secondary px-4">
+        <section className="mt-7 flex flex-col items-center justify-between gap-y-4 md:flex-row md:items-end">
+          <div className="flex flex-col items-center gap-5 md:flex-row">
             <Avatar
-              src="/asas.jpeg"
+              src="/common/avt.jpeg"
               username="D"
               className="h-[110px] w-[110px]"
               nameSize={36}
             />
 
-            <article className=" space-y-1">
+            <article className=" space-y-1 text-center md:text-left">
               <p className=" text-2xl font-semibold">Dzung</p>
               <p>@jungjung261</p>
             </article>
           </div>
 
-          <div className=" space-x-2">
+          <div className=" space-x-2 text-center ">
             <Button className="h-9 space-x-1" variant="outline">
               <Icon name="Pen" width={18} height={18} />
               <span>Edit profile</span>

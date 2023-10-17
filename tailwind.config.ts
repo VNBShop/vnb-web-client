@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      flex: {
+        full: '0 0 100%',
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':

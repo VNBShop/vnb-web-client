@@ -14,7 +14,7 @@ export default function UserNavigation({ userId }: UserNavigationProps) {
   const pathname = usePathname()
 
   return (
-    <ul className="-ml-4 flex items-center gap-1">
+    <ul className="flex items-center gap-1 px-4 md:-ml-4 lg:px-0">
       {user_navigation.map((item, index) => (
         <li key={index}>
           <Link

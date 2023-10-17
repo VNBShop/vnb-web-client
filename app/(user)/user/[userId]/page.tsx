@@ -9,8 +9,8 @@ export type UserPageProps = {
 
 export default function UserPage({ params }: UserPageProps) {
   return (
-    <section className="mx-auto mt-10 flex max-w-secondary items-start gap-4">
-      <section className="w-[38%] rounded-md bg-white p-4 py-3 shadow-box">
+    <section className="mx-auto mt-10 flex max-w-secondary flex-col gap-4 px-4 lg:flex-row lg:items-start">
+      <section className="rounded-md bg-white p-4 py-3 shadow-box lg:w-[38%]">
         <h2 className=" font-medium">Information</h2>
       </section>
       <section className="flex-1">
