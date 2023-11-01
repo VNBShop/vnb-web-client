@@ -1,6 +1,8 @@
+'use client'
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export const metadata: Metadata = {
   icons: 'common/icon.png',
@@ -8,23 +10,22 @@ export const metadata: Metadata = {
 }
 
 export default function NotFound() {
+  const router = useRouter()
   return (
-    <section className="flex min-h-screen w-full items-center justify-center overflow-hidden bg-[#ebfffd]">
+    <section className="flex min-h-screen w-full items-center justify-center overflow-hidden ">
       <section className="flex flex-col-reverse items-center gap-0 md:flex-row">
         <article className="mr-0 text-center md:-mr-[150px] md:text-left">
-          <h2 className="text-4xl font-semibold text-[#1b84f5] mb-7 md:text-[56px]">
-            OOPS!
-          </h2>
-          <p className="mt-2 text-2xl font-medium text-[#279eff] md:mt-0 md:text-4xl">
+          <h2 className="mb-7 text-4xl font-semibold md:text-[56px]">OOPS!</h2>
+          <p className="mt-2 text-2xl font-medium md:mt-0 md:text-4xl">
             404 - Page Not Found
           </p>
 
-          <Link
-            href="/"
-            className="mt-5 inline-block rounded-full border bg-[#279eff] px-7 py-3 text-lg text-white transition-all duration-200 ease-linear md:mt-10 lg:border-[#279eff] lg:bg-transparent lg:text-[#279eff] lg:hover:bg-[#279eff] lg:hover:text-white"
+          <button
+            onClick={() => router.back()}
+            className="mt-5 inline-block rounded-full border border-black px-7 py-2 text-lg transition-all duration-200 ease-linear md:mt-10 lg:bg-transparent lg:hover:bg-black lg:hover:text-white"
           >
-            Take me home
-          </Link>
+            Go back
+          </button>
         </article>
 
         <Image

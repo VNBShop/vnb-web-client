@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 
 import Empty from '@/common/empty'
-import Products from '@/contents/products'
+
+import Products from '@/contents/ecommerce/products'
 
 import { BrandProps } from '../../../types/products'
 
@@ -113,7 +114,7 @@ export default function ProductsPage() {
   ]
 
   return (
-    <section className="mx-auto max-w-main mt-10 px-4">
+    <section className="mx-auto mt-10 max-w-main px-4">
       {arr?.length ? (
         <Products
           title="Products"

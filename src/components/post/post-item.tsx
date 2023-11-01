@@ -6,7 +6,7 @@ import PostStatus from './post-status'
 
 export default function PostItem() {
   return (
-    <article className="mb-7 rounded-md bg-white py-3 shadow-box">
+    <article className="mb-7 bg-white py-3 md:rounded-md md:shadow-box">
       <PostHeader />
       <PostStatus />
       <PostMedia />

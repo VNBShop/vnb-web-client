@@ -1,10 +1,15 @@
 import Link from 'next/link'
 
+import ProductCard from '@/components/ui/card.product'
+
 import ProductAction from './action'
 import ProductHeader from './header'
 
-import { BrandProps, ProductProps, StoreProps } from '../../../types/products'
-import ProductCard from '../../components/ui/card.product'
+import {
+  BrandProps,
+  ProductProps,
+  StoreProps,
+} from '../../../../types/products'
 
 export type ProductPageProps = {
   title?: string
@@ -23,11 +28,11 @@ export default function Products({
 }: ProductPageProps) {
   return (
     <>
-      <section className=" flex flex-col md:flex-row md:items-end md:justify-between gap-y-4">
+      <section className=" flex flex-col gap-y-4 md:flex-row md:items-end md:justify-between">
         <ProductHeader title={title} desciption={desciption} />
         <ProductAction brands={brands} stores={stores} />
       </section>
-      <ul className=" grid gap-6 lg:grid-cols-5 md:grid-cols-3 grid-cols-2 mt-7">
+      <ul className=" mt-7 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
         {products && products.length
           ? products.map((product) => {
               return (

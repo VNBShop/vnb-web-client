@@ -15,7 +15,7 @@ export default function AddPost() {
 
   return (
     <>
-      <section className="space-y-3 rounded-md bg-white p-4 py-3 shadow-box">
+      <section className="space-y-3 bg-white p-4 py-3 md:rounded-md md:shadow-box">
         <section className="flex items-center gap-2">
           <figure className="h-10 w-10 rounded-full">
             <p className="textw-white flex h-full w-full items-center justify-center rounded-full bg-black text-xl text-white">
@@ -46,7 +46,6 @@ export default function AddPost() {
       <Modal
         show={addPostModal}
         close={() => setAddPostModal(false)}
-        center
         closeOutside
       >
         <section className="inline-flex items-center gap-2">

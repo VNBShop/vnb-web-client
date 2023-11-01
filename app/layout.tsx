@@ -14,10 +14,6 @@ export const metadata: Metadata = {
   icons: '/common/icon.png',
 }
 
-const Gallery = dynamic(() => import('@/components/carousel'), {
-  ssr: false,
-})
-
 export default function RootLayout({
   children,
 }: {
@@ -25,10 +21,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="scroll-smooth font-sans antialiased">
-        {children}
-        <Gallery />
-      </body>
+      <body className="scroll-smooth font-sans antialiased">{children}</body>
     </html>
   )
 }

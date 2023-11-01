@@ -1,13 +1,11 @@
 'use client'
-
 import { useState } from 'react'
 
+import Icon from '@/common/icons'
 import { Input } from '@/components/ui/input'
 import { Modal } from '@/components/ui/modal'
 
-import Icon from '../icons'
-
-export default function Search() {
+export default function ForumSearch() {
   const [searchPopup, setSearchPopup] = useState(false)
 
   const handleOpenSearchPopup = () => {
@@ -22,7 +20,7 @@ export default function Search() {
       >
         <Icon name="Search" width={20} height={20} color="gray" />
         <span className="hidden text-xs text-gray-500 lg:block">
-          Search product...
+          Search something...
         </span>
       </div>
 
@@ -34,7 +32,7 @@ export default function Search() {
         <section className="relative flex items-center">
           <Icon width={22} height={22} name="Search" />
           <Input
-            placeholder="Search product..."
+            placeholder="Search something..."
             className="h-8 flex-1 border-none text-sm"
             autoFocus
           />
