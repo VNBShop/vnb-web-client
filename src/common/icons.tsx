@@ -566,6 +566,42 @@ export default function Icon({
         </svg>
       )
     }
+
+    case 'Logout': {
+      return (
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill="none"
+            stroke={color}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4m7 14l5-5l-5-5m5 5H9"
+          />
+        </svg>
+      )
+    }
+
+    case 'I': {
+      return (
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill={color}
+            d="M12 7q-.633 0-1.066-.434Q10.5 6.133 10.5 5.5t.434-1.066Q11.367 4 12 4t1.066.434q.434.433.434 1.066t-.434 1.066Q12.633 7 12 7Zm-1 13V9.77h2V20h-2Z"
+          />
+        </svg>
+      )
+    }
   }
 }
 
@@ -588,6 +624,8 @@ export type IconName =
   | 'Chart'
   | 'Wallet'
   | 'Coin'
+  | 'Logout'
+  | 'I'
   | 'HeartOutline'
   | 'Heart'
   | 'Checked'
