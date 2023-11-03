@@ -1,3 +1,6 @@
+'use client'
+import { usePathname } from 'next/navigation'
+
 import Icon from '@/common/icons'
 import Avatar from '@/components/avatar'
 
@@ -5,8 +8,13 @@ import ConversationList from './conversation-list'
 import ConversationSearch from './search'
 
 export default function ConversationSidebar() {
+  const pathname = usePathname()
   return (
-    <aside className="col-span-[25%] flex h-full flex-col space-y-2 overflow-hidden border-r p-2 pb-4">
+    <aside
+      className={`lg:col-span-[25%] col-span-1 flex h-full flex-col space-y-2 overflow-hidden border-r p-2 pb-4 ${
+        pathname.startsWith('/conversation/') ? 'hidden lg:flex' : ''
+      }`}
+    >
       <h1 className="ml-2 py-[6px] text-lg font-medium">Conversation</h1>
       <ConversationSearch />
       <ConversationList />

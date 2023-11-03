@@ -3,23 +3,3 @@
 @tailwind utilities;
 
 @import './animation.css';
-
-/* Messenger dynamic border radius */
-
-.him p,
-.me p {
-  border-radius: 30px;
-}
-
-.him + .me p {
-  border-bottom-right-radius: 5px;
-}
-
-.me + .me p {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.me:last-of-type p {
-  border-bottom-right-radius: 30px;
-}

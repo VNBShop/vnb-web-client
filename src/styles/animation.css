@@ -209,3 +209,31 @@
     background-color: #ffffff;
   }
 }
+
+@keyframes wave {
+  0%,
+  60%,
+  100% {
+    transform: initial;
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+}
+
+.dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #6b6b6b;
+  animation: wave 1.1s linear infinite;
+  animation-delay: -0.9s;
+}
+
+.dot.two {
+  animation-delay: -0.7s;
+}
+.dot:nth-child(3) {
+  animation-delay: -0.6s;
+}
