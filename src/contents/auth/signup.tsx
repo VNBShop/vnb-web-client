@@ -1,10 +1,10 @@
 'use client'
 
-import { z } from 'zod'
-import { useForm } from 'react-hook-form'
-import { authSchema } from '@/lib/validations/auth'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -12,9 +12,10 @@ import {
   FormItem,
   FormMessage,
 } from '@/components/ui/form'
+
 import { Input } from '@/components/ui/input'
 import InputPassword from '@/components/ui/input-password'
-import { Button } from '@/components/ui/button'
+import { authSchema } from '@/lib/validations/auth'
 
 type Inputs = z.infer<typeof authSchema>
 

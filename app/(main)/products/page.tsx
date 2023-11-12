@@ -1,18 +1,16 @@
-import type { Metadata } from 'next'
-
 import Empty from '@/common/empty'
 
 import Products from '@/contents/ecommerce/products'
 
 import { BrandProps } from '../../../types/products'
 
-export const meta: Metadata = {
-  title: 'Products',
-  description: 'Buy products from our stores',
-  alternates: {
-    canonical: '/products',
-  },
-}
+// export const meta: Metadata = {
+//   title: 'Products',
+//   description: 'Buy products from our stores',
+//   alternates: {
+//     canonical: '/products',
+//   },
+// }
 
 export default function ProductsPage() {
   const arr = []

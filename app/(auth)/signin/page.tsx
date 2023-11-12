@@ -1,12 +1,13 @@
+import Link from 'next/link'
+
 import GoogleOAuth from '@/contents/auth/google-auth'
 import SignInForm from '@/contents/auth/signin'
-import Link from 'next/link'
 
 export default function SignIn() {
   return (
     <>
-      <h1 className=" font-semibold text-xl">Sign in</h1>
-      <p className="text-sm text-gray-500 my-4">
+      <h1 className=" text-xl font-semibold">Sign in</h1>
+      <p className="my-4 text-sm text-gray-500">
         Choose your preferred sign in method
       </p>
 
@@ -17,7 +18,7 @@ export default function SignIn() {
           <span className="w-full border-t" />
         </div>
         <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-white px-2 text-muted-foreground">
+          <span className="text-muted-foreground bg-white px-2">
             Or continue with
           </span>
         </div>
@@ -25,7 +26,7 @@ export default function SignIn() {
 
       <SignInForm />
 
-      <section className="flex items-center justify-between mt-6 mb-2">
+      <section className="mb-2 mt-6 flex items-center justify-between">
         <div className="flex items-center gap-1 text-sm">
           <span className="text-gray-500">Don&apos;t have an account?</span>
           <Link className="text-gray-700 hover:underline" href="/signup">

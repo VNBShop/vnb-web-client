@@ -8,8 +8,7 @@ const comments = [
     userId: '12das2',
     userName: 'Dzung',
     userAvatar: '/common/fake.webp',
-    content:
-      'Norman: Tao vừa mới bị thằng Nhọ chốt vỡ mồm xong phải đi loay hoay đi đào thằng Kraven lên thì giờ lại đến có đứa chốt vỡ mồm tao rồi đào con giai tao lên à ?? Thằng Nhọ gánh tội cho tao thì tao gánh nhọ cho nó hay gì đây ??',
+    content: 'Norman: Best racket',
   },
   {
     id: 2121,

@@ -20,21 +20,21 @@ function ChatList({
 }) {
   const scrollViewRef = useRef<HTMLDivElement>(null)
 
-  // useEffect(() => {
-  //   if (scrollViewRef && scrollViewRef.current) {
-  //     scrollViewRef.current.scrollIntoView({
-  //       behavior: 'smooth',
-  //     })
-  //   }
-  // }, [chats, isTyping])
-
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (scrollViewRef && scrollViewRef.current) {
       scrollViewRef.current.scrollIntoView({
         behavior: 'smooth',
       })
     }
-  }, [])
+  }, [chats, isTyping])
+
+  // useLayoutEffect(() => {
+  //   if (scrollViewRef && scrollViewRef.current) {
+  //     scrollViewRef.current.scrollIntoView({
+  //       behavior: 'smooth',
+  //     })
+  //   }
+  // }, [])
 
   const check = markConsecutiveDuplicates(chats)
 

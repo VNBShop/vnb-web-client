@@ -9,7 +9,7 @@ import {
   productTypeLabelProps,
 } from '@/common/product-type-label'
 import { Button } from '@/components/ui/button'
-import OrderAction from '@/contents/order/order-action'
+import OrderAction from '@/contents/ecommerce/order/order-action'
 
 export default function OrderPage() {
   const deliveryRef = useRef<HTMLDivElement | null>(null)

@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-before-interactive-script-outside-document */
 'use client'
 
-import Script from 'next/script'
 import { useEffect } from 'react'
+
+import Script from 'next/script'
 
 export default function GoogleOAuth() {
   const handleAuthWithGoogle = (response: any) => {
