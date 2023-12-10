@@ -1,31 +1,24 @@
-/* eslint-disable @next/next/no-before-interactive-script-outside-document */
 'use client'
 
 import { useEffect } from 'react'
 
-import Script from 'next/script'
+import { jwtDecode } from 'jwt-decode'
+import { toast } from 'sonner'
 
 export default function GoogleOAuth() {
-  const handleAuthWithGoogle = (response: any) => {
-    console.log('response', response)
+  const handleAuthWithGoogle = (response: {
+    clientId: string
+    client_id: string
+    credential: string
+  }) => {
+    console.log('>>', response)
+    const { credential } = response
+    if (!!credential) {
+      const auth = jwtDecode(credential)
+    } else {
+      toast.error('Authentication with gooogle faild, try again!')
+    }
   }
-
-  // useEffect(() => {
-  //   if (!window.google) return
-  //   google.accounts.id.initialize({
-  //     client_id: process.env.GOOGLE_CLIENT_ID,
-  //     callback: handleAuthWithGoogle,
-  //   })
-
-  //   const signInButton = document.getElementById('google-signin')
-
-  //   if (!signInButton) return
-
-  //   google.accounts.id.renderButton(signInButton, {
-  //     theme: 'outline',
-  //     size: 'large',
-  //   })
-  // }, [])
 
   useEffect(() => {
     const script = document.createElement('script')
@@ -52,11 +45,6 @@ export default function GoogleOAuth() {
   return (
     <>
       <button id="google-signin"></button>
-      {/* <Script
-        src="https://accounts.google.com/gsi/client"
-        strategy="beforeInteractive"
-        async
-      /> */}
     </>
   )
 }

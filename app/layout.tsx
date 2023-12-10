@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 
+import { Toaster } from 'sonner'
 import './../src/styles/globals.css'
-import dynamic from 'next/dynamic'
 
+import RQProvider from '@/components/provider'
 import { siteConfig } from '@/config/site'
 
 export const metadata: Metadata = {
@@ -21,7 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="scroll-smooth font-sans antialiased">{children}</body>
+      <body className="scroll-smooth font-sans antialiased">
+        <RQProvider>{children}</RQProvider>{' '}
+        <Toaster richColors position="top-center" />
+      </body>
     </html>
   )
 }

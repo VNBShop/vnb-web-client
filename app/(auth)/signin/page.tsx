@@ -1,9 +1,14 @@
+import { useEffect } from 'react'
+
 import Link from 'next/link'
 
 import GoogleOAuth from '@/contents/auth/google-auth'
 import SignInForm from '@/contents/auth/signin'
 
-export default function SignIn() {
+type Props = {
+  searchParams?: Record<'callbackUrl' | 'error', string>
+}
+export default function SignIn({ searchParams }: Props) {
   return (
     <>
       <h1 className=" text-xl font-semibold">Sign in</h1>
