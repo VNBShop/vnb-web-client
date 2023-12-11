@@ -28,6 +28,9 @@ export const authOptions: NextAuthOptions = {
 
         const data = await res.json()
 
+        console.log('data', data)
+
+
         if (data?.success) {
           const info = jwtDecode(data?.metadata?.accessToken)
 
@@ -41,7 +44,7 @@ export const authOptions: NextAuthOptions = {
           return data?.metadata
 
         } else {
-          return null
+          throw new Error(data?.metadata?.message)
         }
       },
     }),

@@ -50,11 +50,13 @@ export default function SignInForm() {
     })
     setLoading(false)
 
+    console.log('result', result)
+
     if (result?.ok) {
       toast.success('Login successfully!')
       router.push('/')
     } else {
-      toast.error('Wrong email or password!')
+      toast.error(result?.error)
     }
   }
 
