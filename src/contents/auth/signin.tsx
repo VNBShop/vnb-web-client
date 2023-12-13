@@ -50,8 +50,6 @@ export default function SignInForm() {
     })
     setLoading(false)
 
-    console.log('result', result)
-
     if (result?.ok) {
       toast.success('Login successfully!')
       router.push('/')

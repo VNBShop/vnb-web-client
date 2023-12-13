@@ -29,7 +29,7 @@ export interface ModalProps
   extends HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof modalVariants> {
   show: boolean
-  close: (state: boolean) => void
+  close?: (state: boolean) => void
   center?: boolean
   title?: string
   closeOutside?: boolean
@@ -59,7 +59,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     ) => {
       if (modalRef.current) {
         if (!modalRef.current.contains(event.target as Node)) {
-          close(true)
+          close?.(true)
         }
       }
     }
@@ -67,7 +67,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     useEffect(() => {
       const handleEsc = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
-          show && close(false)
+          show && close?.(false)
         }
       }
       window.addEventListener('keydown', handleEsc)

@@ -21,7 +21,7 @@ export default function Nav() {
 
   const { data } = useSession()
 
-  console.log('data', data)
+  console.log('data> >>> >> ', data)
 
   const [navMobile, setOpenNavMobile] = useState(false)
   const [cartCont, setCartCont] = useState(false)

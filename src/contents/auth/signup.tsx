@@ -1,5 +1,7 @@
 'use client'
 
+import { useState } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
@@ -9,6 +11,7 @@ import { z } from 'zod'
 
 import { signup } from '@/api/auth/signup'
 import Spiner from '@/common/spiner'
+import ModalOTP, { ModalOTPProps } from '@/components/modal-otp'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -22,9 +25,20 @@ import { Input } from '@/components/ui/input'
 import InputPassword from '@/components/ui/input-password'
 import { signUpSchema } from '@/lib/validations/auth'
 
+import { DataError, DataResponse } from '../../../types'
+
 type Inputs = z.infer<typeof signUpSchema>
 
 export default function SignUpForm() {
+  const [modalVerify, setModalVerify] = useState<ModalOTPProps>({
+    meta: {
+      email: '',
+      title: '',
+      type: 'REGISTER',
+    },
+    open: false,
+  })
+
   const form = useForm<Inputs>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -50,7 +64,6 @@ export default function SignUpForm() {
       }
     },
     onError: (error) => {
-
       toast.error(error.response.data.metadata.message)
     },
   })
@@ -60,55 +73,69 @@ export default function SignUpForm() {
   }
 
   return (
-    <Form {...form}>
-      <form
-        className="grid gap-4"
-        onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
-      >
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <Input placeholder="example@gmail.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <ModalOTP
+        open
+        onClose={() => {}}
+        meta={{
+          email: 'jungas@gmail.com',
+          title: 'Verify your account',
+          type: 'REGISTER',
+        }}
+      />
+      <Form {...form}>
+        <form
+          className="grid gap-4"
+          onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
+        >
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input placeholder="example@gmail.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <InputPassword placeholder="********" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <InputPassword placeholder="********" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <InputPassword placeholder="********" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <InputPassword placeholder="********" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button disabled={isPending} className="bg-black text-white flex items-center gap-2">
-          {isPending && <Spiner size={20} />}
-          Continue
-        </Button>
-      </form>
-    </Form>
+          <Button
+            disabled={isPending}
+            className="flex items-center gap-2 bg-black text-white"
+          >
+            {isPending && <Spiner size={20} />}
+            Continue
+          </Button>
+        </form>
+      </Form>
+    </>
   )
 }

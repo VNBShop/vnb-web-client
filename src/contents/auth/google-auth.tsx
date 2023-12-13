@@ -3,48 +3,34 @@
 import { useEffect } from 'react'
 
 import { jwtDecode } from 'jwt-decode'
+import Image from 'next/image'
+import { signIn } from 'next-auth/react'
 import { toast } from 'sonner'
 
+import { Button } from '@/components/ui/button'
+
 export default function GoogleOAuth() {
-  const handleAuthWithGoogle = (response: {
-    clientId: string
-    client_id: string
-    credential: string
-  }) => {
-    console.log('>>', response)
-    const { credential } = response
-    if (!!credential) {
-      const auth = jwtDecode(credential)
-    } else {
-      toast.error('Authentication with gooogle faild, try again!')
-    }
+  const onSubmit = async () => {
+    const result = await signIn('google', {
+      redirect: false,
+    })
+
+    console.log('res >>', result)
   }
-
-  useEffect(() => {
-    const script = document.createElement('script')
-    script.src = 'https://accounts.google.com/gsi/client'
-    script.async = true
-    script.onload = () => {
-      google.accounts.id.initialize({
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        callback: handleAuthWithGoogle,
-      })
-
-      const signInButton = document.getElementById('google-signin')
-
-      if (signInButton) {
-        google.accounts.id.renderButton(signInButton, {
-          theme: 'outline',
-          size: 'large',
-        })
-      }
-    }
-    document.body.appendChild(script)
-  }, [])
 
   return (
     <>
-      <button id="google-signin"></button>
+      <Button className="gap-1 bg-white hover:bg-white" onClick={onSubmit}>
+        <Image
+          src="/common/google.png"
+          alt="google"
+          width={40}
+          height={40}
+          sizes="100vw"
+          className=" object-contain"
+        />
+        <span className="text-sm text-black">Signin width google</span>
+      </Button>
     </>
   )
 }

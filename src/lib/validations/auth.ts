@@ -36,12 +36,21 @@ export const signUpSchema = z
   })
 
 export const loginSchema = z.object({
-  email: z.string().nonempty({
-    message: 'Please enter emaill address'
-  }).email({
-    message: 'Please enter a valid email address'
-  }),
+  email: z
+    .string()
+    .nonempty({
+      message: 'Please enter emaill address',
+    })
+    .email({
+      message: 'Please enter a valid email address',
+    }),
   password: z.string().nonempty({
-    message: 'Please enter password'
-  })
+    message: 'Please enter password',
+  }),
+})
+
+export const OTPSchema = z.object({
+  otp: z.string().min(6, {
+    message: 'OTP not empty',
+  }),
 })

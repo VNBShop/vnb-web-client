@@ -21,8 +21,6 @@ export default function AddPostForm() {
   const watchCommentForm = useWatch({ control: form.control, name: 'comment' })
 
   const onSubmit = (value: Inputs) => {
-    console.log('value', value)
-
     form.reset()
     form.setValue('comment', '')
   }
