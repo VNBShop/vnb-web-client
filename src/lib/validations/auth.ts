@@ -54,3 +54,41 @@ export const OTPSchema = z.object({
     message: 'OTP not empty',
   }),
 })
+
+export const forgotPassSchema = z.object({
+  email: z.string().min(1, {
+    message: 'Please enter your email address',
+  }),
+})
+
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, {
+        message: 'Password must be at least 8 characters long',
+      })
+      .max(100)
+      .refine(
+        (value) =>
+          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(
+            value
+          ),
+        'Password must be at least one special character, number and uppercase letter'
+      ),
+    confirmPassword: z
+      .string()
+      .min(8, {
+        message: 'Password must be at least 8 characters long',
+      })
+      .max(100),
+  })
+  .superRefine(({ confirmPassword, password }, ctx) => {
+    if (confirmPassword !== password) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The passwords did not match',
+        path: ['confirmPassword'],
+      })
+    }
+  })

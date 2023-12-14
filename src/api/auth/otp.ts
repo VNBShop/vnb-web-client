@@ -1,12 +1,12 @@
 import axios from 'axios'
 
-type PayloadProps = {
-  otp: string
+export type OTPPayloadProps = {
+  otpCode: string
   email: string
-  type: 'REGISTER'
+  type: 'REGISTER' | 'RESET_PASSWORD'
 }
 
-export async function confirmOTP(payload: PayloadProps) {
+export async function confirmOTP(payload: OTPPayloadProps) {
   const res = await axios.post(
     `${process.env.NEXT_SERVER_URL}/account/confirm-otp`,
     payload

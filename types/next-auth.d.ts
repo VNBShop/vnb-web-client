@@ -1,9 +1,10 @@
-import NextAuth from "next-auth"
+import NextAuth from 'next-auth'
 
-declare module "next-auth" {
-
+declare module 'next-auth' {
   interface Session {
     user: {
+      name?: string
+      image?: string
       isFirstLogin: boolean
       accessToken: string
       refreshToken: string

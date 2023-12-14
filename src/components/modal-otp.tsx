@@ -1,21 +1,15 @@
-import { useState } from 'react'
-
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation } from '@tanstack/react-query'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
 import OtpInput from 'react-otp-input'
 
 import { z } from 'zod'
 
-import { confirmOTP } from '@/api/auth/otp'
 import Spiner from '@/common/spiner'
 import { OTPSchema } from '@/lib/validations/auth'
 
 import { Button } from './ui/button'
 import { Modal } from './ui/modal'
-
-import { DataError, DataResponse } from '../../types'
 
 export type ModalOTPProps = {
   open: boolean
@@ -25,6 +19,8 @@ export type ModalOTPProps = {
     type: 'REGISTER' | 'signup'
     title: string
   }
+  onSubmit?: (values: any) => void
+  isPending?: boolean
 }
 
 type Inputs = z.infer<typeof OTPSchema>
@@ -44,7 +40,13 @@ const style = {
   },
 }
 
-export default function ModalOTP({ open, onClose, meta }: ModalOTPProps) {
+export default function ModalOTP({
+  open,
+  meta,
+  onClose,
+  onSubmit,
+  isPending,
+}: ModalOTPProps) {
   const {
     control,
     handleSubmit,
@@ -55,20 +57,6 @@ export default function ModalOTP({ open, onClose, meta }: ModalOTPProps) {
       otp: '',
     },
   })
-
-  const { mutate } = useMutation<DataResponse, DataError, any, any>({
-    mutationFn: confirmOTP,
-  })
-
-  const onSubmit = (values: Inputs) => {
-    console.log('values', values)
-    const payload = {
-      otp: values.otp,
-      email: meta.email,
-      type: meta.type,
-    }
-    mutate(payload)
-  }
 
   return (
     <Modal
@@ -85,7 +73,10 @@ export default function ModalOTP({ open, onClose, meta }: ModalOTPProps) {
         <span className="font-medium text-secondary">{meta.email}</span>
       </p>
 
-      <form className="mt-8" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="mt-8"
+        onSubmit={handleSubmit(onSubmit as SubmitHandler<any>)}
+      >
         <Controller
           control={control}
           name="otp"
@@ -112,8 +103,12 @@ export default function ModalOTP({ open, onClose, meta }: ModalOTPProps) {
         />
 
         <section className="mt-10 flex justify-end">
-          <Button type="submit" className="flex h-9 items-center gap-2">
-            {/* <Spiner size={20} /> */}
+          <Button
+            disabled={isPending}
+            type="submit"
+            className="flex h-9 items-center gap-2"
+          >
+            {isPending ? <Spiner size={20} /> : null}
             Confirm
           </Button>
         </section>

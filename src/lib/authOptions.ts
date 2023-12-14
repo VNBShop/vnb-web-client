@@ -1,31 +1,33 @@
-import { jwtDecode } from "jwt-decode"
-import { NextAuthOptions } from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import Google from "next-auth/providers/google"
+import { jwtDecode } from 'jwt-decode'
+import { NextAuthOptions } from 'next-auth'
+import Credentials from 'next-auth/providers/credentials'
+import Google from 'next-auth/providers/google'
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     Credentials({
-      name: "Credentials",
+      name: 'Credentials',
 
       credentials: {
-        email: { label: "Email" },
-        password: { label: "Password" },
+        email: { label: 'Email' },
+        password: { label: 'Password' },
       },
 
       async authorize(credentials, req) {
-
-        const res = await fetch(`${process.env.NEXT_SERVER_URL}/account/login`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: credentials?.email,
-            password: credentials?.password,
-          }),
-        })
+        const res = await fetch(
+          `${process.env.NEXT_SERVER_URL}/account/login`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
+          }
+        )
 
         const data = await res.json()
 
@@ -35,12 +37,11 @@ export const authOptions: NextAuthOptions = {
           if (!!info) {
             return {
               ...data?.metadata,
-              ...info
+              ...info,
             }
           }
 
           return data?.metadata
-
         } else {
           throw new Error(data?.metadata?.message)
         }
@@ -48,9 +49,8 @@ export const authOptions: NextAuthOptions = {
     }),
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SERECT as string
-    })
-
+      clientSecret: process.env.GOOGLE_CLIENT_SERECT as string,
+    }),
   ],
   callbacks: {
     async jwt({ token, user, account }) {
@@ -59,8 +59,6 @@ export const authOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token, user }) {
-
-
       session.user = token as any
       return session
     },
@@ -68,9 +66,8 @@ export const authOptions: NextAuthOptions = {
 
     //   return true
     // },
-
   },
   pages: {
-    signIn: '/signin'
-  }
+    signIn: '/signin',
+  },
 }

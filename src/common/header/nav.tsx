@@ -6,7 +6,8 @@ import { Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-import { signOut, useSession } from 'next-auth/react'
+import { Session } from 'next-auth'
+import { getSession, signOut, useSession } from 'next-auth/react'
 
 import Avatar from '@/components/avatar'
 import CartDrawer from '@/components/drawers/cart.drawer'
@@ -16,12 +17,12 @@ import { nav } from '@/data'
 
 import Icon from '../icons'
 
-export default function Nav() {
+type NavProps = {
+  user: Session['user']
+}
+
+export default function Nav({ user }: NavProps) {
   const pathname = usePathname()
-
-  const { data } = useSession()
-
-  console.log('data> >>> >> ', data)
 
   const [navMobile, setOpenNavMobile] = useState(false)
   const [cartCont, setCartCont] = useState(false)
@@ -75,20 +76,12 @@ export default function Nav() {
         <Icon name="Cart" width={20} height={20} />
       </Button>
 
-      {!data?.user ? (
-        <Button
-          className="ml-2 h-9 border bg-black text-white shadow-none"
-          variant="outline"
-          asChild
-        >
-          <Link href="/signin">Sign in</Link>
-        </Button>
-      ) : (
-        <Menu as="div" className="relative inline-block">
+      {user && Object.keys(user)?.length ? (
+        <Menu as="div" className="relative flex items-center justify-center">
           <Menu.Button>
             <Avatar
-              username={data?.user.username}
-              src={data?.user?.avatar ?? ''}
+              username={user.username}
+              src={user?.avatar ?? user?.image ?? ''}
             />
           </Menu.Button>
           <Transition
@@ -100,23 +93,51 @@ export default function Nav() {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute -right-4 top-[120%] z-10 grid min-w-[250px] gap-2 rounded-lg bg-white p-2 shadow-box">
+            <Menu.Items className="absolute -right-4 top-[120%] z-10 grid min-w-[320px]  gap-1 rounded-lg bg-white p-2 shadow-box">
               <Menu.Item
                 as="div"
-                className="rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                className="flex items-center gap-2 rounded-md p-2 text-sm font-medium shadow-sm hover:cursor-pointer hover:bg-gray-100"
               >
-                {data?.user?.username}
+                <Avatar
+                  username={user.username}
+                  className="h-10 w-10"
+                  src={user?.avatar ?? user?.image ?? ''}
+                />
+                {user?.username?.split('@')[0] ?? user.name}
               </Menu.Item>
+
               <Menu.Item
                 as="div"
-                className="rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                className="flex items-center gap-2 rounded-md p-2 py-1 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
                 onClick={() => signOut()}
               >
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
+                  <Icon name="Key" width={20} height={20} />
+                </div>
+                Change password
+              </Menu.Item>
+
+              <Menu.Item
+                as="div"
+                className="flex items-center gap-2 rounded-md p-2 py-1 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                onClick={() => signOut()}
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
+                  <Icon name="Logout" width={20} height={20} />
+                </div>
                 Logout
               </Menu.Item>
             </Menu.Items>
           </Transition>
         </Menu>
+      ) : (
+        <Button
+          className="ml-2 h-9 border bg-black text-white shadow-none"
+          variant="outline"
+          asChild
+        >
+          <Link href="/signin">Sign in</Link>
+        </Button>
       )}
 
       <button className="lg:hidden" onClick={() => setOpenNavMobile(true)}>

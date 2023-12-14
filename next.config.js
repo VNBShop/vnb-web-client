@@ -6,6 +6,13 @@ const nextConfig = {
     NEXT_SERVER_URL: process.env.NEXT_SERVER_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'lh3.googleusercontent.com'
+      }
+    ]
+  }
 }
 
 module.exports = nextConfig

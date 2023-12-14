@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { OTPPayloadProps, confirmOTP } from '@/api/auth/otp'
 import { signup } from '@/api/auth/signup'
 import Spiner from '@/common/spiner'
 import ModalOTP, { ModalOTPProps } from '@/components/modal-otp'
@@ -23,21 +24,24 @@ import {
 
 import { Input } from '@/components/ui/input'
 import InputPassword from '@/components/ui/input-password'
-import { signUpSchema } from '@/lib/validations/auth'
+import { OTPSchema, signUpSchema } from '@/lib/validations/auth'
 
 import { DataError, DataResponse } from '../../../types'
 
 type Inputs = z.infer<typeof signUpSchema>
 
 export default function SignUpForm() {
-  const [modalVerify, setModalVerify] = useState<ModalOTPProps>({
+  const initStateModalVerify: ModalOTPProps = {
     meta: {
       email: '',
       title: '',
       type: 'REGISTER',
     },
     open: false,
-  })
+    onClose: () => setModalVerify(initStateModalVerify),
+  }
+  const [modalVerify, setModalVerify] =
+    useState<ModalOTPProps>(initStateModalVerify)
 
   const form = useForm<Inputs>({
     resolver: zodResolver(signUpSchema),
@@ -50,17 +54,20 @@ export default function SignUpForm() {
 
   const router = useRouter()
 
-  const { isPending, mutate } = useMutation<
-    DataResponse,
-    DataError,
-    any,
-    unknown
-  >({
+  const mutationSigup = useMutation<DataResponse, DataError, Inputs, unknown>({
     mutationFn: signup,
-    onSuccess: (response) => {
+    onSuccess: (response, data) => {
       if (response.data.success) {
         toast.success('Signup successfully!')
-        router.push('/signin')
+        setModalVerify((prev) => ({
+          ...prev,
+          meta: {
+            ...prev.meta,
+            email: data.email,
+            title: 'Confirm your account',
+          },
+          open: true,
+        }))
       }
     },
     onError: (error) => {
@@ -69,20 +76,47 @@ export default function SignUpForm() {
   })
 
   const onSubmit = (data: Inputs) => {
-    mutate(data)
+    mutationSigup.mutate(data)
+  }
+
+  const mutationVerify = useMutation<
+    DataResponse,
+    DataError,
+    OTPPayloadProps,
+    unknown
+  >({
+    mutationFn: confirmOTP,
+    onSuccess: (response) => {
+      if (response.data.success) {
+        toast.success('Verify successfully!')
+        modalVerify.onClose?.()
+        router.push('/signin')
+      }
+    },
+    onError: (error) => {
+      toast.error(error.response.data.metadata.message)
+    },
+  })
+
+  const onSubmitVerify = (values: z.infer<typeof OTPSchema>) => {
+    const payload: OTPPayloadProps = {
+      email: modalVerify.meta.email,
+      otpCode: values.otp,
+      type: 'REGISTER',
+    }
+    mutationVerify.mutate(payload)
   }
 
   return (
     <>
       <ModalOTP
-        open
-        onClose={() => {}}
-        meta={{
-          email: 'jungas@gmail.com',
-          title: 'Verify your account',
-          type: 'REGISTER',
-        }}
+        open={modalVerify.open}
+        onClose={modalVerify.onClose}
+        meta={modalVerify.meta}
+        onSubmit={onSubmitVerify}
+        isPending={mutationVerify.isPending}
       />
+
       <Form {...form}>
         <form
           className="grid gap-4"
@@ -128,10 +162,10 @@ export default function SignUpForm() {
           />
 
           <Button
-            disabled={isPending}
+            disabled={mutationSigup.isPending}
             className="flex items-center gap-2 bg-black text-white"
           >
-            {isPending && <Spiner size={20} />}
+            {mutationSigup.isPending && <Spiner size={20} />}
             Continue
           </Button>
         </form>
