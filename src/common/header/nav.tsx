@@ -7,11 +7,13 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { Session } from 'next-auth'
-import { getSession, signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 
+import { useModal } from '@/_store/useModal'
 import Avatar from '@/components/avatar'
 import CartDrawer from '@/components/drawers/cart.drawer'
 import NavDrawer from '@/components/drawers/nav.drawer'
+import ModalChangePassword from '@/components/modals/change-password'
 import { Button } from '@/components/ui/button'
 import { nav } from '@/data'
 
@@ -23,6 +25,8 @@ type NavProps = {
 
 export default function Nav({ user }: NavProps) {
   const pathname = usePathname()
+
+  const { setModal } = useModal((state) => state)
 
   const [navMobile, setOpenNavMobile] = useState(false)
   const [cartCont, setCartCont] = useState(false)
@@ -39,6 +43,7 @@ export default function Nav({ user }: NavProps) {
 
   return (
     <>
+      <ModalChangePassword />
       <NavDrawer navMobile={navMobile} setOpenNavMobile={setOpenNavMobile} />
       <CartDrawer cartCont={cartCont} setCartCont={setCartCont} />
       <nav className=" hidden items-center lg:flex">
@@ -93,7 +98,7 @@ export default function Nav({ user }: NavProps) {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute -right-4 top-[120%] z-10 grid min-w-[320px]  gap-1 rounded-lg bg-white p-2 shadow-box">
+            <Menu.Items className="absolute -right-4 top-[120%] z-10 grid min-w-[320px]  gap-[6px] rounded-lg bg-white p-2 shadow-box">
               <Menu.Item
                 as="div"
                 className="flex items-center gap-2 rounded-md p-2 text-sm font-medium shadow-sm hover:cursor-pointer hover:bg-gray-100"
@@ -109,10 +114,10 @@ export default function Nav({ user }: NavProps) {
               <Menu.Item
                 as="div"
                 className="flex items-center gap-2 rounded-md p-2 py-1 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
-                onClick={() => signOut()}
+                onClick={() => setModal('modalChangePassword')}
               >
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
-                  <Icon name="Key" width={20} height={20} />
+                  <Icon name="Key" width={18} height={18} />
                 </div>
                 Change password
               </Menu.Item>
@@ -123,7 +128,7 @@ export default function Nav({ user }: NavProps) {
                 onClick={() => signOut()}
               >
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
-                  <Icon name="Logout" width={20} height={20} />
+                  <Icon name="Logout" width={18} height={18} />
                 </div>
                 Logout
               </Menu.Item>

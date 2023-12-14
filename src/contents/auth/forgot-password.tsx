@@ -13,10 +13,10 @@ import { z } from 'zod'
 import { forgotPassword, resetPassword } from '@/api/auth/forgot-password'
 import { OTPPayloadProps, confirmOTP } from '@/api/auth/otp'
 import Spiner from '@/common/spiner'
-import ModalChangePassword, {
-  ModalChangeProps,
-} from '@/components/modal-change-password'
 import ModalOTP, { ModalOTPProps } from '@/components/modal-otp'
+import ModalResetPassword, {
+  ModalResetProps,
+} from '@/components/modals/reset-password'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -59,8 +59,8 @@ export default function ForgotPasswordForm() {
   const [modalVerify, setModalVerify] =
     useState<ModalOTPProps>(initStateModalVerify)
 
-  const [modalResetPassword, setModalResetPassword] =
-    useState<ModalChangeProps>({
+  const [modalResetPassword, setModalResetPassword] = useState<ModalResetProps>(
+    {
       email: '',
       open: false,
       onClose: () =>
@@ -68,7 +68,8 @@ export default function ForgotPasswordForm() {
           email: '',
           open: false,
         }),
-    })
+    }
+  )
 
   const mutationFindAccount = useMutation<
     DataResponse,
@@ -172,7 +173,7 @@ export default function ForgotPasswordForm() {
         isPending={mutationVerifyAccount.isPending}
       />
 
-      <ModalChangePassword
+      <ModalResetPassword
         open={modalResetPassword.open}
         onClose={modalResetPassword.onClose}
         email={modalResetPassword.email}

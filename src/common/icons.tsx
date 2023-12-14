@@ -634,6 +634,22 @@ export default function Icon({
         </svg>
       )
     }
+
+    case 'ChevronLeftThin': {
+      return (
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill={color}
+            d="M13.891 17.418a.697.697 0 0 1 0 .979a.68.68 0 0 1-.969 0l-7.83-7.908a.697.697 0 0 1 0-.979l7.83-7.908a.68.68 0 0 1 .969 0a.697.697 0 0 1 0 .979L6.75 10z"
+          />
+        </svg>
+      )
+    }
   }
 }
 
@@ -665,6 +681,7 @@ export type IconName =
   | 'Checked'
   | 'ChevronDown'
   | 'ChevronLeft'
+  | 'ChevronLeftThin'
   | 'ChevronRight'
   | 'Endow'
   | 'Star'

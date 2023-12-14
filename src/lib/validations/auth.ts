@@ -92,3 +92,38 @@ export const resetPasswordSchema = z
       })
     }
   })
+
+export const changePasswordSchema = z
+  .object({
+    oldPassword: z.string().min(1, {
+      message: 'Please enter current password',
+    }),
+    newPassword: z
+      .string()
+      .min(8, {
+        message: 'Password must be at least 8 characters long',
+      })
+      .max(100)
+      .refine(
+        (value) =>
+          /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/.test(
+            value
+          ),
+        'Password must be at least one special character, number and uppercase letter'
+      ),
+    confirmNewPassword: z
+      .string()
+      .min(8, {
+        message: 'Password must be at least 8 characters long',
+      })
+      .max(100),
+  })
+  .superRefine(({ newPassword, confirmNewPassword }, ctx) => {
+    if (newPassword !== confirmNewPassword) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The passwords did not match',
+        path: ['confirmNewPassword'],
+      })
+    }
+  })

@@ -1,19 +1,17 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-
-import OtpInput from 'react-otp-input'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 import { z } from 'zod'
 
 import Spiner from '@/common/spiner'
-import { OTPSchema, resetPasswordSchema } from '@/lib/validations/auth'
+import { resetPasswordSchema } from '@/lib/validations/auth'
 
-import { Button } from './ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from './ui/form'
-import InputPassword from './ui/input-password'
-import { Modal } from './ui/modal'
+import { Button } from '../ui/button'
+import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
+import InputPassword from '../ui/input-password'
+import { Modal } from '../ui/modal'
 
-export type ModalChangeProps = {
+export type ModalResetProps = {
   open: boolean
   onClose?: () => void
   email: string
@@ -23,12 +21,12 @@ export type ModalChangeProps = {
 
 type Inputs = z.infer<typeof resetPasswordSchema>
 
-export default function ModalChangePassword({
+export default function ModalResetPassword({
   open,
   onClose,
   onSubmit,
   isPending,
-}: ModalChangeProps) {
+}: ModalResetProps) {
   const form = useForm<Inputs>({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
