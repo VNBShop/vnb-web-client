@@ -1,30 +1,27 @@
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from '@tanstack/react-query'
+
+import { Metadata } from 'next'
+
+import getProducts from '@/api/public/product'
 import Empty from '@/common/empty'
 
 import Products from '@/contents/ecommerce/products'
 
 import { BrandProps } from '../../../types/products'
 
-// export const meta: Metadata = {
-//   title: 'Products',
-//   description: 'Buy products from our stores',
-//   alternates: {
-//     canonical: '/products',
-//   },
-// }
+export const meta: Metadata = {
+  title: 'Products',
+  description: 'Buy products from our stores',
+  alternates: {
+    canonical: '/products',
+  },
+}
 
-export default function ProductsPage() {
-  const arr = []
-
-  for (let i = 0; i < 10; i++) {
-    const fakeData = {
-      id: i + 1,
-      image: '/common/fake.webp',
-      name: `Lining racket HC1200 ${i + 1}`,
-      price: Math.floor(Math.random() * 9900001) + 100000,
-    }
-    arr.push(fakeData)
-  }
-
+export default async function ProductsPage() {
   const brands: BrandProps[] = [
     {
       id: 1,
@@ -111,19 +108,23 @@ export default function ProductsPage() {
     },
   ]
 
+  // const queryClient = new QueryClient()
+
+  // await queryClient.prefetchQuery({
+  //   queryKey: ['products'],
+  //   queryFn: getProducts,
+  // })
+
   return (
     <section className="mx-auto mt-10 max-w-main px-4">
-      {arr?.length ? (
-        <Products
-          title="Products"
-          desciption="Buy products from our stores"
-          products={arr}
-          brands={brands}
-          stores={stores}
-        />
-      ) : (
-        <Empty message="Product is empty!" />
-      )}
+      {/* <HydrationBoundary state={dehydrate(queryClient)}> */}
+      <Products
+        title="Products"
+        desciption="Buy products from our stores"
+        brands={brands}
+        stores={stores}
+      />
+      {/* </HydrationBoundary> */}
     </section>
   )
 }

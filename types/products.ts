@@ -1,8 +1,17 @@
-export type ProductProps = {
-  id?: number
-  name: string
-  image: string
-  price: number
+export type ProductsProps = {
+  productId: number
+  productName: string
+  productImages: string[]
+  productPrice: number
+}
+
+export type ProductsList = {
+  data: ProductsProps[]
+  maxPage?: number
+  nextPage: number
+  currentPage: number
+  previousPage?: number
+  total: number
 }
 
 export type BrandProps = {
