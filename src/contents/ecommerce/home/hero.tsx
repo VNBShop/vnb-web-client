@@ -1,29 +1,29 @@
 'use client'
+
 import { useEffect } from 'react'
 
 import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { axiosProduct } from '@/api/axios/axiosProduct'
 import Icon from '@/common/icons'
 
 export default function Hero() {
   // have some problem here
-  useEffect(() => {
-    ;(async () => {
-      const test = await axiosProduct.get(
-        '/product?currentPage=2&pageSize=10',
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
+  // useEffect(() => {
+  //   ;(async () => {
+  //     const test = await axios.get(
+  //       `${process.env.NEXT_PRODUCT_SERVICE}/product/827`,
+  //       {
+  //         headers: {
+  //           'ngrok-skip-browser-warning': true,
+  //         },
+  //       }
+  //     )
 
-      console.log('test >>>>', test)
-    })()
-  }, [])
+  //     console.log('test >>>>', test)
+  //   })()
+  // }, [])
   return (
     <section className=" relative">
       <section className="relative mx-auto flex w-full max-w-[64rem] flex-col items-center justify-center gap-4 py-12 text-center md:pt-28">

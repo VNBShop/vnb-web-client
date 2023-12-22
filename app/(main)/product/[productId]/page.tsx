@@ -1,9 +1,14 @@
 import Image from 'next/image'
 
+import { notFound } from 'next/navigation'
+
 import Icon from '@/common/icons'
+import { Breadcrumbs } from '@/components/breadcrumbs'
 import AddToCardForm from '@/components/form/add-to-card'
 import CommentForm from '@/components/form/product-comment'
 import CommnentCard from '@/components/ui/card.comment'
+
+import { ProductDetail } from '../../../../types/products'
 
 type ProductPageProps = {
   params: {
@@ -11,201 +16,210 @@ type ProductPageProps = {
   }
 }
 
-const product = {
-  id: 123123,
-  name: 'Yonex BA261CR Badminton Racket',
-  image: '/common/fake.webp',
-  brand: 'Yonex',
-  status: 'Available',
-  price: 3490000,
-  endows: ['Free 1 pair of VNB badminton socks', 'Genuine products'],
-  quantity: 12,
-  rating: 4.3,
-  comments: [
-    {
-      id: 1231,
-      userId: '12das2',
-      userName: 'Dzung',
-      userAvatar: '/common/fake.webp',
-      content:
-        'Norman: Tao vừa mới bị thằng Nhọ chốt vỡ mồm xong phải đi loay hoay đi đào thằng Kraven lên thì giờ lại đến có đứa chốt vỡ mồm tao rồi đào con giai tao lên à ?? Thằng Nhọ gánh tội cho tao thì tao gánh nhọ cho nó hay gì đây ??',
-    },
-    {
-      id: 2121,
-      userId: 'csaa232',
-      userName: 'Khang Leo',
-      content: 'Ugly racket',
-    },
-  ],
-  description: `<p><strong>1. About Yonex Arc Lite badminton racket</strong></p><p>Yonex Arcsaber Lite badminton racket with its leading advanced technologies applied, you will not need to worry much when you want to own this racquet. Especially if you are looking for a racquet with high stability, flexibility in every move then this will be a great choice for you.</p><p>Overall, this Arc Lite racquet line is manufactured by new innovative materials, H.M. Graphite/NANOAIR SPRING, Graphite frame technology makes the racquet durable and reduces the vibration of the racquet when hitting the shuttle.</p><p>The Yonex Arcsaber Lite is a head-heavy racquet with a medium stiffness body and light racquet weight. This is a natural attack racket suitable for attacking style, using attack power to overwhelm the opponent.</p><p>The racket is designed with an extremely strong design when the detailed lines of yellow and white on both sides of the racket frame stand out against the dark navy blue background of the racket to create a balanced look, a unified block with symmetry. adds strength and certainty to the racquet</p><p>With a low price, guaranteed quality and a powerful and elegant design, Yonex Arcsaber Lite is very suitable for those who play the natural way of playing, those who have been playing for a while, students, students, people who have been playing for a while. play movement.</p><p><br></p><p><strong>2. Yonex Arc Lite badminton racket specifications</strong></p><p>- Hardness: Medium</p><p>- Racket frame: Carbon Ggraphite</p><p>- Body: Carbon Graphite.</p><p>- Weight: 4U</p><p>- Grip circumference: G4, 5</p><p>- Maximum tension: 24 LBS</p><p>- Balance point: 285 – 295 mm</p><p>- Color: Navy Blue/Yellow/White</p><p>- Manufacture: Taiwan</p><p><br></p><p><strong>3. Technology applied to the badminton racket Yonex Arc Lite</strong></p><p>The Nanoair Spring in the resin binds the carbon fibers so that the nano-sized air bubbles in the material help the racquet to bend and flex like in a spring. The result is a better energy transfer from the wire bed to the shuttle for a stronger hit.</p><p>- The ISOOMETRIC was invented by YONEX to maximize this all-important sweet spot and has now become the world's leading feature of YONEX racquets. The square head of the racquet means more strings will pass through the right angle area, making the sweet spot area larger. YONEX continues to develop and enhance the power of ISOMETRIC, further reducing the "dead" zones around the frame edge commonly found on conventional racquets, creating a larger sweet spot area than other frames. other racquets.</p><p>- AERO-BOX FRAME. The purpose of the oval frame face design is so that when hitting the racquet, the wind will let the air through, the BOX FRAME beveled on both sides makes the racket stronger. The design helps to increase aerodynamics, helping us swing the racquet faster, smash the shuttle harder.</p><p><br></p><p><strong>4. Objects suitable for Yonex Arc Lite badminton rackets</strong></p><p>- Suitable for people with average wrist strength, movement players, people who have just played for a while, students.</p><p>- Suitable for players who follow the style of attacking, overwhelming the opponent with attack power, like to smash the bridge.</p>`,
-  stores: [
-    {
-      id: 1,
-      name: 'District 1',
-    },
-    {
-      id: 2,
-      name: 'District 2',
-    },
-    {
-      id: 3,
-      name: 'District 3',
-    },
-    {
-      id: 4,
-      name: 'District 4',
-    },
-    {
-      id: 5,
-      name: 'District 5',
-    },
-  ],
+type ProductDetailResponse = {
+  metadata: ProductDetail
+  success: boolean
 }
-export default function ProductPage({ params }: ProductPageProps) {
+
+export default async function ProductPage({ params }: ProductPageProps) {
+  const id = Number(params?.productId)
+
+  const res = await fetch(`${process.env.NEXT_PRODUCT_SERVICE}/product/${id}`)
+
+  const result: ProductDetailResponse = await res.json()
+
+  if (!result.success) {
+    notFound()
+  }
+
+  const product = result?.metadata
+
   return (
-    <section className="mx-auto mt-10 flex max-w-main flex-col items-start gap-7 px-4 lg:flex-row">
-      <section className="flex flex-col items-start gap-7 lg:w-[75%]">
-        <section className="flex w-full flex-col items-start lg:flex-row">
-          <figure className="w-full lg:w-[45%]">
-            <Image
-              src={product.image}
-              alt={product.name}
-              title={product.name}
-              width="0"
-              height="0"
-              className=" h-full w-full object-contain"
-              sizes="100vw"
-            />
-          </figure>
+    <section className="mx-auto mt-5 max-w-main space-y-7 px-4">
+      <Breadcrumbs
+        segments={[
+          {
+            title: 'Home',
+            href: '/',
+          },
+          {
+            title: 'Products',
+            href: '/products',
+          },
+          {
+            title: product.productName,
+            href: `/product/${product.productId}`,
+          },
+        ]}
+      />
 
-          <article className="w-full flex-1 space-y-3">
-            <h1 className="text-2xl font-medium">{product?.name}</h1>
+      <section className="flex flex-col items-start gap-7 lg:flex-row">
+        <section className="flex w-full flex-col items-start gap-7 lg:w-[75%]">
+          <section className="flex w-full flex-col items-start gap-x-10 lg:flex-row">
+            <figure className="w-full lg:w-[45%]">
+              <Image
+                src={product?.productImages[0]}
+                alt={product?.productName}
+                title={product?.productName}
+                width="0"
+                height="0"
+                className=" aspect-square w-full object-cover"
+                sizes="100vw"
+              />
+            </figure>
 
-            <h2 className="text-sm">
-              Code: <span className="text-secondary">{params?.productId}</span>
-            </h2>
+            <article className="w-full flex-1 space-y-3">
+              <h1 className="text-2xl font-medium">{product?.productName}</h1>
 
-            <div className="flex items-center gap-2 text-sm">
-              <h2>
-                Brand: <span className=" text-secondary">{product?.brand}</span>
+              <h2 className="text-sm">
+                Code:{' '}
+                <span className="text-secondary">{params?.productId}</span>
               </h2>
-              <div className="h-4 w-[1px] bg-gray-500" />
-              <h2>
-                Status:{' '}
-                <span className="text-secondary">{product?.status}</span>
-              </h2>
-            </div>
 
-            <div className="flex items-end gap-4">
-              <h2 className="text-xl font-medium text-secondary">
-                {product?.price?.toLocaleString()}đ
-              </h2>
-              <p className=" text-gray-400 ">
-                SRP:{' '}
-                {product?.price ? (
-                  <span className=" line-through">
-                    {(product?.price + product?.price * 0.1).toLocaleString()}đ
+              <div className="flex items-center gap-2 text-sm">
+                <h2>
+                  Brand:{' '}
+                  <span className=" text-secondary">
+                    {product?.productBrand}
                   </span>
-                ) : (
-                  0
-                )}
-              </p>
-            </div>
+                </h2>
+                <div className="h-4 w-[1px] bg-gray-500" />
+                <h2>
+                  Status:{' '}
+                  {!!product?.productStatus ? (
+                    <span className="text-secondary">
+                      {product?.productStatus}
+                    </span>
+                  ) : (
+                    <span className="text-gray-600">Not available</span>
+                  )}
+                </h2>
+              </div>
 
-            <ul className="flex items-center gap-2">
-              {[1, 2, 3, 4, 5].map((item, index) => (
-                <li key={index}>
-                  <Icon
-                    name="Star"
-                    width={18}
-                    height={18}
-                    color={
-                      product?.rating
-                        ? item <= Math.round(product.rating)
-                          ? '#FF9529'
-                          : '#B4B4B3'
-                        : '#FF9529'
-                    }
-                  />
-                </li>
-              ))}
-            </ul>
+              <div className="flex items-end gap-4">
+                <h2 className="text-xl font-medium text-secondary">
+                  {product?.productPrice?.toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                  })}
+                </h2>
+                <p className=" text-gray-400 ">
+                  SRP:{' '}
+                  {product?.productPrice ? (
+                    <span className=" line-through">
+                      {(
+                        product?.productPrice +
+                        product?.productPrice * 0.1
+                      ).toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                      })}
+                    </span>
+                  ) : (
+                    0
+                  )}
+                </p>
+              </div>
 
-            <div className="relative !my-7 rounded-md border border-dashed p-4">
-              <ul className="space-y-3">
-                {product.endows.map((endow, index) => (
-                  <li
-                    className="flex items-start gap-2 text-sm text-gray-600"
-                    key={index}
-                  >
-                    <Icon name="Checked" width={20} height={20} /> {endow}
-                    {endow}
+              <ul className="flex items-center gap-1">
+                {[1, 2, 3, 4, 5].map((item, index) => (
+                  <li key={index}>
+                    <Icon
+                      name="Star"
+                      width={18}
+                      height={18}
+                      color={
+                        product?.productRating
+                          ? item <= Math.round(product.productRating)
+                            ? '#FF9529'
+                            : '#B4B4B3'
+                          : '#FF9529'
+                      }
+                    />
                   </li>
                 ))}
               </ul>
-              <figure className="absolute -top-4 right-2">
-                <Icon name="Endow" color="#ff2461" width={27} height={27} />
-              </figure>
-            </div>
+              {/*
+              <div className="relative !my-7 rounded-md border border-dashed p-4">
+                <ul className="space-y-3">
+                  {product.endows.map((endow, index) => (
+                    <li
+                      className="flex items-start gap-2 text-sm text-gray-600"
+                      key={index}
+                    >
+                      <Icon name="Checked" width={20} height={20} /> {endow}
+                      {endow}
+                    </li>
+                  ))}
+                </ul>
+                <figure className="absolute -top-4 right-2">
+                  <Icon name="Endow" color="#ff2461" width={27} height={27} />
+                </figure>
+              </div> */}
+              {!!Object.keys(product?.productDetail)?.length ? (
+                <ul className="!mb-10">
+                  {Object.entries(product.productDetail).map(
+                    ([key, value], index) => {
+                      return (
+                        <li
+                          key={index}
+                          className="flex items-center gap-1 text-sm leading-[24px] text-gray-500"
+                        >
+                          <p>{key}</p>:{' '}
+                          <p className=" font-medium text-gray-600">{value}</p>
+                        </li>
+                      )
+                    }
+                  )}
+                </ul>
+              ) : null}
 
-            <AddToCardForm />
-          </article>
+              <AddToCardForm />
+            </article>
+          </section>
+          <hr className="w-full" />
+          <section className="mt-4 w-full">
+            <CommentForm />
+
+            <ul className="mt-10 max-w-[500px] space-y-7">
+              {!!product?.productComments?.length ? (
+                product.productComments.map((comment, index) => (
+                  <li key={index}>
+                    <CommnentCard
+                      comment={comment.comment}
+                      name={comment.commenterName}
+                      avatar={comment.commenterAvatar}
+                    />
+                  </li>
+                ))
+              ) : (
+                <p className="text-center text-sm text-gray-500">
+                  This product didnt have comment yet!
+                </p>
+              )}
+            </ul>
+          </section>
+          Rb
         </section>
 
-        <section className="mt-10 w-full">
-          <header className="mb-5 flex items-center gap-2">
-            <h2 className="text-xl font-medium">Descriptions</h2>
-            <hr className="flex-1" />
-          </header>
-
-          <div
-            className="text-sm"
-            dangerouslySetInnerHTML={{
-              __html: product?.description,
-            }}
-          />
-        </section>
-        <hr className="w-full" />
-        <section className="mt-4 w-full">
-          <CommentForm />
-
-          <ul className="mt-10 max-w-[500px] space-y-7">
-            {!product?.comments?.length ? (
-              product.comments.map((comment) => (
-                <li key={comment.id}>
-                  <CommnentCard
-                    comment={comment.content}
-                    name={comment.userName}
-                    avatar={comment.userAvatar}
-                  />
-                </li>
-              ))
-            ) : (
-              <p className="text-center text-sm text-gray-500">
-                This product didnt have comment yet!
-              </p>
-            )}
+        <section className="relative top-[80px] w-full flex-1 rounded-md border border-dashed p-4 lg:sticky">
+          <ul className=" mt-3 bg-black">
+            {product?.productStores?.length
+              ? product.productStores.map((store) => (
+                  <li
+                    className="border-b border-gray-300 p-1 px-2 text-sm text-white"
+                    key={store.storeId}
+                  >
+                    {store.storeName}
+                  </li>
+                ))
+              : null}
           </ul>
+
+          <div className=" absolute -top-[16px] rounded-md border bg-white p-2 py-1 text-sm font-medium">
+            Available at
+          </div>
         </section>
-      </section>
-
-      <section className="relative top-[80px] w-full flex-1 rounded-md border border-dashed p-4 lg:sticky">
-        <ul className=" mt-3 bg-black">
-          {product?.stores?.length
-            ? product.stores.map((store) => (
-                <li
-                  className="border-b border-gray-300 p-1 px-2 text-sm text-white"
-                  key={store.id}
-                >
-                  {store.name}
-                </li>
-              ))
-            : null}
-        </ul>
-
-        <div className=" absolute -top-[16px] rounded-md border bg-white p-2 py-1 text-sm font-medium">
-          Available at
-        </div>
       </section>
     </section>
   )

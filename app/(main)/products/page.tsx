@@ -4,24 +4,17 @@ import {
   dehydrate,
 } from '@tanstack/react-query'
 
-import { Metadata } from 'next'
-
-import getProducts from '@/api/public/product'
-import Empty from '@/common/empty'
+import { getProducts } from '@/api/public/product'
 
 import Products from '@/contents/ecommerce/products'
 
-import { BrandProps } from '../../../types/products'
+import { BrandProps, ProductStore } from '../../../types/products'
 
-export const meta: Metadata = {
-  title: 'Products',
-  description: 'Buy products from our stores',
-  alternates: {
-    canonical: '/products',
-  },
-}
-
-export default async function ProductsPage() {
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Record<string, string | string[] | undefined>
+}) {
   const brands: BrandProps[] = [
     {
       id: 1,
@@ -45,86 +38,87 @@ export default async function ProductsPage() {
     },
   ]
 
-  const stores: BrandProps[] = [
+  const stores: ProductStore[] = [
     {
-      id: 1,
-      name: 'District 1',
+      storeId: 1,
+      storeName: 'District 1',
     },
     {
-      id: 2,
-      name: 'District 2',
+      storeId: 2,
+      storeName: 'District 2',
     },
     {
-      id: 3,
-      name: 'District 3',
+      storeId: 3,
+      storeName: 'District 3',
     },
     {
-      id: 4,
-      name: 'District 4',
+      storeId: 4,
+      storeName: 'District 4',
     },
     {
-      id: 5,
-      name: 'District 5',
+      storeId: 5,
+      storeName: 'District 5',
     },
     {
-      id: 6,
-      name: 'District 6',
+      storeId: 6,
+      storeName: 'District 6',
     },
     {
-      id: 7,
-      name: 'District 7',
+      storeId: 7,
+      storeName: 'District 7',
     },
     {
-      id: 8,
-      name: 'District 8',
+      storeId: 8,
+      storeName: 'District 8',
     },
     {
-      id: 9,
-      name: 'District 9',
+      storeId: 9,
+      storeName: 'District 9',
     },
     {
-      id: 10,
-      name: 'District 10',
+      storeId: 10,
+      storeName: 'District 10',
     },
     {
-      id: 11,
-      name: 'District 11',
+      storeId: 11,
+      storeName: 'District 11',
     },
     {
-      id: 12,
-      name: 'District 12',
+      storeId: 12,
+      storeName: 'District 12',
     },
     {
-      id: 13,
-      name: 'Tan Phu District',
+      storeId: 13,
+      storeName: 'Tan Phu District',
     },
     {
-      id: 14,
-      name: 'Tan Binh District',
+      storeId: 14,
+      storeName: 'Tan Binh District',
     },
     {
-      id: 15,
-      name: 'Binh Thanh District',
+      storeId: 15,
+      storeName: 'Binh Thanh District',
     },
   ]
 
-  // const queryClient = new QueryClient()
+  const queryClient = new QueryClient()
 
-  // await queryClient.prefetchQuery({
-  //   queryKey: ['products'],
-  //   queryFn: getProducts,
-  // })
+  await queryClient.prefetchQuery({
+    queryKey: ['products'],
+    queryFn: () => getProducts({ currentPage: 1 }),
+  })
 
   return (
     <section className="mx-auto mt-10 max-w-main px-4">
-      {/* <HydrationBoundary state={dehydrate(queryClient)}> */}
-      <Products
-        title="Products"
-        desciption="Buy products from our stores"
-        brands={brands}
-        stores={stores}
-      />
-      {/* </HydrationBoundary> */}
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <Products
+          title="Products"
+          desciption="Buy products from our stores"
+          brands={brands}
+          stores={stores}
+          filter={searchParams}
+        />
+      </HydrationBoundary>
     </section>
   )
 }

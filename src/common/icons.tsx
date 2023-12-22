@@ -650,6 +650,22 @@ export default function Icon({
         </svg>
       )
     }
+
+    case 'ChevronRightThin': {
+      return (
+        <svg
+          width={width}
+          height={height}
+          viewBox="0 0 50 50"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill={color}
+            d="m22.7 34.7l-1.4-1.4l8.3-8.3l-8.3-8.3l1.4-1.4l9.7 9.7z"
+          />
+        </svg>
+      )
+    }
   }
 }
 
@@ -683,6 +699,7 @@ export type IconName =
   | 'ChevronLeft'
   | 'ChevronLeftThin'
   | 'ChevronRight'
+  | 'ChevronRightThin'
   | 'Endow'
   | 'Star'
   | 'Trash'

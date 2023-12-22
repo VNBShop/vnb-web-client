@@ -10,7 +10,7 @@ type EmptyProps = HTMLAttributes<HTMLDivElement> & {
 export default function Empty({ message, className, ...props }: EmptyProps) {
   return (
     <section
-      className={cn('w-full flex items-center justify-center py-32', className)}
+      className={cn('flex w-full items-center justify-center py-16', className)}
       {...props}
     >
       <figure>

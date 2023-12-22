@@ -21,7 +21,7 @@ export default function ProductCard({
   return (
     <article
       className={cn(
-        'group h-full overflow-hidden rounded-lg hover:cursor-pointer',
+        'group flex h-full flex-col overflow-hidden rounded-lg hover:cursor-pointer',
         className
       )}
       {...props}
@@ -40,11 +40,16 @@ export default function ProductCard({
         </figure>
       </section>
 
-      <section className="p-4">
-        <p className=" text-sm font-medium">{name}</p>
-        <section className="flex items-center justify-between mt-2">
+      <section className="flex flex-1 flex-col justify-between p-4">
+        <div className=" text-sm font-medium">{name}</div>
+        <section className="mt-2 flex items-center justify-between">
           <p className=" text-sm text-[#FF3FA4]">
-            {price ? price.toLocaleString() : null}đ
+            {price
+              ? price.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              : null}
           </p>
 
           <section className="flex items-center gap-2">

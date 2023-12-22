@@ -55,8 +55,8 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
   const searchParams = useSearchParams()
   const [isPending, startTransition] = useTransition()
 
-  const brand_ids = searchParams?.get('brand_ids')
-  const store_ids = searchParams?.get('store_ids')
+  const brand_ids = searchParams?.get('brandIds')
+  const store_ids = searchParams?.get('storeIds')
   const price_range = searchParams?.get('price_range')
   const sort = searchParams?.get('sort')
 
@@ -64,7 +64,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
 
   const [filterContainer, setFilterContainer] = useState(false)
 
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 20000000])
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000])
   const [brandIds, setBrandIds] = useState<number[] | null>(
     brand_ids?.split('.').map(Number) ?? null
   )
@@ -107,7 +107,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
     startTransition(() => {
       router.push(
         `${pathname}?${createQueryString({
-          brand_ids: brandIds?.length ? brandIds.join('.') : null,
+          brandIds: brandIds?.length ? brandIds.join('.') : null,
         })}`
       )
     })
@@ -118,7 +118,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
     startTransition(() => {
       router.push(
         `${pathname}?${createQueryString({
-          store_ids: storeIds?.length ? storeIds.join('.') : null,
+          storeIds: storeIds?.length ? storeIds.join('.') : null,
         })}`
       )
     })
@@ -145,7 +145,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
                 window.history.replaceState(null, '', pathname)
               }
               setBrandIds(null)
-              setPriceRange([0, 20000000])
+              setPriceRange([0, 1000])
               setStoreIds(null)
             }}
           >
@@ -154,14 +154,14 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
         ) : null}
 
         <Button
-          className=" shadow-none bg-black text-white"
+          className=" bg-black text-white shadow-none"
           size="sm"
           onClick={() => setFilterContainer(true)}
         >
           Filter
         </Button>
         <Menu as="div" className="relative inline-block">
-          <Menu.Button className="h-8 rounded-md px-3 text-xs flex items-center gap-1 shadow-none bg-black text-white">
+          <Menu.Button className="flex h-8 items-center gap-1 rounded-md bg-black px-3 text-xs text-white shadow-none">
             Sort <Icon name="ChevronDown" width={18} height={18} />
           </Menu.Button>
           <Transition
@@ -173,11 +173,11 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
             leaveFrom="transform opacity-100 scale-100"
             leaveTo="transform opacity-0 scale-95"
           >
-            <Menu.Items className="absolute top-[120%] grid gap-2 rounded-lg p-4 bg-white shadow-box z-10 min-w-[170px] -right-4">
+            <Menu.Items className="absolute -right-4 top-[120%] z-10 grid min-w-[170px] gap-2 rounded-lg bg-white p-4 shadow-box">
               {sorts.map((item) => (
                 <Menu.Item key={item.id} as={Fragment}>
                   <p
-                    className={`hover:cursor-pointer text-sm hover:font-medium ${
+                    className={`text-sm hover:cursor-pointer hover:font-medium ${
                       sort === item.value ? 'font-medium' : ''
                     }`}
                     onClick={() =>
@@ -217,7 +217,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
           leave="transition-all duration-300 ease-in-out"
           leaveFrom="opacity-100 translate-x-0"
           leaveTo="opacity-0 -translate-x-[100%]"
-          className="absolute top-0 left-0 bottom-0 lg:w-[25%] w-[75%] md:w-[40%] bg-white p-4 shadow-md"
+          className="absolute bottom-0 left-0 top-0 w-[75%] bg-white p-4 shadow-md md:w-[40%] lg:w-[25%]"
         >
           <section className="flex items-center justify-between border-b pb-4">
             <h3 className=" font-medium md:text-lg">Filters</h3>
@@ -227,26 +227,26 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
             </button>
           </section>
 
-          <section className="mt-5 space-y-10 h-full overflow-auto mb-10 pb-10">
+          <section className="mb-10 mt-5 h-full space-y-10 overflow-auto pb-10">
             <div className=" space-y-4">
-              <h3 className="text-sm font-medium tracking-wide text-foreground">
-                Price range (VND)
+              <h3 className="text-foreground text-sm font-medium tracking-wide">
+                Price range ($)
               </h3>
 
               <div className="flex items-center justify-between">
-                <p className="text-xs text-hray-500">
+                <p className="text-hray-500 text-xs">
                   {priceRange[0].toLocaleString()}
                 </p>
-                <p className="text-xs text-hray-500">
+                <p className="text-hray-500 text-xs">
                   {priceRange[1].toLocaleString()}
                 </p>
               </div>
               <Slider
                 variant="range"
                 thickness="thin"
-                defaultValue={[0, 20000000]}
-                max={20000000}
-                step={100}
+                defaultValue={[0, 1000]}
+                max={1000}
+                step={1}
                 value={priceRange}
                 onValueChange={(value: typeof priceRange) =>
                   setPriceRange(value)
@@ -257,11 +257,11 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
 
             {brands && brands.length ? (
               <div className="space-y-4">
-                <h3 className="text-sm font-medium tracking-wide text-foreground">
+                <h3 className="text-foreground text-sm font-medium tracking-wide">
                   Brands
                 </h3>
 
-                <ul className="space-y-4 max-h-[240px] overflow-auto">
+                <ul className="max-h-[240px] space-y-4 overflow-auto">
                   {brands.map((brand) => (
                     <li key={brand.id} className="flex items-center gap-2">
                       <Checkbox
@@ -292,32 +292,33 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
 
             {stores && stores.length ? (
               <div className="space-y-4">
-                <h3 className="text-sm font-medium tracking-wide text-foreground">
+                <h3 className="text-foreground text-sm font-medium tracking-wide">
                   Store
                 </h3>
 
-                <ul className="space-y-4 max-h-[240px] overflow-auto">
+                <ul className="max-h-[240px] space-y-4 overflow-auto">
                   {stores.map((store) => (
-                    <li key={store.id} className="flex items-center gap-2">
+                    <li key={store.storeId} className="flex items-center gap-2">
                       <Checkbox
-                        id={`store-${store.id}`}
-                        checked={storeIds?.includes(store.id) ?? false}
+                        id={`store-${store.storeId}`}
+                        checked={storeIds?.includes(store.storeId) ?? false}
                         onCheckedChange={(value) => {
                           if (value) {
-                            setStoreIds([...(storeIds ?? []), store.id])
+                            setStoreIds([...(storeIds ?? []), store.storeId])
                           } else {
                             setStoreIds(
-                              storeIds?.filter((id) => id !== store.id) ?? null
+                              storeIds?.filter((id) => id !== store.storeId) ??
+                                null
                             )
                           }
                         }}
                       />
 
                       <Label
-                        htmlFor={`store-${store.id}`}
+                        htmlFor={`store-${store.storeId}`}
                         className="font-normal hover:cursor-pointer"
                       >
-                        {store.name}
+                        {store.storeName}
                       </Label>
                     </li>
                   ))}
