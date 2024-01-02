@@ -26,32 +26,34 @@ export default function ForumSideBar() {
             <h3 className="text-sm font-medium">Saved</h3>
           </Link>
         </li>
-      </ul>
 
-      <hr className="my-4 mt-7" />
-      {/* Ads */}
-      <section className="mt-4">
-        <figure className="flex w-full items-center justify-center">
-          <Image
-            src="/forum/banner-sale.png"
-            alt="banner"
-            width="0"
-            height="0"
-            className="w-[100px]"
-            sizes="100vw"
-          />
-        </figure>
-        <p className="text-center text-lg font-semibold">VNB SUPPER sale</p>
-        <h4 className="mt-2 bg-messenger bg-clip-text text-center text-3xl font-bold text-transparent">
-          UPTO 70%
-        </h4>
-        <Link
-          href="/"
-          className=" mt-5 inline-flex w-full items-center justify-center rounded-md bg-black py-3 text-sm font-medium text-white"
-        >
-          Buying now
-        </Link>
-      </section>
+        <li>
+          <hr className="my-4 mt-7" />
+          {/* Ads */}
+          <section className="mt-4">
+            <figure className="flex w-full items-center justify-center">
+              <Image
+                src="/forum/banner-sale.png"
+                alt="banner"
+                width="0"
+                height="0"
+                className="w-[100px]"
+                sizes="100vw"
+              />
+            </figure>
+            <p className="text-center text-lg font-semibold">VNB SUPPER sale</p>
+            <h4 className="mt-2 bg-messenger bg-clip-text text-center text-3xl font-bold text-transparent">
+              UPTO 70%
+            </h4>
+            <Link
+              href="/"
+              className=" mt-5 inline-flex w-full items-center justify-center rounded-md bg-black py-3 text-sm font-medium text-white"
+            >
+              Buying now
+            </Link>
+          </section>
+        </li>
+      </ul>
     </aside>
   )
 }

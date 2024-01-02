@@ -22,19 +22,9 @@ function ChatList({
 
   useEffect(() => {
     if (scrollViewRef && scrollViewRef.current) {
-      scrollViewRef.current.scrollIntoView({
-        behavior: 'smooth',
-      })
+      scrollViewRef.current.scrollIntoView()
     }
   }, [chats, isTyping])
-
-  // useLayoutEffect(() => {
-  //   if (scrollViewRef && scrollViewRef.current) {
-  //     scrollViewRef.current.scrollIntoView({
-  //       behavior: 'smooth',
-  //     })
-  //   }
-  // }, [])
 
   const check = markConsecutiveDuplicates(chats)
 

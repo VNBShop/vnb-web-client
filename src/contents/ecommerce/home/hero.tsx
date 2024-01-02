@@ -66,9 +66,9 @@ export default function Hero() {
         </div>
       </section>
 
-      <figure className=" absolute bottom-[-250px] right-[150px] z-[-1] hidden rotate-[-40deg]  lg:block">
+      {/* <figure className=" absolute bottom-[-250px] right-[150px] z-[-1] hidden rotate-[-40deg]  lg:block">
         <Image src="/home/tenis.webp" alt="logo" width={250} height={250} />
-      </figure>
+      </figure> */}
 
       <figure className=" absolute bottom-[-100px] right-[-35px] z-[-1] hidden scale-x-[-1] lg:block">
         <Image src="/home/table.png" alt="logo" width={300} height={300} />
