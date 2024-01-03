@@ -36,7 +36,7 @@ export default function Hero() {
           <span className="hidden lg:inline">.</span>
           <span className=" h1-animation-second relative">
             <span className="animation-color-pink bg-clip-text text-transparent">
-              Trustworthy
+              Esteem
             </span>
           </span>
           <span className="hidden lg:inline">.</span>
@@ -47,23 +47,32 @@ export default function Hero() {
           </span>
         </h1>
 
-        <blockquote className="max-w-[700px] text-xl text-gray-600 drop-shadow-md lg:text-2xl">
-          Buy and sell badminton gears from independent brands and stores around
-          the world with ease
+        <blockquote className="max-w-[700px] text-lg text-gray-600 drop-shadow-md lg:text-2xl">
+          Buy and sell sport gears from independent brands and stores around the
+          world with ease 🎾
         </blockquote>
 
-        <div className="button-Cus relative mt-[30px] h-[50px] w-[170px] rounded-full">
-          <Link
-            href="/products"
-            className=" flex h-full w-full items-center justify-center gap-2 rounded-full border-[1.2px] border-transparent bg-white bg-clip-padding font-medium text-black dark:bg-black  dark:text-white"
-          >
-            <Icon name="Cart" width={16} height={16} /> Buying now
-          </Link>
+        <section className="mt-[30px] flex items-center gap-4">
+          <div className="button-Cus relative h-[48px] w-[170px] rounded-full">
+            <Link
+              href="/products"
+              className=" flex h-full w-full items-center justify-center gap-2 rounded-full border-[1.2px] border-transparent bg-white bg-clip-padding font-medium text-black dark:bg-black  dark:text-white"
+            >
+              <Icon name="Cart" width={16} height={16} /> Buying now
+            </Link>
 
-          <span className="animation-color-blue-shadow absolute inset-0 z-[-1] h-full w-full rounded-full" />
-          <span className="animation-color-pink-shadow absolute inset-0 z-[-1] h-full w-full rounded-full" />
-          <span className="animation-color-orange-shadow absolute inset-0 z-[-1] h-full w-full rounded-full" />
-        </div>
+            <span className="animation-color-blue-shadow absolute inset-0 z-[-1] h-full w-full rounded-full" />
+            <span className="animation-color-pink-shadow absolute inset-0 z-[-1] h-full w-full rounded-full" />
+            <span className="animation-color-orange-shadow absolute inset-0 z-[-1] h-full w-full rounded-full" />
+          </div>
+
+          <Link
+            href="/forum"
+            className="flex h-[48px] items-center justify-end rounded-full bg-black px-10 font-medium text-white lg:hover:bg-black/70"
+          >
+            Forum
+          </Link>
+        </section>
       </section>
 
       {/* <figure className=" absolute bottom-[-250px] right-[150px] z-[-1] hidden rotate-[-40deg]  lg:block">
