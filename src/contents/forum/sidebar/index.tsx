@@ -30,24 +30,28 @@ export default function ForumSideBar() {
         <li>
           <hr className="my-4 mt-7" />
           {/* Ads */}
-          <section className="mt-4">
-            <figure className="flex w-full items-center justify-center">
-              <Image
-                src="/forum/banner-sale.png"
-                alt="banner"
-                width="0"
-                height="0"
-                className="w-[100px]"
-                sizes="100vw"
-              />
-            </figure>
-            <p className="text-center text-lg font-semibold">VNB SUPPER sale</p>
-            <h4 className="mt-2 bg-messenger bg-clip-text text-center text-3xl font-bold text-transparent">
-              UPTO 70%
-            </h4>
+          <section className="mt-4 rounded-md border p-3">
+            <section className="flex items-start gap-5">
+              <figure className="">
+                <Image
+                  src="/forum/banner-sale.png"
+                  alt="banner"
+                  width="0"
+                  height="0"
+                  className="w-[40px]"
+                  sizes="100vw"
+                />
+              </figure>
+              <div className="flex-1">
+                <p className=" text-lg font-semibold">VNB SUPPER sale</p>
+                <h4 className="mt-1 bg-messenger bg-clip-text text-3xl font-bold text-transparent backdrop-blur-0">
+                  UPTO 50%
+                </h4>
+              </div>
+            </section>
             <Link
               href="/"
-              className=" mt-5 inline-flex w-full items-center justify-center rounded-md bg-black py-3 text-sm font-medium text-white"
+              className=" mt-5 inline-flex w-full items-center justify-center rounded-md border bg-messenger py-3 text-sm font-medium text-white lg:hover:bg-black lg:hover:text-white"
             >
               Buying now
             </Link>
