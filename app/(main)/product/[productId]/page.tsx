@@ -2,6 +2,7 @@ import Image from 'next/image'
 
 import { notFound } from 'next/navigation'
 
+import { getProductDetail } from '@/api/public/product'
 import Icon from '@/common/icons'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import AddToCardForm from '@/components/form/add-to-card'
@@ -16,23 +17,18 @@ type ProductPageProps = {
   }
 }
 
-type ProductDetailResponse = {
-  metadata: ProductDetail
-  success: boolean
-}
-
 export default async function ProductPage({ params }: ProductPageProps) {
   const id = Number(params?.productId)
 
-  const res = await fetch(`${process.env.NEXT_PRODUCT_SERVICE}/product/${id}`)
+  const result = await getProductDetail({ id })
 
-  const result: ProductDetailResponse = await res.json()
+  // const result: ProductDetailResponse = await res.json()
 
-  if (!result.success) {
+  if (!result?.success) {
     notFound()
   }
 
-  const product = result?.metadata
+  const product = result?.metadata ?? {}
 
   return (
     <section className="mx-auto mt-5 max-w-main space-y-7 px-4">
@@ -47,8 +43,8 @@ export default async function ProductPage({ params }: ProductPageProps) {
             href: '/products',
           },
           {
-            title: product.productName,
-            href: `/product/${product.productId}`,
+            title: product?.productName,
+            href: `/product/${product?.productId}`,
           },
         ]}
       />
@@ -58,7 +54,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           <section className="flex w-full flex-col items-start gap-x-10 lg:flex-row">
             <figure className="w-full lg:w-[45%]">
               <Image
-                src={product?.productImages[0]}
+                src={product?.productImages?.[0]}
                 alt={product?.productName}
                 title={product?.productName}
                 width="0"
@@ -156,7 +152,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <Icon name="Endow" color="#ff2461" width={27} height={27} />
                 </figure>
               </div> */}
-              {!!Object.keys(product?.productDetail)?.length ? (
+              {!!Object.keys(product?.productDetail ?? {})?.length ? (
                 <ul className="!mb-10">
                   {Object.entries(product.productDetail).map(
                     ([key, value], index) => {

@@ -17,24 +17,52 @@ export default async function ProductsPage({
 }) {
   const brands: BrandProps[] = [
     {
-      id: 1,
-      name: 'VNB',
+      brandId: 1,
+      brandName: 'Victor',
     },
     {
-      id: 2,
-      name: 'Yonex',
+      brandId: 2,
+      brandName: 'Yonex',
     },
     {
-      id: 3,
-      name: 'Lining',
+      brandId: 3,
+      brandName: 'RSL',
     },
     {
-      id: 4,
-      name: 'Kawasaki',
+      brandId: 4,
+      brandName: 'Carlton',
     },
     {
-      id: 5,
-      name: 'Adidas',
+      brandId: 5,
+      brandName: 'Bad M',
+    },
+    {
+      brandId: 6,
+      brandName: 'Fz Forza',
+    },
+    {
+      brandId: 7,
+      brandName: 'Dunlop',
+    },
+    {
+      brandId: 8,
+      brandName: 'Babolat',
+    },
+    {
+      brandId: 9,
+      brandName: 'Adidas',
+    },
+    {
+      brandId: 10,
+      brandName: 'Slazenger',
+    },
+    {
+      brandId: 12,
+      brandName: 'Badminton Nederland',
+    },
+    {
+      brandId: 13,
+      brandName: 'Kawasaki',
     },
   ]
 

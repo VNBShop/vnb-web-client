@@ -261,28 +261,29 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
                   Brands
                 </h3>
 
-                <ul className="max-h-[240px] space-y-4 overflow-auto">
+                <ul className=" space-y-4 overflow-auto">
                   {brands.map((brand) => (
-                    <li key={brand.id} className="flex items-center gap-2">
+                    <li key={brand.brandId} className="flex items-center gap-2">
                       <Checkbox
-                        id={`brand-${brand.id}`}
-                        checked={brandIds?.includes(brand.id) ?? false}
+                        id={`brand-${brand.brandId}`}
+                        checked={brandIds?.includes(brand.brandId) ?? false}
                         onCheckedChange={(value) => {
                           if (value) {
-                            setBrandIds([...(brandIds ?? []), brand.id])
+                            setBrandIds([...(brandIds ?? []), brand.brandId])
                           } else {
                             setBrandIds(
-                              brandIds?.filter((id) => id !== brand.id) ?? null
+                              brandIds?.filter((id) => id !== brand.brandId) ??
+                                null
                             )
                           }
                         }}
                       />
 
                       <Label
-                        htmlFor={`brand-${brand.id}`}
+                        htmlFor={`brand-${brand.brandId}`}
                         className="font-normal hover:cursor-pointer"
                       >
-                        {brand.name}
+                        {brand.brandName}
                       </Label>
                     </li>
                   ))}
@@ -290,7 +291,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
               </div>
             ) : null}
 
-            {stores && stores.length ? (
+            {/* {stores && stores.length ? (
               <div className="space-y-4">
                 <h3 className="text-foreground text-sm font-medium tracking-wide">
                   Store
@@ -324,7 +325,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
                   ))}
                 </ul>
               </div>
-            ) : null}
+            ) : null} */}
           </section>
         </Transition.Child>
       </Transition>
