@@ -1,4 +1,3 @@
-import { ProductDetail } from '../../../types/products'
 import { axiosProduct } from '../axios/axiosProduct'
 
 export async function getProducts({
@@ -22,16 +21,13 @@ export async function getProducts({
     delete filter.price_range
   }
 
-  const res = await axiosProduct.get(
-    `${process.env.NEXT_PRODUCT_SERVICE}/products`,
-    {
-      params: {
-        currentPage,
-        pageSize: pageSize,
-        ...filter,
-      },
-    }
-  )
+  const res = await axiosProduct.get('/products', {
+    params: {
+      currentPage,
+      pageSize: pageSize,
+      ...filter,
+    },
+  })
 
   if (res?.data?.metadata && !!res?.data?.metadata?.data?.length) {
     return res?.data?.metadata?.data
@@ -40,22 +36,11 @@ export async function getProducts({
   }
 }
 
-type ProductDetailResponse = {
-  metadata: ProductDetail
-  success: boolean
-}
-
 export async function getProductDetail({ id }: { id: number }) {
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PRODUCT_SERVICE}/products/${id}`
-    )
+    const res = await axiosProduct.get(`/products/${id}`)
 
-    console.log('result>>', res)
-
-    const result: ProductDetailResponse = await res.json()
-
-    return result
+    return res
   } catch (error) {
     console.error('Error fetching or parsing product data:', error)
   }

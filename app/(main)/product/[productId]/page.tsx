@@ -24,11 +24,13 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   // const result: ProductDetailResponse = await res.json()
 
-  if (!result?.success) {
+  if (!result?.data?.success) {
     notFound()
   }
 
-  const product = result?.metadata ?? {}
+  const product: ProductDetail = result?.data?.metadata ?? {}
+
+  console.log('product', product)
 
   return (
     <section className="mx-auto mt-5 max-w-main space-y-7 px-4">
@@ -82,13 +84,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <div className="h-4 w-[1px] bg-gray-500" />
                 <h2>
                   Status:{' '}
-                  {!!product?.productStatus ? (
-                    <span className="text-secondary">
-                      {product?.productStatus}
-                    </span>
-                  ) : (
-                    <span className="text-gray-600">Not available</span>
-                  )}
+                  <span className=" text-secondary">
+                    {product?.productStatus ? 'Available' : 'Not available'}
+                  </span>
                 </h2>
               </div>
 
@@ -153,7 +151,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </figure>
               </div> */}
               {!!Object.keys(product?.productDetail ?? {})?.length ? (
-                <ul className="!mb-10">
+                <ul className="!mb-5">
                   {Object.entries(product.productDetail).map(
                     ([key, value], index) => {
                       return (
@@ -170,7 +168,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 </ul>
               ) : null}
 
-              <AddToCardForm />
+              <AddToCardForm
+                productStocks={product?.productStocks}
+                productIsHaveSize={product?.productIsHaveSize}
+              />
             </article>
           </section>
           <hr className="w-full" />
@@ -182,9 +183,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 product.productComments.map((comment, index) => (
                   <li key={index}>
                     <CommnentCard
-                      comment={comment.comment}
-                      name={comment.commenterName}
-                      avatar={comment.commenterAvatar}
+                      comment={comment.commentContent}
+                      name={comment.commentAuthor}
+                      avatar={comment.commentAuthorAvatar}
                     />
                   </li>
                 ))
@@ -195,7 +196,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
               )}
             </ul>
           </section>
-          Rb
         </section>
 
         <section className="relative top-[80px] w-full flex-1 rounded-md border border-dashed p-4 lg:sticky">

@@ -16,7 +16,7 @@ export const authOptions: NextAuthOptions = {
 
       async authorize(credentials, req) {
         const res = await fetch(
-          `${process.env.NEXT_SERVER_URL}/account/login`,
+          `${process.env.NEXT_SERVER_API_SERVICE}/user-service/api/v1/account/login`,
           {
             method: 'POST',
             headers: {
@@ -53,7 +53,36 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
+    // async signIn({ account, user, credentials }) {
+    //   if (account?.provider === 'google') {
+    //     user.name = account?.id_token
+    //   }
+
+    //   return true
+    // },
     async jwt({ token, user, account }) {
+      if (account?.provider === 'google') {
+        const verifyWithBE = await fetch(
+          `${process.env.NEXT_SERVER_API_SERVICE}/user-service/api/v1/account/google-login`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              idToken: account?.id_token,
+              platform: 'WEB',
+            }),
+          }
+        )
+
+        const data = await verifyWithBE?.json()
+
+        if (data?.success) {
+          return data?.metadata
+        }
+      }
+
       if (user) return { ...token, ...user }
 
       return token
@@ -62,10 +91,6 @@ export const authOptions: NextAuthOptions = {
       session.user = token as any
       return session
     },
-    // async signIn({ account, user, credentials }) {
-
-    //   return true
-    // },
   },
   pages: {
     signIn: '/signin',

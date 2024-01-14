@@ -10,14 +10,18 @@ import {
 
 import { Menu, Transition } from '@headlessui/react'
 
+import { useQuery } from '@tanstack/react-query'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
+import getStores from '@/api/public/store'
 import Icon from '@/common/icons'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Label } from '@/components/ui/label'
 import { Slider } from '@/components/ui/slider'
 import { useDebounce } from '@/hooks/useDebounce'
+
+import { ProductStore } from '../../../../types/products'
 
 import { ProductPageProps } from '.'
 
@@ -49,7 +53,7 @@ const sorts = [
   },
 ]
 
-export default function ProductAction({ brands, stores }: ProductActionProps) {
+export default function ProductAction({ brands }: ProductActionProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -133,6 +137,14 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
     }
   }, [filterContainer])
 
+  const { data: dataStores } = useQuery({
+    queryKey: ['stores'],
+    queryFn: getStores,
+    refetchOnWindowFocus: false,
+  })
+
+  const stores = (dataStores?.data?.metadata as ProductStore[]) ?? []
+
   return (
     <>
       <section className="flex items-center gap-2">
@@ -199,7 +211,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
 
       <Transition
         show={filterContainer}
-        className="fixed inset-0 z-[11] backdrop-blur"
+        className="fixed inset-0 z-[11] bg-[rgba(255,255,255,.9)]"
         onClick={(e) => {
           // Close outside
           if (filterContainerRef && filterContainerRef.current) {
@@ -217,7 +229,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
           leave="transition-all duration-300 ease-in-out"
           leaveFrom="opacity-100 translate-x-0"
           leaveTo="opacity-0 -translate-x-[100%]"
-          className="absolute bottom-0 left-0 top-0 w-[75%] bg-white p-4 shadow-md md:w-[40%] lg:w-[25%]"
+          className="absolute bottom-0 left-0 top-0 flex w-[75%] flex-col bg-white p-4 shadow-md md:w-[40%] lg:w-[25%]"
         >
           <section className="flex items-center justify-between border-b pb-4">
             <h3 className=" font-medium md:text-lg">Filters</h3>
@@ -227,7 +239,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
             </button>
           </section>
 
-          <section className="mb-10 mt-5 h-full space-y-10 overflow-auto pb-10">
+          <section className="mt-5 h-full space-y-10 overflow-auto pb-10">
             <div className=" space-y-4">
               <h3 className="text-foreground text-sm font-medium tracking-wide">
                 Price range ($)
@@ -291,13 +303,13 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
               </div>
             ) : null}
 
-            {/* {stores && stores.length ? (
+            {stores && stores.length ? (
               <div className="space-y-4">
                 <h3 className="text-foreground text-sm font-medium tracking-wide">
                   Store
                 </h3>
 
-                <ul className="max-h-[240px] space-y-4 overflow-auto">
+                <ul className="space-y-4">
                   {stores.map((store) => (
                     <li key={store.storeId} className="flex items-center gap-2">
                       <Checkbox
@@ -325,7 +337,7 @@ export default function ProductAction({ brands, stores }: ProductActionProps) {
                   ))}
                 </ul>
               </div>
-            ) : null} */}
+            ) : null}
           </section>
         </Transition.Child>
       </Transition>

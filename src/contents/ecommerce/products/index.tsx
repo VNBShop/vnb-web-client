@@ -13,12 +13,16 @@ import ProductHeader from './header'
 
 import ProductsSkeleton from './skeleton'
 
-import { BrandProps, ProductStore, Products } from '../../../../types/products'
+import {
+  ProductBrand,
+  ProductStore,
+  Products,
+} from '../../../../types/products'
 
 export type ProductPageProps = {
   title?: string
   desciption?: string
-  brands?: BrandProps[]
+  brands?: ProductBrand[]
   stores?: ProductStore[]
   filter: Record<string, string | string[] | undefined>
 }

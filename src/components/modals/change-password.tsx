@@ -34,6 +34,8 @@ export default function ModalChangePassword() {
     },
   })
 
+  const axiosPrivate = useAxiosPrivate()
+
   const { isPending, mutate } = useMutation<
     DataResponse,
     DataError,
@@ -41,8 +43,8 @@ export default function ModalChangePassword() {
     unknown
   >({
     mutationFn: (payload) => {
-      const res = axios.put(
-        `${process.env.NEXT_SERVER_URL}/account/change-password`,
+      const res = axiosPrivate.put(
+        `user-service/api/v1/account/change-password`,
         payload
       )
       return res

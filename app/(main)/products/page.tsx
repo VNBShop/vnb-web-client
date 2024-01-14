@@ -6,16 +6,17 @@ import {
 
 import { getProducts } from '@/api/public/product'
 
+import getStores from '@/api/public/store'
 import Products from '@/contents/ecommerce/products'
 
-import { BrandProps, ProductStore } from '../../../types/products'
+import { ProductBrand, ProductStore } from '../../../types/products'
 
 export default async function ProductsPage({
   searchParams,
 }: {
   searchParams: Record<string, string | string[] | undefined>
 }) {
-  const brands: BrandProps[] = [
+  const brands: ProductBrand[] = [
     {
       brandId: 1,
       brandName: 'Victor',

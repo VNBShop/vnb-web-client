@@ -3,13 +3,17 @@
 import { Fragment, useEffect, useState } from 'react'
 
 import { Menu, Transition } from '@headlessui/react'
+import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { Session } from 'next-auth'
 import { signOut } from 'next-auth/react'
 
+import { toast } from 'sonner'
+
 import { useModal } from '@/_store/useModal'
+import { axiosPrivate } from '@/api/private/axios'
 import Avatar from '@/components/avatar'
 import CartDrawer from '@/components/drawers/cart.drawer'
 import NavDrawer from '@/components/drawers/nav.drawer'
@@ -17,7 +21,10 @@ import ModalChangePassword from '@/components/modals/change-password'
 import { Button } from '@/components/ui/button'
 import { nav } from '@/data'
 
+import { DataError, DataResponse } from '../../../types'
 import Icon from '../icons'
+
+import Spiner from '../spiner'
 
 type NavProps = {
   user: Session['user']
@@ -30,6 +37,26 @@ export default function Nav({ user }: NavProps) {
 
   const [navMobile, setOpenNavMobile] = useState(false)
   const [cartCont, setCartCont] = useState(false)
+
+  const { mutate: onSignOut, isPending } = useMutation<
+    DataResponse,
+    DataError,
+    unknown,
+    unknown
+  >({
+    mutationFn: () => {
+      const res = axiosPrivate.post('/user-service/api/v1/account/logout')
+      return res
+    },
+    onSuccess: (res) => {
+      if (res?.data?.success) {
+        signOut()
+      }
+    },
+    onError: (error) => {
+      toast.error(error.response.data.metadata.message)
+    },
+  })
 
   useEffect(() => {
     if (navMobile || cartCont) {
@@ -85,8 +112,8 @@ export default function Nav({ user }: NavProps) {
         <Menu as="div" className="relative flex items-center justify-center">
           <Menu.Button>
             <Avatar
-              username={user.username}
-              src={user?.avatar ?? user?.image ?? ''}
+              username={!!user?.firstName ? user.firstName : user?.email}
+              src={user?.avatar ?? ''}
             />
           </Menu.Button>
           <Transition
@@ -104,32 +131,40 @@ export default function Nav({ user }: NavProps) {
                 className="flex items-center gap-2 rounded-md p-2 text-sm font-medium shadow-sm hover:cursor-pointer hover:bg-gray-100"
               >
                 <Avatar
-                  username={user.username}
+                  username={!!user?.firstName ? user.firstName : user?.email}
                   className="h-10 w-10"
-                  src={user?.avatar ?? user?.image ?? ''}
+                  src={user?.avatar ?? ''}
                 />
-                {user?.username?.split('@')[0] ?? user.name}
+                {!!user?.firstName
+                  ? `${user.firstName} ${user.lastName}`
+                  : user?.email.split('@')[0]}
               </Menu.Item>
+
+              {user?.provider !== 'GOOGLE' ? (
+                <Menu.Item
+                  as="div"
+                  className="flex items-center gap-2 rounded-md p-2 py-1 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                  onClick={() => setModal('modalChangePassword')}
+                >
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
+                    <Icon name="Key" width={18} height={18} />
+                  </div>
+                  Change password
+                </Menu.Item>
+              ) : null}
 
               <Menu.Item
                 as="div"
                 className="flex items-center gap-2 rounded-md p-2 py-1 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
-                onClick={() => setModal('modalChangePassword')}
+                onClick={onSignOut}
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
-                  <Icon name="Key" width={18} height={18} />
-                </div>
-                Change password
-              </Menu.Item>
-
-              <Menu.Item
-                as="div"
-                className="flex items-center gap-2 rounded-md p-2 py-1 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
-                onClick={() => signOut()}
-              >
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
-                  <Icon name="Logout" width={18} height={18} />
-                </div>
+                {!isPending ? (
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
+                    <Icon name="Logout" width={18} height={18} />
+                  </div>
+                ) : (
+                  <Spiner size={30} />
+                )}
                 Logout
               </Menu.Item>
             </Menu.Items>

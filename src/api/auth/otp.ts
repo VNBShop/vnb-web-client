@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+import { axiosUser } from '../axios/axiosUser'
+
 export type OTPPayloadProps = {
   otpCode: string
   email: string
@@ -7,9 +9,6 @@ export type OTPPayloadProps = {
 }
 
 export async function confirmOTP(payload: OTPPayloadProps) {
-  const res = await axios.post(
-    `${process.env.NEXT_SERVER_URL}/account/confirm-otp`,
-    payload
-  )
+  const res = await axiosUser.post('/account/confirm-otp', payload)
   return res
 }

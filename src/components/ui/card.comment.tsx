@@ -17,7 +17,7 @@ export default function CommnentCard({
 }: CommnentCardProps) {
   return (
     <article className="inline-flex items-start gap-2">
-      <Avatar src="/common/avt.jpeg" username={name} />
+      <Avatar src={''} username={name} />
       <section className="flex-1">
         <div className="rounded-2xl bg-gray-100 p-2 px-4">
           <h3 className="text-sm font-medium">{name}</h3>
