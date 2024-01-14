@@ -6,11 +6,17 @@ export const useRefreshToken = () => {
   const { data: session } = useSession()
 
   const refreshToken = async () => {
-    const res = await axiosPrivate.post('/user-service/api/v1/refresh-token', {
-      refreshToken: session?.user?.refreshToken,
-    })
+    const res = await axiosPrivate.post(
+      '/user-service/api/v1/account/refresh-token',
+      {
+        refreshToken: session?.user?.refreshToken,
+      }
+    )
 
-    console.log('res >>> ', res)
+    if (res?.data?.success && session) {
+      session.user.accessToken = res?.data?.metadata?.accessToken
+      session.user.refreshToken = res?.data?.metadata?.refreshToken
+    }
   }
 
   return refreshToken

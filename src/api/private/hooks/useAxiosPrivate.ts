@@ -27,13 +27,20 @@ export default function useAxiosPrivate() {
       (err) => Promise.reject(err)
     )
 
+    let isRefreshing = false
+
     const responseIntercept = axiosPrivate.interceptors.response.use(
       (res) => res,
       async (err) => {
         const prevReq = err.config
         if (err?.response?.status === 401 && !prevReq?.sent) {
+          if (!isRefreshing) {
+            isRefreshing = true
+            await refreshToken()
+            isRefreshing = false
+          }
           prevReq.sent = true
-          await refreshToken()
+
           prevReq.headers[
             'Authorization'
           ] = `Bearer ${session?.user.accessToken}`
