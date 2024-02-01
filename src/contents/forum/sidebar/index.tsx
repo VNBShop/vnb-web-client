@@ -30,7 +30,7 @@ export default function ForumSideBar() {
         <li>
           <hr className="my-4 mt-7" />
           {/* Ads */}
-          <section className="mt-4 rounded-md border p-3">
+          <section className="mt-4 rounded-md">
             <section className="flex items-start gap-5">
               <figure className="">
                 <Image

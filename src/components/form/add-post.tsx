@@ -46,7 +46,7 @@ export default function AddPostForm() {
               <FormItem>
                 <textarea
                   placeholder="What's on your mind?"
-                  cols={30}
+                  rows={4}
                   maxLength={200}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {

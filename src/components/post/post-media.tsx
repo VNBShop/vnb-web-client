@@ -30,6 +30,7 @@ const postimage = [
 
 export default function PostMedia() {
   const [carousel, setCarousel] = useState<any[] | null>(null)
+  const [carouselIndex, setCarouselIndex] = useState(0)
 
   return (
     <>
@@ -44,7 +45,10 @@ export default function PostMedia() {
               <li
                 data-length={postimage.length - 4}
                 key={item.id}
-                onClick={() => setCarousel(postimage)}
+                onClick={() => {
+                  setCarousel(postimage)
+                  setCarouselIndex(index)
+                }}
                 className={`group relative w-full overflow-hidden pb-[100%] ${
                   postimage.length === 3 ? '[&:nth-child(2)]:row-span-2' : ''
                 }
@@ -73,7 +77,13 @@ export default function PostMedia() {
         })}
       </ul>
 
-      <Carousel images={carousel} close={() => setCarousel(null)} />
+      <Carousel
+        images={carousel}
+        close={() => setCarousel(null)}
+        options={{
+          startIndex: carouselIndex,
+        }}
+      />
     </>
   )
 }
