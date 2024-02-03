@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="scroll-smooth font-sans antialiased">
-        <RQProvider>{children}</RQProvider>{' '}
+        <RQProvider>{children}</RQProvider>
         <Toaster richColors position="top-center" />
       </body>
     </html>
