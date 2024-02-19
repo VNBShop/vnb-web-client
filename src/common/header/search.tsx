@@ -1,14 +1,12 @@
 'use client'
 
-import { createRef, useEffect, useState } from 'react'
+import { createRef, useState } from 'react'
 
 import { useQuery } from '@tanstack/react-query'
 
 import Image from 'next/image'
 
 import Link from 'next/link'
-
-import { isError } from 'util'
 
 import { getProducts } from '@/api/public/product'
 import { Input } from '@/components/ui/input'
