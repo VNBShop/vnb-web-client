@@ -1,3 +1,5 @@
+import { createRef } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useMutation } from '@tanstack/react-query'
@@ -11,7 +13,7 @@ import { useModal } from '@/_store/useModal'
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 import Icon from '@/common/icons'
 import Spiner from '@/common/spiner'
-import { Modal } from '@/components/ui/modal'
+import { Modal, ModalProps } from '@/components/ui/modal'
 import { changePasswordSchema } from '@/lib/validations/auth'
 
 import { DataError, DataResponse } from '../../../types'
@@ -23,7 +25,7 @@ type Inputs = z.infer<typeof changePasswordSchema>
 export default function ModalChangePassword() {
   const axios = useAxiosPrivate()
 
-  const { modalChangePassword, setModal } = useModal((state) => state)
+  const modalChangePassRef = createRef<ModalProps>()
 
   const form = useForm<Inputs>({
     resolver: zodResolver(changePasswordSchema),
@@ -52,7 +54,7 @@ export default function ModalChangePassword() {
     onSuccess: (response) => {
       if (response.data.success) {
         toast.success('Change password successfully!')
-        setModal('modalChangePassword')
+        !!modalChangePassRef.current && modalChangePassRef.current.onClose()
       }
     },
     onError: (error) => {
@@ -66,17 +68,16 @@ export default function ModalChangePassword() {
 
   return (
     <>
-      <Modal
-        show={modalChangePassword}
-        closeOutside
-        close={() => setModal('modalChangePassword')}
-      >
+      <Modal ref={modalChangePassRef} closeOutside>
         <section className="flex items-center justify-between">
           <div
             className="hover:cursor-pointer"
-            onClick={() => setModal('modalChangePassword')}
+            onClick={() =>
+              !!modalChangePassRef.current &&
+              modalChangePassRef.current.onOpen()
+            }
           >
-            <Icon name="ChevronLeftThin" width={22} height={22} />
+            <Icon name="ChevronLeftThin" size={22} />
           </div>
           <h2 className="text-lg font-medium">Change password</h2>
           <span>&nbsp;</span>

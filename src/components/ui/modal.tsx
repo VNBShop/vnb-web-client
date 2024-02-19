@@ -1,11 +1,20 @@
 'use client'
 
-import { HTMLAttributes, ReactNode, forwardRef, useEffect, useRef } from 'react'
+import {
+  HTMLAttributes,
+  ReactNode,
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 
 import { Transition } from '@headlessui/react'
 
 import { VariantProps, cva } from 'class-variance-authority'
 
+import Icon from '@/common/icons'
 import { cn } from '@/lib/utils'
 
 const modalVariants = cva('bg-white shadow-box w-full', {
@@ -25,28 +34,32 @@ const modalVariants = cva('bg-white shadow-box w-full', {
   },
 })
 
-export interface ModalProps
+export interface ModalInnerProps
   extends HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof modalVariants> {
-  show: boolean
-  close?: (state: boolean) => void
   center?: boolean
   title?: string
   closeOutside?: boolean
   children?: ReactNode
+  header?: string
 }
 
-const Modal = forwardRef<HTMLDivElement, ModalProps>(
+export type ModalProps = {
+  isOpen: boolean
+  onOpen: () => void
+  onClose: () => void
+}
+
+const Modal = forwardRef<ModalProps, ModalInnerProps>(
   (
     {
       className,
       variant,
       title,
       size,
-      show,
       center,
-      close,
       children,
+      header,
       closeOutside = false,
       ...props
     },
@@ -54,12 +67,28 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
   ) => {
     const modalRef = useRef<HTMLDivElement>(null)
 
+    const [open, setOpen] = useState(false)
+
+    const onOpen = () => {
+      setOpen(true)
+    }
+
+    const onClose = () => {
+      setOpen(false)
+    }
+
+    useImperativeHandle(ref, () => ({
+      isOpen: !!open,
+      onClose,
+      onOpen,
+    }))
+
     const onCloseOutSide = (
       event: React.MouseEvent<HTMLDivElement, MouseEvent>
     ) => {
       if (modalRef.current) {
         if (!modalRef.current.contains(event.target as Node)) {
-          close?.(true)
+          onClose()
         }
       }
     }
@@ -67,25 +96,23 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     useEffect(() => {
       const handleEsc = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
-          show && close?.(false)
+          open && onClose()
         }
       }
       window.addEventListener('keydown', handleEsc)
-      if (show) {
+      if (open) {
         document.body.style.overflow = 'hidden'
       }
       return () => {
         window.removeEventListener('keydown', handleEsc)
         document.body.style.overflow = 'unset'
       }
-    }, [show, close])
+    }, [open])
 
     return (
       <>
-        {/* {show && ( */}
         <Transition
-          show={show}
-          ref={ref}
+          show={open}
           appear
           className={
             center
@@ -101,14 +128,25 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
             leave="transition ease-in-out duration-200"
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-0"
-            className={cn(modalVariants({ variant, size, className }))}
+            className={cn(modalVariants({ variant, size, className }), 'mb-10')}
             ref={modalRef}
             {...props}
           >
+            {!!header ? (
+              <header className="flex items-center justify-between">
+                <h2 className=" font-medium">{header}</h2>
+                <div
+                  onClick={onClose}
+                  className="p-2 hover:cursor-pointer hover:text-secondary"
+                >
+                  <Icon name="Xmark" size={25} />
+                </div>
+              </header>
+            ) : null}
+
             {children}
           </Transition.Child>
         </Transition>
-        {/* )} */}
       </>
     )
   }

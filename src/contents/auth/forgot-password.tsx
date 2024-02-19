@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { createRef, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -26,6 +26,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { ModalProps } from '@/components/ui/modal'
 import {
   OTPSchema,
   forgotPassSchema,
@@ -40,6 +41,9 @@ type Inputs = z.infer<typeof forgotPassSchema>
 export default function ForgotPasswordForm() {
   const router = useRouter()
 
+  const modalOTPRef = createRef<ModalProps>()
+  const modalResetPassword = createRef<ModalProps>()
+
   const form = useForm<Inputs>({
     resolver: zodResolver(forgotPassSchema),
     defaultValues: {
@@ -47,29 +51,11 @@ export default function ForgotPasswordForm() {
     },
   })
 
-  const initStateModalVerify: ModalOTPProps = {
-    meta: {
-      email: '',
-      title: '',
-      type: 'REGISTER',
-    },
-    open: false,
-    onClose: () => setModalVerify(initStateModalVerify),
-  }
-  const [modalVerify, setModalVerify] =
-    useState<ModalOTPProps>(initStateModalVerify)
-
-  const [modalResetPassword, setModalResetPassword] = useState<ModalResetProps>(
-    {
-      email: '',
-      open: false,
-      onClose: () =>
-        setModalResetPassword({
-          email: '',
-          open: false,
-        }),
-    }
+  const [payloadVerify, setPayloadVerify] = useState<ModalOTPProps['meta']>(
+    {} as ModalOTPProps['meta']
   )
+
+  const [email, setEmail] = useState<ModalResetProps['email']>('')
 
   const mutationFindAccount = useMutation<
     DataResponse,
@@ -81,15 +67,12 @@ export default function ForgotPasswordForm() {
     onSuccess: (response, data) => {
       if (response.data.success) {
         toast.success('Find account successfully!')
-        setModalVerify((prev) => ({
+        setPayloadVerify((prev) => ({
           ...prev,
-          meta: {
-            ...prev.meta,
-            email: data.email,
-            title: 'Confirm your account',
-          },
-          open: true,
+          email: data.email,
+          title: 'Confirm your account',
         }))
+        !!modalOTPRef.current && modalOTPRef.current.onOpen()
       }
     },
     onError: (error) => {
@@ -108,12 +91,9 @@ export default function ForgotPasswordForm() {
       if (response.data.success) {
         toast.success('Verify account successfully!')
 
-        setModalResetPassword((prev) => ({
-          ...prev,
-          email: data.email,
-          open: true,
-        }))
-        modalVerify.onClose?.()
+        setEmail(data.email)
+        !!modalOTPRef.current && modalOTPRef.current.onClose()
+        !!modalResetPassword.current && modalResetPassword.current.onOpen()
       }
     },
     onError: (error) => {
@@ -130,7 +110,7 @@ export default function ForgotPasswordForm() {
     onSuccess: (response) => {
       if (response.data.success) {
         toast.success('Reset password successfully!')
-        modalResetPassword.onClose?.()
+        !!modalResetPassword.current && modalResetPassword.current.onClose()
         router.push('/signin')
       }
     },
@@ -145,7 +125,7 @@ export default function ForgotPasswordForm() {
 
   const onSubmitVerify = (values: z.infer<typeof OTPSchema>) => {
     const payload: OTPPayloadProps = {
-      email: modalVerify.meta.email,
+      email: payloadVerify.email,
       otpCode: values.otp,
       type: 'RESET_PASSWORD',
     }
@@ -158,7 +138,7 @@ export default function ForgotPasswordForm() {
   ) => {
     const payload: z.infer<typeof signUpSchema> = {
       ...values,
-      email: modalResetPassword.email,
+      email: email,
     }
     mutationResetPassword.mutate(payload)
   }
@@ -166,17 +146,15 @@ export default function ForgotPasswordForm() {
   return (
     <>
       <ModalOTP
-        meta={modalVerify.meta}
-        open={modalVerify.open}
-        onClose={modalVerify.onClose}
+        modalRef={modalOTPRef}
+        meta={payloadVerify}
         onSubmit={onSubmitVerify}
         isPending={mutationVerifyAccount.isPending}
       />
 
       <ModalResetPassword
-        open={modalResetPassword.open}
-        onClose={modalResetPassword.onClose}
-        email={modalResetPassword.email}
+        ref={modalResetPassword}
+        email={email}
         onSubmit={onSubmitResetPassword}
         isPending={mutationResetPassword.isPending}
       />

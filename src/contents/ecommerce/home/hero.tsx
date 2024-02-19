@@ -64,7 +64,7 @@ export default function Hero() {
               href="/products"
               className=" flex h-full w-full items-center justify-center gap-2 rounded-lg border-[1.2px] border-transparent bg-white bg-clip-padding font-medium text-black dark:bg-black  dark:text-white"
             >
-              <Icon name="Cart" width={16} height={16} /> Buying now
+              <Icon name="Cart" size={16} /> Buying now
             </Link>
 
             <span className="animation-color-blue-shadow absolute inset-0 z-[-1] h-full w-full rounded-lg" />

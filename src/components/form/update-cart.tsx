@@ -10,24 +10,24 @@ export default function UpdateCartForm(cart: UpdateCartForm) {
     <section className="flex items-center justify-between">
       <div className="flex items-center gap-1">
         <button>
-          <Icon name="Minus" width={18} height={18} />
+          <Icon name="Minus" size={18} />
         </button>
 
         <Input
           min={0}
-          className="text-center h-7 max-w-[50px] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          className="h-7 max-w-[50px] text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           type="number"
           value={cart.quantity}
           inputMode="numeric"
         />
 
         <button>
-          <Icon name="Plus" width={18} height={18} />
+          <Icon name="Plus" size={18} />
         </button>
       </div>
 
       <button className="ml-3">
-        <Icon name="Trash" width={25} height={25} />
+        <Icon name="Trash" size={25} />
       </button>
     </section>
   )

@@ -2,7 +2,6 @@
 
 import { useEffect } from 'react'
 
-import { AxiosRequestConfig } from 'axios'
 import { useSession } from 'next-auth/react'
 
 import { useRefreshToken } from './useRefreshToken'
@@ -14,6 +13,7 @@ export default function useAxiosPrivate() {
   const refreshToken = useRefreshToken()
 
   useEffect(() => {
+    if (!session) return
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
         if (!config.headers['Authorization']) {
@@ -36,7 +36,7 @@ export default function useAxiosPrivate() {
         if (err?.response?.status === 401 && !prevReq?.sent) {
           if (!isRefreshing) {
             isRefreshing = true
-            await refreshToken()
+            await refreshToken.mutate()
             isRefreshing = false
           }
           prevReq.sent = true
@@ -54,6 +54,7 @@ export default function useAxiosPrivate() {
       axiosPrivate.interceptors.request.eject(requestIntercept)
       axiosPrivate.interceptors.response.eject(responseIntercept)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session])
 
   return axiosPrivate

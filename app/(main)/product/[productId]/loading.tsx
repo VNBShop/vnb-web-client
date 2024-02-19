@@ -29,12 +29,7 @@ export default function ProductLoading() {
               <ul className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map((item, index) => (
                   <li key={index}>
-                    <Icon
-                      name="Star"
-                      width={18}
-                      height={18}
-                      color={'#B4B4B3'}
-                    />
+                    <Icon name="Star" size={18} color={'#B4B4B3'} />
                   </li>
                 ))}
               </ul>

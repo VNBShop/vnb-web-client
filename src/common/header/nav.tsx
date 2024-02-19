@@ -105,7 +105,7 @@ export default function Nav({ user }: NavProps) {
         variant="outline"
         onClick={() => setCartCont(true)}
       >
-        <Icon name="Cart" width={20} height={20} />
+        <Icon name="Cart" size={20} />
       </Button>
 
       {user && Object.keys(user)?.length ? (
@@ -147,7 +147,7 @@ export default function Nav({ user }: NavProps) {
                   onClick={() => setModal('modalChangePassword')}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
-                    <Icon name="Key" width={18} height={18} />
+                    <Icon name="Key" size={18} />
                   </div>
                   Change password
                 </Menu.Item>
@@ -160,7 +160,7 @@ export default function Nav({ user }: NavProps) {
               >
                 {!isPending ? (
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
-                    <Icon name="Logout" width={18} height={18} />
+                    <Icon name="Logout" size={18} />
                   </div>
                 ) : (
                   <Spiner size={30} />
@@ -181,7 +181,7 @@ export default function Nav({ user }: NavProps) {
       )}
 
       <button className="lg:hidden" onClick={() => setOpenNavMobile(true)}>
-        <Icon name="Hamburger" width={30} height={30} />
+        <Icon name="Hamburger" size={30} />
       </button>
     </>
   )

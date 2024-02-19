@@ -111,7 +111,7 @@ export default function Carousel({
                 {images?.length
                   ? images.map((image, index) => (
                       <div
-                        className="flex-full relative h-screen min-w-0 lg:pl-4"
+                        className="relative h-screen min-w-0 flex-full lg:pl-4"
                         key={index}
                       >
                         <Image
@@ -140,7 +140,7 @@ export default function Carousel({
                 disabled={prevBtnDisabled}
                 onClick={scrollPrev}
               >
-                <Icon name="ChevronLeft" width={25} height={25} color="white" />
+                <Icon name="ChevronLeft" size={25} color="white" />
               </Button>
             ) : null}
 
@@ -152,12 +152,7 @@ export default function Carousel({
                 className="absolute right-4 top-[50%] hidden h-12 w-12 items-center justify-center rounded-full hover:cursor-pointer lg:inline-flex"
                 onClick={scrollNext}
               >
-                <Icon
-                  name="ChevronRight"
-                  width={25}
-                  height={25}
-                  color="white"
-                />
+                <Icon name="ChevronRight" size={25} color="white" />
               </Button>
             ) : null}
 
@@ -167,7 +162,7 @@ export default function Carousel({
               className="absolute right-2 top-2 inline-flex h-12 w-12 items-center justify-center rounded-full hover:cursor-pointer lg:right-4"
               onClick={close}
             >
-              <Icon name="Xmark" width={25} height={25} color="white" />
+              <Icon name="Xmark" size={25} color="white" />
             </Button>
 
             {/* {photos?.length && photos.length > 1 ? (

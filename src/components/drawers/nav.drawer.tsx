@@ -28,7 +28,7 @@ const NavSheet = ({
   return (
     <Transition
       show={navMobile}
-      className="nav-mobile fixed lg:hidden top-0 left-0 bottom-0 right-0 bg-clip-padding bg-opacity-30 bg-gray-100 backdrop-blur-sm"
+      className="nav-mobile fixed bottom-0 left-0 right-0 top-0 bg-gray-100 bg-opacity-30 bg-clip-padding backdrop-blur-sm lg:hidden"
       onClick={handleCloseOutSide}
     >
       <Transition.Child
@@ -39,7 +39,7 @@ const NavSheet = ({
         leave="transition-all duration-300 ease-in-out"
         leaveFrom="opacity-100 translate-x-0"
         leaveTo="opacity-0 -translate-x-[100%]"
-        className="w-[75%] md:w-[40%] absolute top-0 left-0 bottom-0 bg-white p-4"
+        className="absolute bottom-0 left-0 top-0 w-[75%] bg-white p-4 md:w-[40%]"
       >
         <section className="flex items-center justify-between">
           <Link href="/">
@@ -56,17 +56,17 @@ const NavSheet = ({
           </Link>
 
           <button onClick={() => setOpenNavMobile(false)}>
-            <Icon name="Xmark" width={25} height={25} />
+            <Icon name="Xmark" size={25} />
           </button>
         </section>
-        <ul className=" grid gap-4 mt-5">
+        <ul className=" mt-5 grid gap-4">
           {nav.map((item) => (
             <li key={item.url} className=" group relative flex items-center">
               <Link
-                className="font-medium text-sm flex items-center gap-2"
+                className="flex items-center gap-2 text-sm font-medium"
                 href={item.url}
               >
-                <Icon name={item.title as IconName} width={18} height={18} />
+                <Icon name={item.title as IconName} size={18} />
                 {item.title}
               </Link>
             </li>

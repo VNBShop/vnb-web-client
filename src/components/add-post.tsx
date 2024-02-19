@@ -1,16 +1,16 @@
 'use client'
-import { useState } from 'react'
+import { createRef, useState } from 'react'
 
 import Icon from '@/common/icons'
 
 import AddPostForm from './form/add-post'
-import { Modal } from './ui/modal'
+import { Modal, ModalProps } from './ui/modal'
 
 export default function AddPost() {
-  const [addPostModal, setAddPostModal] = useState(false)
+  const modalAddPostRef = createRef<ModalProps>()
 
   const openAddPostModal = () => {
-    setAddPostModal((prev) => !prev)
+    !!modalAddPostRef.current && modalAddPostRef.current.onOpen()
   }
 
   return (
@@ -37,17 +37,13 @@ export default function AddPost() {
             className="inline-flex items-center gap-2 rounded-md p-2 hover:cursor-pointer lg:hover:bg-gray-100"
             onClick={openAddPostModal}
           >
-            <Icon name="Photo" width={20} height={20} color="green" />
+            <Icon name="Photo" size={20} color="green" />
             <p className="text-sm font-medium text-gray-500">Photo/Video</p>
           </div>
         </section>
       </section>
 
-      <Modal
-        show={addPostModal}
-        close={() => setAddPostModal(false)}
-        closeOutside
-      >
+      <Modal ref={modalAddPostRef} closeOutside>
         <section className="inline-flex items-center gap-2">
           <figure className="h-10 w-10 rounded-full">
             <p className="textw-white flex h-full w-full items-center justify-center rounded-full bg-black text-xl text-white">

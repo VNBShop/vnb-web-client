@@ -1,3 +1,5 @@
+import { RefObject } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
@@ -9,18 +11,16 @@ import Spiner from '@/common/spiner'
 import { OTPSchema } from '@/lib/validations/auth'
 
 import { Button } from './ui/button'
-import { Modal } from './ui/modal'
+import { Modal, ModalProps } from './ui/modal'
 
 export type ModalOTPProps = {
-  open: boolean
-  onClose?: () => void
   meta: {
     email: string
-    type: 'REGISTER' | 'signup'
     title: string
   }
   onSubmit?: (values: any) => void
   isPending?: boolean
+  modalRef: RefObject<ModalProps>
 }
 
 type Inputs = z.infer<typeof OTPSchema>
@@ -41,11 +41,10 @@ const style = {
 }
 
 export default function ModalOTP({
-  open,
   meta,
-  onClose,
   onSubmit,
   isPending,
+  modalRef,
 }: ModalOTPProps) {
   const {
     control,
@@ -60,8 +59,7 @@ export default function ModalOTP({
 
   return (
     <Modal
-      show={open}
-      close={onClose}
+      ref={modalRef}
       closeOutside={false}
       size="default"
       title="Verify your account"

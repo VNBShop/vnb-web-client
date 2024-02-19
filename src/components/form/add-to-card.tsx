@@ -77,7 +77,7 @@ export default function AddToCardForm({
               }}
               disabled={isPending || form.getValues('quantity') === 1}
             >
-              <Icon name="Minus" width={22} height={22} />
+              <Icon name="Minus" size={22} />
             </button>
             <FormField
               control={form.control}
@@ -109,7 +109,7 @@ export default function AddToCardForm({
                 form.setValue('quantity', form.getValues('quantity') + 1)
               }}
             >
-              <Icon name="Plus" width={22} height={22} />
+              <Icon name="Plus" size={22} />
             </button>
           </section>
 

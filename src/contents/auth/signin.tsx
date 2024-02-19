@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { createRef, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { redirect, useRouter } from 'next/navigation'
-import { signIn, useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -24,6 +24,7 @@ import {
 
 import { Input } from '@/components/ui/input'
 import InputPassword from '@/components/ui/input-password'
+import { ModalProps } from '@/components/ui/modal'
 import { OTPSchema, loginSchema } from '@/lib/validations/auth'
 
 import { DataError, DataResponse } from '../../../types'
@@ -31,19 +32,12 @@ import { DataError, DataResponse } from '../../../types'
 type Inputs = z.infer<typeof loginSchema>
 
 export default function SignInForm() {
+  const modalVerifyAccountRef = createRef<ModalProps>()
   const [loading, setLoading] = useState(false)
 
-  const initStateModalVerify: ModalOTPProps = {
-    meta: {
-      email: '',
-      title: '',
-      type: 'REGISTER',
-    },
-    open: false,
-    onClose: () => setModalVerify(initStateModalVerify),
-  }
-  const [modalVerify, setModalVerify] =
-    useState<ModalOTPProps>(initStateModalVerify)
+  const [verifyPayload, setVerifyPayload] = useState<ModalOTPProps['meta']>(
+    {} as ModalOTPProps['meta']
+  )
 
   const router = useRouter()
 
@@ -70,15 +64,14 @@ export default function SignInForm() {
     } else {
       toast.error(result?.error)
       if (result?.error?.includes('Your account must be verify')) {
-        setModalVerify((prev) => ({
+        setVerifyPayload((prev) => ({
           ...prev,
-          meta: {
-            ...prev.meta,
-            email: data.email,
-            title: 'Confirm your account',
-          },
-          open: true,
+          email: data.email,
+          title: 'Confirm your account',
         }))
+
+        !!modalVerifyAccountRef.current &&
+          modalVerifyAccountRef.current.onOpen()
       }
     }
   }
@@ -93,7 +86,8 @@ export default function SignInForm() {
     onSuccess: (response) => {
       if (response?.data?.success) {
         toast.success('Verify successfully!')
-        modalVerify.onClose?.()
+        !!modalVerifyAccountRef.current &&
+          modalVerifyAccountRef.current.onClose()
         form.handleSubmit(onSubmit)()
       }
     },
@@ -104,7 +98,7 @@ export default function SignInForm() {
 
   const onSubmitVerify = (values: z.infer<typeof OTPSchema>) => {
     const payload: OTPPayloadProps = {
-      email: modalVerify.meta.email,
+      email: verifyPayload.email,
       otpCode: values.otp,
       type: 'REGISTER',
     }
@@ -114,9 +108,8 @@ export default function SignInForm() {
   return (
     <>
       <ModalOTP
-        open={modalVerify.open}
-        onClose={modalVerify.onClose}
-        meta={modalVerify.meta}
+        modalRef={modalVerifyAccountRef}
+        meta={verifyPayload}
         onSubmit={onSubmitVerify}
         isPending={mutationVerify.isPending}
       />

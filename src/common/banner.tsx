@@ -25,12 +25,12 @@ export default function Banner() {
 
         <section className="absolute right-4 flex items-center gap-2">
           <p className="flex items-center gap-1 text-xs text-white">
-            <Icon name="Phone" width={17} height={17} />
+            <Icon name="Phone" size={17} />
             1900 1087
           </p>
           <div className="h-[18px] w-[1px] bg-white" />
           <p className="flex items-center gap-2 text-xs text-white">
-            <Icon name="Plane" width={17} height={17} />
+            <Icon name="Plane" size={17} />
             Store system
           </p>
         </section>

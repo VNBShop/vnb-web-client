@@ -67,8 +67,7 @@ export default function PostCommentForm() {
           <Button disabled={!watchCommentForm} variant="ghost" className="p-0">
             <Icon
               name="Plane"
-              width={22}
-              height={22}
+              size={22}
               color={!!watchCommentForm ? 'black' : 'gray'}
             />
           </Button>

@@ -31,7 +31,7 @@ export default function Chat({ params }: ChatProps) {
       <section className="flex items-center justify-between border-b px-2 py-1 pl-2">
         <div className="flex items-center gap-2">
           <div className="lg:hidden" onClick={() => router.back()}>
-            <Icon name="ChevronLeft" width={23} height={23} />
+            <Icon name="ChevronLeft" size={23} />
           </div>
           <Link
             href="/user/jungjung261"
@@ -43,7 +43,7 @@ export default function Chat({ params }: ChatProps) {
         </div>
 
         <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
-          <Icon name="I" width={16} height={16} />
+          <Icon name="I" size={16} />
         </div>
       </section>
 

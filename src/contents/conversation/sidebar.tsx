@@ -26,7 +26,7 @@ export default function ConversationSidebar() {
         </article>
 
         <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
-          <Icon name="Logout" width={18} height={18} />
+          <Icon name="Logout" size={18} />
         </div>
       </div>
     </aside>

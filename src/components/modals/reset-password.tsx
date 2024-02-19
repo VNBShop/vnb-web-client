@@ -1,3 +1,5 @@
+import { RefObject } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -9,21 +11,19 @@ import { resetPasswordSchema } from '@/lib/validations/auth'
 import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
 import InputPassword from '../ui/input-password'
-import { Modal } from '../ui/modal'
+import { Modal, ModalProps } from '../ui/modal'
 
 export type ModalResetProps = {
-  open: boolean
-  onClose?: () => void
   email: string
   onSubmit?: (values: any) => void
   isPending?: boolean
+  ref: RefObject<ModalProps>
 }
 
 type Inputs = z.infer<typeof resetPasswordSchema>
 
 export default function ModalResetPassword({
-  open,
-  onClose,
+  ref,
   onSubmit,
   isPending,
 }: ModalResetProps) {
@@ -37,8 +37,7 @@ export default function ModalResetPassword({
 
   return (
     <Modal
-      show={open}
-      close={onClose}
+      ref={ref}
       closeOutside={false}
       size="default"
       title="Verify your account"

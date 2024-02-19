@@ -14,7 +14,7 @@ export default function PostHeader() {
       </section>
 
       <div className="flex h-8 w-8 items-center justify-center rounded-full hover:cursor-pointer lg:hover:bg-gray-100">
-        <Icon name="Ellipsis" width={20} height={20} />
+        <Icon name="Ellipsis" size={20} />
       </div>
     </header>
   )

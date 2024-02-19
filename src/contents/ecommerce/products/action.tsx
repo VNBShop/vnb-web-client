@@ -174,7 +174,7 @@ export default function ProductAction({ brands }: ProductActionProps) {
         </Button>
         <Menu as="div" className="relative inline-block">
           <Menu.Button className="flex h-8 items-center gap-1 rounded-md bg-black px-3 text-xs text-white shadow-none">
-            Sort <Icon name="ChevronDown" width={18} height={18} />
+            Sort <Icon name="ChevronDown" size={18} />
           </Menu.Button>
           <Transition
             as={Fragment}
@@ -235,7 +235,7 @@ export default function ProductAction({ brands }: ProductActionProps) {
             <h3 className=" font-medium md:text-lg">Filters</h3>
 
             <button onClick={() => setFilterContainer(false)}>
-              <Icon name="Xmark" width={25} height={25} />
+              <Icon name="Xmark" size={25} />
             </button>
           </section>
 

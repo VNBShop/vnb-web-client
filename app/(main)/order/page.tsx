@@ -42,7 +42,7 @@ export default function OrderPage() {
             className="mt-5 inline-flex items-center gap-1 rounded border border-transparent py-1 pr-1"
             ref={deliveryRef}
           >
-            <Icon name="Location" width={20} height={20} />
+            <Icon name="Location" size={20} />
             <span>Delivery information</span>
             <OrderAction />
           </h3>
@@ -136,7 +136,7 @@ export default function OrderPage() {
               <p className="text-center text-sm text-gray-600">Or</p>
 
               <Button variant="outline" className="flex w-full gap-1">
-                <Icon name="QR" width={19} height={19} />
+                <Icon name="QR" size={19} />
                 <p>
                   <span className="text-red-500">VN</span>
                   <span className="text-blue-500">PAY</span>

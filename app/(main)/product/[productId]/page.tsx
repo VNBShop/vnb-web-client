@@ -120,8 +120,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   <li key={index}>
                     <Icon
                       name="Star"
-                      width={18}
-                      height={18}
+                      size={18}
                       color={
                         product?.productRating
                           ? item <= Math.round(product.productRating)

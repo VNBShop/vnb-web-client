@@ -38,12 +38,12 @@ export default function UserLayout({ children, params }: UserLayoutProps) {
 
           <div className=" space-x-2 text-center ">
             <Button className="h-9 space-x-1" variant="outline">
-              <Icon name="Pen" width={18} height={18} />
+              <Icon name="Pen" size={18} />
               <span>Edit profile</span>
             </Button>
 
             <Button className="h-9 space-x-1">
-              <Icon name="Plus" width={18} height={18} />
+              <Icon name="Plus" size={18} />
               <span>Add post</span>
             </Button>
           </div>

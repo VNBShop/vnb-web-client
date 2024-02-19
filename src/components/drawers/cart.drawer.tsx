@@ -39,7 +39,7 @@ const CartDrawer = ({
   return (
     <Transition
       show={cartCont}
-      className="cart fixed top-0 left-0 bottom-0 right-0 bg-clip-padding bg-opacity-30 bg-gray-100 backdrop-blur-sm z-10"
+      className="cart fixed bottom-0 left-0 right-0 top-0 z-10 bg-gray-100 bg-opacity-30 bg-clip-padding backdrop-blur-sm"
       onClick={handleCloseOutSideCart}
     >
       <Transition.Child
@@ -50,27 +50,27 @@ const CartDrawer = ({
         leave="transition-all duration-300 ease-in-out"
         leaveFrom="opacity-100 translate-x-0"
         leaveTo="opacity-0 -translate-x-[100%]"
-        className="w-[100%] flex flex-col md:w-[70%] lg:w-[40%] absolute top-0 h-full left-0 bottom-0 shadow-md bg-white p-4"
+        className="absolute bottom-0 left-0 top-0 flex h-full w-[100%] flex-col bg-white p-4 shadow-md md:w-[70%] lg:w-[40%]"
       >
         <section className="flex items-center justify-between">
           <h2 className="text-lg font-medium">Cart</h2>
           <button onClick={() => setCartCont(false)}>
-            <Icon name="Xmark" width={25} height={25} />
+            <Icon name="Xmark" size={25} />
           </button>
         </section>
         <hr className="my-2" />
 
         {carts?.length ? (
           <>
-            <section className=" overflow-hidden flex flex-1 h-full">
-              <section className=" overflow-y-auto w-full">
+            <section className=" flex h-full flex-1 overflow-hidden">
+              <section className=" w-full overflow-y-auto">
                 <ul className="w-full">
                   {carts.map((cart) => (
                     <li
                       key={cart.id}
-                      className="w-full flex md:items-end flex-col gap-y-4 md:flex-row justify-between border-b pb-3 last:border-none"
+                      className="flex w-full flex-col justify-between gap-y-4 border-b pb-3 last:border-none md:flex-row md:items-end"
                     >
-                      <figure className="flex items-center gap-2 flex-1">
+                      <figure className="flex flex-1 items-center gap-2">
                         <Image
                           src={cart.image}
                           alt={cart.image}
@@ -78,14 +78,14 @@ const CartDrawer = ({
                           width="0"
                           height="0"
                           sizes="100vw"
-                          className="w-16 h-16 rounded-full object-cover"
+                          className="h-16 w-16 rounded-full object-cover"
                         />
-                        <figcaption className="text-sm space-y-1">
+                        <figcaption className="space-y-1 text-sm">
                           <p>{cart.name}</p>
-                          <p className="text-gray-500 text-xs">
+                          <p className="text-xs text-gray-500">
                             {(100000).toLocaleString()}đ
                           </p>
-                          <p className="text-gray-500 text-xs">
+                          <p className="text-xs text-gray-500">
                             x{cart.quantity}
                           </p>
                         </figcaption>
@@ -98,7 +98,7 @@ const CartDrawer = ({
             </section>
 
             <hr className="mb-4" />
-            <section className="text-sm space-y-2">
+            <section className="space-y-2 text-sm">
               <div className="flex items-center justify-between">
                 <p>Shipping:</p>
                 <p>Free</p>
@@ -109,12 +109,12 @@ const CartDrawer = ({
                 <p>VAT</p>
               </div>
 
-              <div className="flex items-center justify-between !mb-2">
+              <div className="!mb-2 flex items-center justify-between">
                 <p>Total:</p>
                 <p>{(100000).toLocaleString()} VND</p>
               </div>
 
-              <Button className="w-full h-9">Checkout</Button>
+              <Button className="h-9 w-full">Checkout</Button>
             </section>
           </>
         ) : (

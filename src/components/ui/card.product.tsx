@@ -53,7 +53,7 @@ export default function ProductCard({
           </p>
 
           <section className="flex items-center gap-2">
-            <Icon name="HeartOutline" width={23} height={23} />
+            <Icon name="HeartOutline" size={23} />
           </section>
         </section>
       </section>

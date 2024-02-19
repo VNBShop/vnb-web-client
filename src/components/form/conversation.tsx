@@ -58,7 +58,7 @@ export default function ConversationForm({
             htmlFor="file"
             className="flex h-full w-full items-center justify-center hover:cursor-pointer"
           >
-            <Icon name="Photo" width={20} height={20} />
+            <Icon name="Photo" size={20} />
           </label>
         </div>
 
@@ -90,7 +90,7 @@ export default function ConversationForm({
         /> */}
 
         <button className="flex h-9 w-9 items-center justify-center rounded-full p-1 lg:hover:bg-gray-100">
-          <Icon name="Plane" width={20} height={20} />
+          <Icon name="Plane" size={20} />
         </button>
       </form>
     </Form>

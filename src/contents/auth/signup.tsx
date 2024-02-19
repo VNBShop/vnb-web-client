@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { createRef, useEffect, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
@@ -24,6 +24,7 @@ import {
 
 import { Input } from '@/components/ui/input'
 import InputPassword from '@/components/ui/input-password'
+import { ModalProps } from '@/components/ui/modal'
 import { OTPSchema, signUpSchema } from '@/lib/validations/auth'
 
 import { DataError, DataResponse } from '../../../types'
@@ -31,17 +32,11 @@ import { DataError, DataResponse } from '../../../types'
 type Inputs = z.infer<typeof signUpSchema>
 
 export default function SignUpForm() {
-  const initStateModalVerify: ModalOTPProps = {
-    meta: {
-      email: '',
-      title: '',
-      type: 'REGISTER',
-    },
-    open: false,
-    onClose: () => setModalVerify(initStateModalVerify),
-  }
-  const [modalVerify, setModalVerify] =
-    useState<ModalOTPProps>(initStateModalVerify)
+  const modalVerifyAccountRef = createRef<ModalProps>()
+
+  const [verifyPayload, setVerifyPayload] = useState<ModalOTPProps['meta']>(
+    {} as ModalOTPProps['meta']
+  )
 
   const form = useForm<Inputs>({
     resolver: zodResolver(signUpSchema),
@@ -59,15 +54,13 @@ export default function SignUpForm() {
     onSuccess: (response, data) => {
       if (response.data.success) {
         toast.success('Signup successfully!')
-        setModalVerify((prev) => ({
+        setVerifyPayload((prev) => ({
           ...prev,
-          meta: {
-            ...prev.meta,
-            email: data.email,
-            title: 'Confirm your account',
-          },
-          open: true,
+          email: data.email,
+          title: 'Confirm your account',
         }))
+        !!modalVerifyAccountRef.current &&
+          modalVerifyAccountRef.current.onOpen()
       }
     },
     onError: (error) => {
@@ -89,7 +82,8 @@ export default function SignUpForm() {
     onSuccess: (response) => {
       if (response.data.success) {
         toast.success('Verify successfully!')
-        modalVerify.onClose?.()
+        !!modalVerifyAccountRef.current &&
+          modalVerifyAccountRef.current.onClose()
         router.push('/signin')
       }
     },
@@ -100,7 +94,7 @@ export default function SignUpForm() {
 
   const onSubmitVerify = (values: z.infer<typeof OTPSchema>) => {
     const payload: OTPPayloadProps = {
-      email: modalVerify.meta.email,
+      email: verifyPayload.email,
       otpCode: values.otp,
       type: 'REGISTER',
     }
@@ -110,9 +104,8 @@ export default function SignUpForm() {
   return (
     <>
       <ModalOTP
-        open={modalVerify.open}
-        onClose={modalVerify.onClose}
-        meta={modalVerify.meta}
+        modalRef={modalVerifyAccountRef}
+        meta={verifyPayload}
         onSubmit={onSubmitVerify}
         isPending={mutationVerify.isPending}
       />

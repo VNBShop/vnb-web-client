@@ -35,7 +35,7 @@ export default function ForumHeader() {
 
         <section className="flex items-center gap-4">
           <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 hover:cursor-pointer lg:hover:bg-gray-200">
-            <Icon name="Bell" width={23} height={23} />
+            <Icon name="Bell" size={23} />
             <div className="absolute -right-1 -top-1 flex h-4 w-4  items-center justify-center rounded-full bg-secondary text-[10px] text-white">
               12
             </div>
@@ -46,7 +46,7 @@ export default function ForumHeader() {
               href="/conversation"
               className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 hover:cursor-pointer lg:hover:bg-gray-200"
             >
-              <Icon name="Plane" width={23} height={23} />
+              <Icon name="Plane" size={23} />
               <div className="absolute -right-1 -top-1 flex h-4 w-4  items-center justify-center rounded-full bg-secondary text-[10px] text-white">
                 12
               </div>

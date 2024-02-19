@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { createRef, useEffect, useState } from 'react'
 
 import { useQuery } from '@tanstack/react-query'
 
@@ -12,7 +12,7 @@ import { isError } from 'util'
 
 import { getProducts } from '@/api/public/product'
 import { Input } from '@/components/ui/input'
-import { Modal } from '@/components/ui/modal'
+import { Modal, ModalProps } from '@/components/ui/modal'
 
 import { useDebounce } from '@/hooks/useDebounce'
 
@@ -21,7 +21,7 @@ import Empty from '../empty'
 import Icon from '../icons'
 
 export default function Search() {
-  const [searchPopup, setSearchPopup] = useState(false)
+  const modalSearchRef = createRef<ModalProps>()
 
   const [searchVal, setSearchVal] = useState('')
 
@@ -39,7 +39,7 @@ export default function Search() {
   })
 
   const handleOpenSearchPopup = () => {
-    setSearchPopup((prev) => !prev)
+    !!modalSearchRef.current && modalSearchRef.current.onOpen()
   }
 
   return (
@@ -48,20 +48,16 @@ export default function Search() {
         className="flex h-9 w-9 flex-1 cursor-pointer items-center justify-center gap-1 rounded-full border lg:w-[200px] lg:justify-normal lg:p-3"
         onClick={handleOpenSearchPopup}
       >
-        <Icon name="Search" width={20} height={20} color="gray" />
+        <Icon name="Search" size={20} color="gray" />
         <span className="hidden text-xs text-gray-500 lg:block">
           Search product...
         </span>
       </div>
 
-      <Modal
-        show={searchPopup}
-        close={() => setSearchPopup(false)}
-        closeOutside
-      >
+      <Modal ref={modalSearchRef} closeOutside>
         <>
           <section className="relative flex items-center">
-            <Icon width={22} height={22} name="Search" />
+            <Icon size={22} name="Search" />
             <Input
               placeholder="Search product..."
               className="h-8 flex-1 border-none text-sm"
@@ -70,9 +66,11 @@ export default function Search() {
             />
             <figure
               className=" absolute right-0 hover:cursor-pointer"
-              onClick={() => setSearchPopup(false)}
+              onClick={() =>
+                !!modalSearchRef.current && modalSearchRef.current.onClose()
+              }
             >
-              <Icon width={22} height={22} name="Xmark" />
+              <Icon size={22} name="Xmark" />
             </figure>
           </section>
 
@@ -83,7 +81,10 @@ export default function Search() {
                   <Link
                     href={`/product/${product?.productId}`}
                     key={product?.productId}
-                    onClick={() => setSearchPopup(false)}
+                    onClick={() =>
+                      !!modalSearchRef.current &&
+                      modalSearchRef.current.onClose()
+                    }
                     className="flex items-center gap-2 rounded-md p-1 lg:hover:cursor-pointer lg:hover:bg-slate-100"
                   >
                     <figure className="h-[55px] w-[55px] rounded-full border border-gray-100">
