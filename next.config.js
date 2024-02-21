@@ -11,6 +11,9 @@ const nextConfig = {
         hostname: 'lh3.googleusercontent.com'
       }, {
         hostname: 'www.badmintonplanet.eu'
+      },
+      {
+        hostname: 'res.cloudinary.com'
       }
     ]
   }

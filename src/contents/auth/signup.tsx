@@ -32,11 +32,11 @@ import { DataError, DataResponse } from '../../../types'
 type Inputs = z.infer<typeof signUpSchema>
 
 export default function SignUpForm() {
-  const modalVerifyAccountRef = createRef<ModalProps>()
-
   const [verifyPayload, setVerifyPayload] = useState<ModalOTPProps['meta']>(
     {} as ModalOTPProps['meta']
   )
+
+  const [modalVerify, setModalVerify] = useState(false)
 
   const form = useForm<Inputs>({
     resolver: zodResolver(signUpSchema),
@@ -59,8 +59,7 @@ export default function SignUpForm() {
           email: data.email,
           title: 'Confirm your account',
         }))
-        !!modalVerifyAccountRef.current &&
-          modalVerifyAccountRef.current.onOpen()
+        setModalVerify(true)
       }
     },
     onError: (error) => {
@@ -82,8 +81,7 @@ export default function SignUpForm() {
     onSuccess: (response) => {
       if (response.data.success) {
         toast.success('Verify successfully!')
-        !!modalVerifyAccountRef.current &&
-          modalVerifyAccountRef.current.onClose()
+        setModalVerify(false)
         router.push('/signin')
       }
     },
@@ -104,7 +102,8 @@ export default function SignUpForm() {
   return (
     <>
       <ModalOTP
-        modalRef={modalVerifyAccountRef}
+        open={modalVerify}
+        onClose={() => setModalVerify(false)}
         meta={verifyPayload}
         onSubmit={onSubmitVerify}
         isPending={mutationVerify.isPending}

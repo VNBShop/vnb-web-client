@@ -1,6 +1,12 @@
 'use client'
 
-import { createRef, useState } from 'react'
+import {
+  ComponentPropsWithoutRef,
+  RefObject,
+  createRef,
+  useRef,
+  useState,
+} from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
@@ -32,8 +38,8 @@ import { DataError, DataResponse } from '../../../types'
 type Inputs = z.infer<typeof loginSchema>
 
 export default function SignInForm() {
-  const modalVerifyAccountRef = createRef<ModalProps>()
   const [loading, setLoading] = useState(false)
+  const [modal, setModal] = useState(false)
 
   const [verifyPayload, setVerifyPayload] = useState<ModalOTPProps['meta']>(
     {} as ModalOTPProps['meta']
@@ -67,11 +73,10 @@ export default function SignInForm() {
         setVerifyPayload((prev) => ({
           ...prev,
           email: data.email,
-          title: 'Confirm your account',
+          title: 'Verify your account',
         }))
 
-        !!modalVerifyAccountRef.current &&
-          modalVerifyAccountRef.current.onOpen()
+        setModal(true)
       }
     }
   }
@@ -86,8 +91,7 @@ export default function SignInForm() {
     onSuccess: (response) => {
       if (response?.data?.success) {
         toast.success('Verify successfully!')
-        !!modalVerifyAccountRef.current &&
-          modalVerifyAccountRef.current.onClose()
+        setModal(false)
         form.handleSubmit(onSubmit)()
       }
     },
@@ -108,9 +112,10 @@ export default function SignInForm() {
   return (
     <>
       <ModalOTP
-        modalRef={modalVerifyAccountRef}
         meta={verifyPayload}
         onSubmit={onSubmitVerify}
+        open={modal}
+        onClose={() => setModal(false)}
         isPending={mutationVerify.isPending}
       />
 

@@ -60,7 +60,11 @@ export const authOptions: NextAuthOptions = {
 
     //   return true
     // },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
+      if (trigger === 'update') {
+        return { ...token, ...session.user }
+      }
+
       if (account?.provider === 'google') {
         const verifyWithBE = await fetch(
           `${process.env.NEXT_SERVER_API_SERVICE}/user-service/api/v1/account/google-login`,

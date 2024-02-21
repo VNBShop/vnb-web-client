@@ -17,13 +17,15 @@ export type ModalResetProps = {
   email: string
   onSubmit?: (values: any) => void
   isPending?: boolean
-  ref: RefObject<ModalProps>
+  open: boolean
+  onClose: () => void
 }
 
 type Inputs = z.infer<typeof resetPasswordSchema>
 
 export default function ModalResetPassword({
-  ref,
+  open,
+  onClose,
   onSubmit,
   isPending,
 }: ModalResetProps) {
@@ -37,7 +39,8 @@ export default function ModalResetPassword({
 
   return (
     <Modal
-      ref={ref}
+      show={open}
+      onCloseModal={onClose}
       closeOutside={false}
       size="default"
       title="Verify your account"

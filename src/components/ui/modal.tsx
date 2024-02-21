@@ -42,6 +42,8 @@ export interface ModalInnerProps
   closeOutside?: boolean
   children?: ReactNode
   header?: string
+  show?: boolean
+  onCloseModal?: () => void
 }
 
 export type ModalProps = {
@@ -61,6 +63,8 @@ const Modal = forwardRef<ModalProps, ModalInnerProps>(
       children,
       header,
       closeOutside = false,
+      show,
+      onCloseModal,
       ...props
     },
     ref
@@ -88,7 +92,7 @@ const Modal = forwardRef<ModalProps, ModalInnerProps>(
     ) => {
       if (modalRef.current) {
         if (!modalRef.current.contains(event.target as Node)) {
-          onClose()
+          !!onCloseModal ? onCloseModal() : onClose()
         }
       }
     }
@@ -96,23 +100,28 @@ const Modal = forwardRef<ModalProps, ModalInnerProps>(
     useEffect(() => {
       const handleEsc = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
-          open && onClose()
+          if (!!onCloseModal && !!show) {
+            onCloseModal()
+          } else {
+            open && onClose()
+          }
         }
       }
       window.addEventListener('keydown', handleEsc)
-      if (open) {
+      if (open || show) {
         document.body.style.overflow = 'hidden'
       }
       return () => {
         window.removeEventListener('keydown', handleEsc)
         document.body.style.overflow = 'unset'
       }
-    }, [open])
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open, show])
 
     return (
       <>
         <Transition
-          show={open}
+          show={!!show ? show : open}
           appear
           className={
             center

@@ -13,7 +13,7 @@ import { signOut } from 'next-auth/react'
 import { toast } from 'sonner'
 
 import { useModal } from '@/_store/useModal'
-import { axiosPrivate } from '@/api/private/axios'
+import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 import Avatar from '@/components/avatar'
 import CartDrawer from '@/components/drawers/cart.drawer'
 import NavDrawer from '@/components/drawers/nav.drawer'
@@ -37,6 +37,9 @@ export default function Nav({ user }: NavProps) {
 
   const [navMobile, setOpenNavMobile] = useState(false)
   const [cartCont, setCartCont] = useState(false)
+  const [modalChangePass, setModalChangePass] = useState(false)
+
+  const axios = useAxiosPrivate()
 
   const { mutate: onSignOut, isPending } = useMutation<
     DataResponse,
@@ -45,7 +48,7 @@ export default function Nav({ user }: NavProps) {
     unknown
   >({
     mutationFn: () => {
-      const res = axiosPrivate.post('/user-service/api/v1/account/logout')
+      const res = axios.post('/user-service/api/v1/account/logout')
       return res
     },
     onSuccess: (res) => {
@@ -56,6 +59,7 @@ export default function Nav({ user }: NavProps) {
     onError: (error) => {
       toast.error(error.response.data.metadata.message)
     },
+    retry: 5,
   })
 
   useEffect(() => {

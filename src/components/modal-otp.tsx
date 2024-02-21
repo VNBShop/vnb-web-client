@@ -1,5 +1,3 @@
-import { RefObject } from 'react'
-
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 
@@ -10,8 +8,9 @@ import { z } from 'zod'
 import Spiner from '@/common/spiner'
 import { OTPSchema } from '@/lib/validations/auth'
 
+import ResendOTP from './resend-otp'
 import { Button } from './ui/button'
-import { Modal, ModalProps } from './ui/modal'
+import { Modal } from './ui/modal'
 
 export type ModalOTPProps = {
   meta: {
@@ -20,7 +19,8 @@ export type ModalOTPProps = {
   }
   onSubmit?: (values: any) => void
   isPending?: boolean
-  modalRef: RefObject<ModalProps>
+  open: boolean
+  onClose: () => void
 }
 
 type Inputs = z.infer<typeof OTPSchema>
@@ -44,7 +44,8 @@ export default function ModalOTP({
   meta,
   onSubmit,
   isPending,
-  modalRef,
+  open,
+  onClose,
 }: ModalOTPProps) {
   const {
     control,
@@ -59,7 +60,8 @@ export default function ModalOTP({
 
   return (
     <Modal
-      ref={modalRef}
+      onCloseModal={onClose}
+      show={open}
       closeOutside={false}
       size="default"
       title="Verify your account"
@@ -68,8 +70,10 @@ export default function ModalOTP({
 
       <p className=" mt-3 text-sm text-gray-600">
         We just send an OTP to{' '}
-        <span className="font-medium text-secondary">{meta.email}</span>
+        <span className="text-success font-medium">{meta.email}</span>
       </p>
+
+      <ResendOTP />
 
       <form
         className="mt-8"

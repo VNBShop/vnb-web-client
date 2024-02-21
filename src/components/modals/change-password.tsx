@@ -1,4 +1,4 @@
-import { createRef } from 'react'
+import { createRef, useEffect, useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 
@@ -25,7 +25,7 @@ type Inputs = z.infer<typeof changePasswordSchema>
 export default function ModalChangePassword() {
   const axios = useAxiosPrivate()
 
-  const modalChangePassRef = createRef<ModalProps>()
+  const { modalChangePassword, setModal } = useModal()
 
   const form = useForm<Inputs>({
     resolver: zodResolver(changePasswordSchema),
@@ -36,8 +36,6 @@ export default function ModalChangePassword() {
     },
   })
 
-  const axiosPrivate = useAxiosPrivate()
-
   const { isPending, mutate } = useMutation<
     DataResponse,
     DataError,
@@ -45,7 +43,7 @@ export default function ModalChangePassword() {
     unknown
   >({
     mutationFn: (payload) => {
-      const res = axiosPrivate.put(
+      const res = axios.put(
         `user-service/api/v1/account/change-password`,
         payload
       )
@@ -54,11 +52,11 @@ export default function ModalChangePassword() {
     onSuccess: (response) => {
       if (response.data.success) {
         toast.success('Change password successfully!')
-        !!modalChangePassRef.current && modalChangePassRef.current.onClose()
+        setModal('modalChangePassword')
       }
     },
     onError: (error) => {
-      toast.error(error.response.data.metadata.message)
+      toast.error(error?.response?.data?.metadata?.message || 'Server error')
     },
   })
 
@@ -66,16 +64,19 @@ export default function ModalChangePassword() {
     mutate(values)
   }
 
+  useEffect(() => {
+    ;() => {
+      form.reset()
+    }
+  }, [form])
+
   return (
     <>
-      <Modal ref={modalChangePassRef} closeOutside>
+      <Modal show={modalChangePassword} closeOutside>
         <section className="flex items-center justify-between">
           <div
             className="hover:cursor-pointer"
-            onClick={() =>
-              !!modalChangePassRef.current &&
-              modalChangePassRef.current.onOpen()
-            }
+            onClick={() => setModal('modalChangePassword')}
           >
             <Icon name="ChevronLeftThin" size={22} />
           </div>
