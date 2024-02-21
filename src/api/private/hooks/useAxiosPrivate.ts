@@ -16,6 +16,7 @@ export default function useAxiosPrivate() {
 
   useEffect(() => {
     // let isRefreshing = false
+    if (!session) return
 
     const responseIntercept = axiosPrivate.interceptors.response.use(
       (res) => res,
