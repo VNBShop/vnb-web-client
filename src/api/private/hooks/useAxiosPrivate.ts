@@ -6,8 +6,6 @@ import axios from 'axios'
 import { Session } from 'next-auth'
 import { getSession, signOut, useSession } from 'next-auth/react'
 
-import { useRefreshToken } from './useRefreshToken'
-
 import axiosPrivate from '../axios'
 
 export default function useAxiosPrivate() {
