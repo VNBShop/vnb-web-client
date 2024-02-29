@@ -10,10 +10,8 @@ import axiosPrivate from '../axios'
 
 export default function useAxiosPrivate() {
   const { data: session, update } = useSession()
-  // const refreshToken = useRefreshToken()
 
   useEffect(() => {
-    // let isRefreshing = false
     if (!session) return
 
     const responseIntercept = axiosPrivate.interceptors.response.use(
@@ -65,7 +63,9 @@ export default function useAxiosPrivate() {
       // axiosPrivate.interceptors.request.eject(requestIntercept)
       axiosPrivate.interceptors.response.eject(responseIntercept)
     }
-  }, [update, session])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session])
 
   return axiosPrivate
 }

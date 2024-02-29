@@ -28,10 +28,10 @@ export const useRefreshToken = () => {
         })
       }
     },
-    onError(error: any) {
+    onError: async (error: any) => {
       console.log('error: ', error)
       if (error?.response?.status === 403) {
-        signOut()
+        await signOut()
       }
     },
   })

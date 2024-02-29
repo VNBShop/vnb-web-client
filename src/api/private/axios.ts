@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Session } from 'next-auth'
 import { getSession, useSession } from 'next-auth/react'
 
-export const axiosPrivate = axios.create({
+const axiosPrivate = axios.create({
   baseURL: process.env.NEXT_SERVER_API_SERVICE,
   headers: {
     'Content-Type': 'application/json',
