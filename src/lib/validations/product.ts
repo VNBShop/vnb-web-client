@@ -5,6 +5,9 @@ const phoneRegex = new RegExp(
 )
 
 export const updateCartItemSchema = z.object({
+  productSizeId: z.string().min(1, {
+    message: 'Please choose size!',
+  }),
   quantity: z.number().min(0).default(1),
 })
 

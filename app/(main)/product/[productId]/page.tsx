@@ -2,6 +2,8 @@ import Image from 'next/image'
 
 import { notFound } from 'next/navigation'
 
+import { Session, getServerSession } from 'next-auth'
+
 import { getProductDetail } from '@/api/public/product'
 import Icon from '@/common/icons'
 import { Breadcrumbs } from '@/components/breadcrumbs'
@@ -9,20 +11,24 @@ import AddToCardForm from '@/components/form/add-to-card'
 import CommentForm from '@/components/form/product-comment'
 import CommnentCard from '@/components/ui/card.comment'
 
+import { authOptions } from '@/lib/authOptions'
+
+import { cn } from '@/lib/utils'
+
 import { ProductDetail } from '../../../../types/products'
 
-type ProductPageProps = {
+type IProps = {
   params: {
     productId: string
   }
 }
 
-export default async function ProductPage({ params }: ProductPageProps) {
+export default async function ProductPage({ params }: IProps) {
   const id = Number(params?.productId)
 
   const result = await getProductDetail({ id })
 
-  // const result: ProductDetailResponse = await res.json()
+  const session = await getServerSession(authOptions)
 
   if (!result?.data?.success) {
     notFound()
@@ -84,7 +90,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
                 <div className="h-4 w-[1px] bg-gray-500" />
                 <h2>
                   Status:{' '}
-                  <span className=" text-secondary">
+                  <span
+                    className={cn(
+                      'rounded-full px-3 py-1 text-xs font-medium',
+                      product?.productStatus
+                        ? 'bg-[#e4f6e2] text-[#368a2f]'
+                        : 'bg-gray-500 text-gray-400'
+                    )}
+                  >
                     {product?.productStatus ? 'Available' : 'Not available'}
                   </span>
                 </h2>
@@ -92,9 +105,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
               <div className="flex items-end gap-4">
                 <h2 className="text-xl font-medium text-secondary">
-                  {product?.productPrice?.toLocaleString('en-US', {
+                  {product?.productPrice?.toLocaleString('vi-VN', {
                     style: 'currency',
-                    currency: 'USD',
+                    currency: 'VND',
                   })}
                 </h2>
                 <p className=" text-gray-400 ">
@@ -104,9 +117,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
                       {(
                         product?.productPrice +
                         product?.productPrice * 0.1
-                      ).toLocaleString('en-US', {
+                      ).toLocaleString('vi-VN', {
                         style: 'currency',
-                        currency: 'USD',
+                        currency: 'VND',
                       })}
                     </span>
                   ) : (
@@ -166,11 +179,16 @@ export default async function ProductPage({ params }: ProductPageProps) {
                   )}
                 </ul>
               ) : null}
-
-              <AddToCardForm
-                productStocks={product?.productStocks}
-                productIsHaveSize={product?.productIsHaveSize}
-              />
+              {product?.productStocks?.some(
+                (item) => !!item?.productStockQuantity
+              ) &&
+                product?.productStatus && (
+                  <AddToCardForm
+                    user={session?.user as Session['user']}
+                    productStocks={product?.productStocks}
+                    productIsHaveSize={product?.productIsHaveSize}
+                  />
+                )}
             </article>
           </section>
           <hr className="w-full" />

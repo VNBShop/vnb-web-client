@@ -3,17 +3,12 @@
 import { Fragment, useEffect, useState } from 'react'
 
 import { Menu, Transition } from '@headlessui/react'
-import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { Session } from 'next-auth'
-import { signOut } from 'next-auth/react'
-
-import { toast } from 'sonner'
 
 import { useModal } from '@/_store/useModal'
-import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 import Avatar from '@/components/avatar'
 import CartDrawer from '@/components/drawers/cart.drawer'
 import NavDrawer from '@/components/drawers/nav.drawer'
@@ -21,7 +16,9 @@ import ModalChangePassword from '@/components/modals/change-password'
 import { Button } from '@/components/ui/button'
 import { nav } from '@/data'
 
-import { DataError, DataResponse } from '../../../types'
+import useFetchCart from '@/hooks/cart/useFetchCart'
+import useSignout from '@/hooks/commons/useSignout'
+
 import Icon from '../icons'
 
 import Spiner from '../spiner'
@@ -33,34 +30,12 @@ type NavProps = {
 export default function Nav({ user }: NavProps) {
   const pathname = usePathname()
 
-  const { setModal } = useModal((state) => state)
-
   const [navMobile, setOpenNavMobile] = useState(false)
   const [cartCont, setCartCont] = useState(false)
-  const [modalChangePass, setModalChangePass] = useState(false)
 
-  const axios = useAxiosPrivate()
-
-  const { mutate: onSignOut, isPending } = useMutation<
-    DataResponse,
-    DataError,
-    unknown,
-    unknown
-  >({
-    mutationFn: () => {
-      const res = axios.post('/user-service/api/v1/account/logout')
-      return res
-    },
-    onSuccess: (res) => {
-      if (res?.data?.success) {
-        signOut()
-      }
-    },
-    onError: (error) => {
-      toast.error(error.response.data.metadata.message)
-    },
-    retry: 5,
-  })
+  const { setModal } = useModal((state) => state)
+  const { isPending, onSignOut } = useSignout()
+  const { data: carts } = useFetchCart()
 
   useEffect(() => {
     if (navMobile || cartCont) {
@@ -104,13 +79,20 @@ export default function Nav({ user }: NavProps) {
         </ul>
       </nav>
 
-      <Button
-        className="ml-2 h-9 border shadow-none"
-        variant="outline"
-        onClick={() => setCartCont(true)}
-      >
-        <Icon name="Cart" size={20} />
-      </Button>
+      {!!user && (
+        <Button
+          className="relative ml-2 h-9 border shadow-none"
+          variant="outline"
+          onClick={() => setCartCont(true)}
+        >
+          <Icon name="Cart" size={20} />
+          {!!carts?.length && (
+            <div className=" absolute left-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-secondary text-[7px] text-white">
+              {carts.length}
+            </div>
+          )}
+        </Button>
+      )}
 
       {user && Object.keys(user)?.length ? (
         <Menu as="div" className="relative flex items-center justify-center">

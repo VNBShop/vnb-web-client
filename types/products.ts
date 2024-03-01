@@ -36,7 +36,7 @@ export type ProductComment = {
 export type ProductStock = {
   productStockId: number
   productStockSize: string
-  productStockQuantity: string
+  productStockQuantity: number
 }
 
 export type ProductBrand = {
