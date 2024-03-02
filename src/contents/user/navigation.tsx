@@ -22,7 +22,7 @@ export default function UserNavigation({ userId }: UserNavigationProps) {
             className="relative inline-block rounded-md p-4 text-sm font-medium text-gray-600 lg:hover:bg-gray-100"
           >
             {item.label}
-            {pathname === `/user/${userId}${item.url}` ? (
+            {pathname === item?.url ? (
               <div className=" absolute inset-x-0 bottom-0 h-[3px] w-full rounded-full bg-secondary" />
             ) : null}
           </Link>

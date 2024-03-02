@@ -22,7 +22,10 @@ export default function Avatar({
   const [name, setName] = useState<string | undefined>(undefined)
 
   return (
-    <figure {...props} className={cn('h-9 w-9 rounded-full', className)}>
+    <figure
+      {...props}
+      className={cn('relative h-9 w-9 rounded-full', className)}
+    >
       {!!name ? (
         <p
           className="flex h-full w-full items-center justify-center rounded-full bg-black font-medium text-white"
@@ -37,9 +40,8 @@ export default function Avatar({
           src={src}
           alt="Avatar"
           title="avatar"
-          width="0"
-          height="0"
-          className="h-full w-full rounded-full object-cover"
+          fill
+          className="rounded-full object-cover"
           sizes="100vw"
           onError={() => setName(username)}
         />

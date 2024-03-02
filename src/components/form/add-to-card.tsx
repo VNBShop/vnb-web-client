@@ -135,7 +135,7 @@ export default function AddToCardForm({
           </div>
 
           <section className="flex items-center gap-4">
-            {!!form.getValues('productSizeId') && !!productStocks?.length && (
+            {!!form.watch('productSizeId') && !!productStocks?.length && (
               <section className="text-sm">
                 <span>Quantity:{` `}</span>
                 {
@@ -148,7 +148,7 @@ export default function AddToCardForm({
               </section>
             )}
 
-            {!!form.getValues('productSizeId') && !!productStocks?.length && (
+            {!!form.watch('productSizeId') && !!productStocks?.length && (
               <div className="h-4 w-[1px] bg-gray-300"></div>
             )}
 

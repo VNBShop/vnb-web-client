@@ -1,13 +1,13 @@
 import AddPost from '@/components/add-post'
 import PostItem from '@/components/post/post-item'
 
-export type UserPageProps = {
-  params: {
-    userId: string
-  }
-}
+// export type UserPageProps = {
+//   params: {
+//     userId: string
+//   }
+// }
 
-export default function UserPage({ params }: UserPageProps) {
+export default function UserProfilePage() {
   return (
     <section className="mx-auto mt-10 flex max-w-secondary flex-col gap-4 md:px-4 lg:flex-row lg:items-start">
       <section className="bg-white p-4 py-3 md:rounded-md md:shadow-box lg:w-[38%]">

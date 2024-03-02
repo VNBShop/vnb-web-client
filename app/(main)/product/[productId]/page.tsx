@@ -95,7 +95,7 @@ export default async function ProductPage({ params }: IProps) {
                       'rounded-full px-3 py-1 text-xs font-medium',
                       product?.productStatus
                         ? 'bg-[#e4f6e2] text-[#368a2f]'
-                        : 'bg-gray-500 text-gray-400'
+                        : 'bg-gray-200 text-gray-400'
                     )}
                   >
                     {product?.productStatus ? 'Available' : 'Not available'}

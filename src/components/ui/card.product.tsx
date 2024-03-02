@@ -45,9 +45,9 @@ export default function ProductCard({
         <section className="mt-2 flex items-center justify-between">
           <p className=" text-sm text-[#FF3FA4]">
             {price
-              ? price.toLocaleString('en-US', {
+              ? price.toLocaleString('vi-VI', {
                   style: 'currency',
-                  currency: 'USD',
+                  currency: 'VND',
                 })
               : null}
           </p>

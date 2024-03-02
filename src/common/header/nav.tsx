@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from 'react'
 
 import { Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 import { Session } from 'next-auth'
 
@@ -29,13 +29,14 @@ type NavProps = {
 
 export default function Nav({ user }: NavProps) {
   const pathname = usePathname()
+  const router = useRouter()
 
   const [navMobile, setOpenNavMobile] = useState(false)
   const [cartCont, setCartCont] = useState(false)
 
   const { setModal } = useModal((state) => state)
   const { isPending, onSignOut } = useSignout()
-  const { data: carts } = useFetchCart()
+  const { data: carts, isFetching, isLoading } = useFetchCart()
 
   useEffect(() => {
     if (navMobile || cartCont) {
@@ -51,7 +52,7 @@ export default function Nav({ user }: NavProps) {
     <>
       <ModalChangePassword />
       <NavDrawer navMobile={navMobile} setOpenNavMobile={setOpenNavMobile} />
-      <CartDrawer cartCont={cartCont} setCartCont={setCartCont} />
+      <CartDrawer carts={carts} cartCont={cartCont} setCartCont={setCartCont} />
       <nav className=" hidden items-center lg:flex">
         <ul className="flex h-full items-center">
           {nav.map((item) => (
@@ -81,13 +82,13 @@ export default function Nav({ user }: NavProps) {
 
       {!!user && (
         <Button
-          className="relative ml-2 h-9 border shadow-none"
+          className="relative ml-2 h-9 w-9 rounded-full border p-0 shadow-none"
           variant="outline"
           onClick={() => setCartCont(true)}
         >
           <Icon name="Cart" size={20} />
           {!!carts?.length && (
-            <div className=" absolute left-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-secondary text-[7px] text-white">
+            <div className=" absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-secondary text-[7px] text-white">
               {carts.length}
             </div>
           )}
@@ -113,6 +114,7 @@ export default function Nav({ user }: NavProps) {
           >
             <Menu.Items className="absolute -right-4 top-[120%] z-10 grid min-w-[320px]  gap-[6px] rounded-lg bg-white p-2 shadow-box">
               <Menu.Item
+                onClick={() => router.push('/profile')}
                 as="div"
                 className="flex items-center gap-2 rounded-md p-2 text-sm font-medium shadow-sm hover:cursor-pointer hover:bg-gray-100"
               >
