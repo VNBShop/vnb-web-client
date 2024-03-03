@@ -8,3 +8,8 @@ export type User = {
   avatar: string
   dateOfBirth: any
 }
+
+export type Photo = {
+  secureUrl: string
+  assetId: string
+}

@@ -35,5 +35,5 @@ export const UpdateProfileSchema = z.object({
     .regex(phoneRegex, 'Phone number is not valid!')
     .optional(),
   gender: z.string(),
-  dateOfBirth: z.date(),
+  dateOfBirth: z.coerce.date(),
 })

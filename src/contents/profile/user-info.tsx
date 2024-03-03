@@ -2,6 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query'
 
+import dayjs from 'dayjs'
+
 import Icon from '@/common/icons'
 import ProfileInfoSkeleton from '@/components/skeletons/profile-info'
 
@@ -23,6 +25,16 @@ export default function UserInfo() {
           <div className="flex items-center gap-2 text-sm">
             <Icon name="Gender" color="#51829B" size={16} />
             <p>{data?.gender ?? '-'}</p>
+          </div>
+
+          <div className="flex items-center gap-2 text-sm">
+            <Icon name="Birthday" color="#51829B" size={16} />
+
+            <p>
+              {data?.dateOfBirth
+                ? dayjs(data.dateOfBirth).format('DD/MM/YYYY')
+                : '-'}
+            </p>
           </div>
 
           <div className="flex items-center gap-2 text-sm">

@@ -152,7 +152,7 @@ export default function UpdateProfileForm({ onCloseModal, user }: IProps) {
                     onChange={field.onChange}
                     name={field.name}
                     value="MALE"
-                    defaultChecked={field?.value === 'MALE' ? true : false}
+                    checked={field?.value === 'MALE' ? true : false}
                   />
                   <FormLabel htmlFor="field-male">Male</FormLabel>
                 </div>
@@ -164,7 +164,7 @@ export default function UpdateProfileForm({ onCloseModal, user }: IProps) {
                     onChange={field.onChange}
                     name={field.name}
                     value="FEMALE"
-                    defaultChecked={field?.value === 'FEMALE' ? true : false}
+                    checked={field?.value === 'FEMALE' ? true : false}
                   />
                   <FormLabel htmlFor="field-female">Female</FormLabel>
                 </div>

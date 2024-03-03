@@ -11,7 +11,6 @@ export default function UserProfilePage() {
         <section className="mt-5">
           <PostItem />
         </section>
-        Us
       </section>
     </section>
   )

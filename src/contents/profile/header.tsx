@@ -4,6 +4,7 @@ import { useState } from 'react'
 
 import Icon from '@/common/icons'
 import Avatar from '@/components/avatar'
+import UpdateAvatarForm from '@/components/form/update-avatar'
 import UpdateProfileForm from '@/components/form/update-profile'
 import ProfileHeaderSkeleton from '@/components/skeletons/profile-header'
 import { Button } from '@/components/ui/button'
@@ -18,34 +19,38 @@ import { User } from '../../../types/user'
 export default function ProfileHeader() {
   const { data, isFetching, isLoading } = useFetchUser()
   const [modal, setModal] = useState(false)
+  const [avtModal, setAvtModal] = useState(false)
 
   const onCloseModal = () => {
     setModal(false)
   }
 
+  const onCloseAvtModal = () => {
+    setAvtModal(false)
+  }
+
   return (
     <>
-      <Modal
-        size="lg"
-        show={modal}
-        header="Update profile"
-        onCloseModal={onCloseModal}
-      >
-        <UpdateProfileForm onCloseModal={onCloseModal} user={data as User} />
-      </Modal>
-
       {isFetching || isLoading ? (
         <ProfileHeaderSkeleton />
       ) : (
         <section className="mx-auto w-full max-w-secondary px-4">
           <section className="mt-7 flex flex-col items-center justify-between gap-y-4 md:flex-row md:items-end">
             <div className="flex flex-col items-center gap-5 md:flex-row">
-              <Avatar
-                src={data?.avatar as string}
-                username={data?.firstName ?? 'Z'}
-                className="h-[110px] w-[110px]"
-                nameSize={36}
-              />
+              <div className=" relative rounded-full">
+                <Avatar
+                  src={data?.avatar as string}
+                  username={data?.firstName ?? 'Z'}
+                  className="h-[110px] w-[110px]"
+                  nameSize={36}
+                />
+                <div
+                  onClick={() => setAvtModal(true)}
+                  className=" absolute bottom-[5px] right-[5px] flex h-7 w-7 items-center justify-center rounded-full bg-gray-100 hover:cursor-pointer"
+                >
+                  <Icon name="Pen" size={15} />
+                </div>
+              </div>
 
               <article className=" space-y-1 text-center md:text-left">
                 <p className=" text-2xl font-semibold">{`${data?.firstName} ${data?.lastName}`}</p>
@@ -73,6 +78,23 @@ export default function ProfileHeader() {
           <UserNavigation userId="jungjung261" />
         </section>
       )}
+
+      <Modal
+        size="lg"
+        show={modal}
+        header="Update profile"
+        onCloseModal={onCloseModal}
+      >
+        <UpdateProfileForm onCloseModal={onCloseModal} user={data as User} />
+      </Modal>
+
+      <Modal
+        show={avtModal}
+        onCloseModal={onCloseAvtModal}
+        header="Update avatar"
+      >
+        <UpdateAvatarForm onCloseModal={onCloseAvtModal} />
+      </Modal>
     </>
   )
 }

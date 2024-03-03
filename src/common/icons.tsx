@@ -49,6 +49,8 @@ export type IconName =
   | 'Bell'
   | 'User'
   | 'Filter'
+  | 'Birthday'
+  | 'PhotoPlus'
 
 export default function Icon({
   name,
@@ -72,6 +74,44 @@ export default function Icon({
       )
     }
 
+    case 'PhotoPlus': {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill={color}
+            d="M5.23 20q-.69 0-1.152-.463t-.463-1.152V5.615q0-.69.463-1.153Q4.54 4 5.23 4h8.384v4h2v2h4v8.385q0 .69-.462 1.152Q18.69 20 18 20H5.23Zm1.885-3.5h9.154l-2.827-3.77l-2.615 3.308l-1.75-2.115L7.115 16.5Zm10.27-8.27v-2h-2v-1h2v-2h1v2h2v1h-2v2h-1Z"
+          />
+        </svg>
+      )
+    }
+
+    case 'Birthday': {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+        >
+          <g
+            fill="none"
+            stroke={color}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="1.5"
+          >
+            <path d="M4 16.5V20a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3.5M3 14v-1a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1m-9-6v3m0-3c1.262 0 2-.968 2-2.625S12 2 12 2s-2 1.718-2 3.375S10.738 8 12 8Z" />
+            <path d="M9 14a3 3 0 1 1-6 0m12 0a3 3 0 1 1-6 0m12 0a3 3 0 1 1-6 0" />
+          </g>
+        </svg>
+      )
+    }
+
     case 'Calendar': {
       return (
         <svg
@@ -85,7 +125,7 @@ export default function Icon({
             stroke={color}
             strokeLinecap="round"
             strokeLinejoin="round"
-            stroke-width="2"
+            strokeWidth="2"
             d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm12-4v4M8 3v4m-4 4h16M7 14h.013m2.997 0h.005m2.995 0h.005m3 0h.005m-3.005 3h.005m-6.01 0h.005m2.995 0h.005"
           />
         </svg>
