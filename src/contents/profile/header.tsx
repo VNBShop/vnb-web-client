@@ -1,18 +1,39 @@
 'use client'
 
+import { useState } from 'react'
+
 import Icon from '@/common/icons'
 import Avatar from '@/components/avatar'
+import UpdateProfileForm from '@/components/form/update-profile'
 import ProfileHeaderSkeleton from '@/components/skeletons/profile-header'
 import { Button } from '@/components/ui/button'
 
+import { Modal } from '@/components/ui/modal'
 import useFetchUser from '@/hooks/user/useFetchUser'
 
 import UserNavigation from './navigation'
 
+import { User } from '../../../types/user'
+
 export default function ProfileHeader() {
   const { data, isFetching, isLoading } = useFetchUser()
+  const [modal, setModal] = useState(false)
+
+  const onCloseModal = () => {
+    setModal(false)
+  }
+
   return (
     <>
+      <Modal
+        size="lg"
+        show={modal}
+        header="Update profile"
+        onCloseModal={onCloseModal}
+      >
+        <UpdateProfileForm onCloseModal={onCloseModal} user={data as User} />
+      </Modal>
+
       {isFetching || isLoading ? (
         <ProfileHeaderSkeleton />
       ) : (
@@ -33,7 +54,11 @@ export default function ProfileHeader() {
             </div>
 
             <div className=" space-x-2 text-center ">
-              <Button className="h-9 space-x-1" variant="outline">
+              <Button
+                className="h-9 space-x-1"
+                variant="outline"
+                onClick={() => setModal(true)}
+              >
                 <Icon name="Pen" size={18} />
                 <span>Edit profile</span>
               </Button>

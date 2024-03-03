@@ -40,6 +40,7 @@ export default function useUpdateUser({ onCloseModal }: IProps = {}) {
         await client.refetchQueries({
           queryKey: ['get-user-profile'],
         })
+        toast.success('Update user info successfully!')
         onCloseModal?.()
       }
     },

@@ -20,7 +20,7 @@ export default function ProfileHeaderSkeleton() {
       <section className="flex items-center justify-center gap-2 pb-1 lg:justify-normal">
         {Array.from({ length: 3 }).map((_, index) => (
           <div key={index}>
-            <div className="h-9 w-[100px] rounded-md bg-gray-200"></div>
+            <div className="h-12 w-[100px] rounded-md bg-gray-200"></div>
           </div>
         ))}
       </section>

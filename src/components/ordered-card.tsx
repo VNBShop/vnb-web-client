@@ -16,10 +16,8 @@ type IProps = {
 }
 
 export default function OrderedCard({ ordered }: IProps) {
-  console.log('oder', ordered)
-
   return (
-    <section className="w-full">
+    <section className="w-full bg-white px-4 py-3 shadow-sm md:rounded-md">
       <section className="flex items-center justify-between">
         <p className="text-sm text-gray-600">
           {dayjs(ordered?.orderDate).fromNow()}
@@ -58,7 +56,9 @@ export default function OrderedCard({ ordered }: IProps) {
               </figure>
 
               <section className="space-y-1">
-                <p className="font-medium text-gray-700">{prod?.productName}</p>
+                <p className="text-[15px] font-medium text-gray-700">
+                  {prod?.productName}
+                </p>
                 {!!prod?.productSizeName && (
                   <p className={cn('w-fit rounded border p-1 text-xs')}>
                     {prod?.productSizeName}
@@ -87,7 +87,7 @@ export default function OrderedCard({ ordered }: IProps) {
           {dayjs(ordered?.orderDate).format('HH:mm:ss DD/MM/YYYY')}
         </div>
 
-        <section className="space-y-2 text-sm">
+        <section className="space-y-2 text-right text-sm">
           <p className="text-sm text-gray-700">
             {' '}
             Payment type: {ordered?.paymentType}

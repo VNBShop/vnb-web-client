@@ -32,3 +32,33 @@ export const colorsOrderedStatus: Record<
     backgroundColor: '#e9f5d2',
   },
 }
+
+export const orderedStatusOption: {
+  label: string
+  value: OrderedStatus
+}[] = [
+  {
+    label: 'Success',
+    value: 'SUCCESS',
+  },
+  {
+    label: 'Pending',
+    value: 'PENDING',
+  },
+  {
+    label: 'Delivering',
+    value: 'DELIVERING',
+  },
+  {
+    label: 'Re delivering',
+    value: 'RE_DELIVERING',
+  },
+  {
+    label: 'Failed',
+    value: 'DELIVER_FAILED',
+  },
+  {
+    label: 'Cancelled',
+    value: 'CANCELLED',
+  },
+]

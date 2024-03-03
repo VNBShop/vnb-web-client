@@ -7,7 +7,7 @@ import { DataResponse } from '../../../types'
 import { Ordered, OrderedStatus } from '../../../types/order'
 
 export type OrderedFilter = {
-  orderStatus: OrderedStatus
+  status: OrderedStatus
 }
 
 type IProps = {
@@ -48,8 +48,6 @@ export default function useFetchOrdered({ filter }: IProps) {
     getNextPageParam: (lastPage, allPages) => allPages?.length + 1,
     refetchOnWindowFocus: false,
   })
-
-  console.log('data', data)
 
   return {
     data: data?.pages ?? [],

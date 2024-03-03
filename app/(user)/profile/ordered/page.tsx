@@ -1,38 +1,45 @@
 'use client'
 
+import { useSearchParams } from 'next/navigation'
+
 import Empty from '@/common/empty'
 import Icon from '@/common/icons'
 import OrderedCard from '@/components/ordered-card'
+import OrderedCardSketelon from '@/components/skeletons/ordered-card'
+import UserOrderedFilter from '@/contents/profile/ordered-filter'
 import useFetchOrdered from '@/hooks/order/useFetchOrdered'
 
 import { Ordered, OrderedStatus } from '../../../../types/order'
 
 export default function ProfileOrderd() {
-  const filter = {
-    orderStatus: 'PENDING' as OrderedStatus,
-  }
-  const { data } = useFetchOrdered({ filter })
+  const searchParams = useSearchParams()
+  const status = searchParams?.get('orderedStatus')
 
-  console.log('data', data)
+  const filter = {
+    status: status as OrderedStatus,
+  }
+  const { data, isError, isFetching, isLoading } = useFetchOrdered({ filter })
 
   return (
-    <section className="mx-auto mt-10 max-w-[650px]">
-      <section className="flex items-center justify-between rounded-md bg-white p-4 py-3 shadow-sm">
+    <section className="mx-auto mb-10 mt-10 max-w-[650px]">
+      <section className="flex items-center justify-between bg-white p-4 py-3 shadow-sm md:rounded-md">
         <h2 className="text-lg font-medium">Ordered</h2>
-        <div>
-          <Icon name="Wallet" size={20} />
-        </div>
+        <UserOrderedFilter />
       </section>
 
-      <section className="mt-7 rounded-md bg-white px-4 py-3 shadow-md">
-        {data?.length ? (
-          data?.map((orders) =>
-            orders.map((ordered: Ordered) => (
-              <OrderedCard key={ordered?.orderId} ordered={ordered} />
-            ))
-          )
-        ) : (
-          <Empty message="No ordered" />
+      <section className="mt-7 space-y-6">
+        {data?.length && !isError && !isFetching && !isLoading
+          ? data?.map((orders) =>
+              orders.map((ordered: Ordered) => (
+                <OrderedCard key={ordered?.orderId} ordered={ordered} />
+              ))
+            )
+          : null}
+
+        {(isFetching || isLoading) && !isError && <OrderedCardSketelon />}
+
+        {isError && (
+          <Empty className="mx-auto grid w-[100px]" message="No ordered" />
         )}
       </section>
     </section>

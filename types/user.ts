@@ -6,4 +6,5 @@ export type User = {
   phoneNumber: string
   address: string
   avatar: string
+  dateOfBirth: any
 }

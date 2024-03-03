@@ -78,7 +78,7 @@ export default function Products({
         {(isPending || isFetchingNextPage) && <ProductsSkeleton />}
       </ul>
 
-      {hasNextPage && !isError && !isPending && !isFetchingNextPage && (
+      {hasNextPage && !isError && !isPending && isFetchingNextPage && (
         <section className="mt-16 flex items-center justify-center">
           <Button variant="outline" onClick={() => fetchNextPage()}>
             Load more
