@@ -1,12 +1,40 @@
 'use client'
 
-import Icon from '@/common/icons'
+import { useState } from 'react'
 
-export default function OrderAction() {
+import Icon from '@/common/icons'
+import UpdateOrderInfoForm from '@/components/form/update-order-info'
+import { Modal } from '@/components/ui/modal'
+
+import { User } from '../../../../types/user'
+
+type IProps = {
+  user: User
+}
+
+export default function OrderAction({ user }: IProps) {
+  const [modal, setModal] = useState(false)
+
+  const onCloseModal = () => {
+    setModal(false)
+  }
   return (
-    <div className="ml-4 flex items-center gap-1 text-sm hover:cursor-pointer">
-      <Icon name="Pen" size={15} color="blue" />
-      <span className="text-blue-700">Edit</span>
-    </div>
+    <>
+      <Modal
+        header="Update delivery info"
+        show={modal}
+        onCloseModal={onCloseModal}
+      >
+        <UpdateOrderInfoForm user={user as User} onCloseModal={onCloseModal} />
+      </Modal>
+
+      <div
+        className="ml-4 flex items-center gap-1 text-sm hover:cursor-pointer"
+        onClick={() => setModal(true)}
+      >
+        <Icon name="Pen" size={15} color="blue" />
+        <span className="text-blue-700">Edit</span>
+      </div>
+    </>
   )
 }

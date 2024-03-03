@@ -32,7 +32,10 @@ const CartDrawer = ({ cartCont, setCartCont, carts: cartsOut }: IProps) => {
 
   const [carts, setCarts] = useState<Cart[]>([])
 
-  const { loading, onAddToCart } = useCreateCart({ isMultiple: true })
+  const { loading, onAddToCart } = useCreateCart({
+    isMultiple: true,
+    onCloseDrawer: () => setCartCont(false),
+  })
 
   const onCloseOutSideCart = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -46,7 +49,7 @@ const CartDrawer = ({ cartCont, setCartCont, carts: cartsOut }: IProps) => {
 
   const onCheckout = () => {
     const payload: CreateCartPayload[] = carts.map((item) => ({
-      productSizeId: item?.cartId,
+      productSizeId: item?.productSizeId,
       quantity: item?.quantity,
     }))
 

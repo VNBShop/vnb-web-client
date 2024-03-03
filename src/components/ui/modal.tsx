@@ -143,9 +143,9 @@ const Modal = forwardRef<ModalProps, ModalInnerProps>(
           >
             {!!header ? (
               <header className="flex items-center justify-between">
-                <h2 className=" font-medium">{header}</h2>
+                <h2 className=" font-medium text-gray-500">{header}</h2>
                 <div
-                  onClick={onClose}
+                  onClick={!!onCloseModal ? onCloseModal : onClose}
                   className="p-2 hover:cursor-pointer hover:text-secondary"
                 >
                   <Icon name="Xmark" size={25} />

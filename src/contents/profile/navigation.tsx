@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import { user_navigation } from '@/data'
+import { cn } from '@/lib/utils'
 
 export type UserNavigationProps = {
   userId: string
@@ -18,8 +19,11 @@ export default function UserNavigation({ userId }: UserNavigationProps) {
       {user_navigation.map((item, index) => (
         <li key={index}>
           <Link
-            href={`/user/${userId}${item.url}`}
-            className="relative inline-block rounded-md p-4 text-sm font-medium text-gray-600 lg:hover:bg-gray-100"
+            href={`${item.url}`}
+            className={cn(
+              'relative inline-block rounded-md p-4 text-sm font-medium text-gray-600 lg:hover:bg-gray-100',
+              pathname === item.url ? 'text-secondary' : ''
+            )}
           >
             {item.label}
             {pathname === item?.url ? (

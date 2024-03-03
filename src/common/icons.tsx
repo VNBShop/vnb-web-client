@@ -4,6 +4,50 @@ type IconProps = {
   size: number
 }
 
+export type IconName =
+  | 'Phone'
+  | 'Gender'
+  | 'Setting'
+  | 'Key'
+  | 'QR'
+  | 'Plane'
+  | 'Xmark'
+  | 'Search'
+  | 'Racket'
+  | 'Shoe'
+  | 'Skirt'
+  | 'Backpack'
+  | 'Products'
+  | 'Hamburger'
+  | 'Minus'
+  | 'Plus'
+  | 'Cart'
+  | 'Shipping'
+  | 'Chart'
+  | 'Wallet'
+  | 'Coin'
+  | 'Logout'
+  | 'I'
+  | 'HeartOutline'
+  | 'Heart'
+  | 'Checked'
+  | 'ChevronDown'
+  | 'ChevronLeft'
+  | 'ChevronLeftThin'
+  | 'ChevronRight'
+  | 'ChevronRightThin'
+  | 'Endow'
+  | 'Star'
+  | 'Trash'
+  | 'Location'
+  | 'Pen'
+  | 'Photo'
+  | 'Ellipsis'
+  | 'ChatOutline'
+  | 'ShareOutline'
+  | 'Bell'
+  | 'User'
+
 export default function Icon({
   name,
   color = 'currentColor',
@@ -21,6 +65,39 @@ export default function Icon({
           <path
             fill={color}
             d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24c1.12.37 2.33.57 3.57.57c.55 0 1 .45 1 1V20c0 .55-.45 1-1 1c-9.39 0-17-7.61-17-17c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1c0 1.25.2 2.45.57 3.57c.11.35.03.74-.25 1.02l-2.2 2.2z"
+          />
+        </svg>
+      )
+    }
+
+    case 'User': {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={size}
+          height={size}
+          viewBox="0 0 20 20"
+        >
+          <path
+            fill={color}
+            fill-rule="evenodd"
+            d="M10 9a3 3 0 1 0 0-6a3 3 0 0 0 0 6Zm-7 9a7 7 0 1 1 14 0H3Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      )
+    }
+    case 'Gender': {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={size}
+          height={size}
+          viewBox="0 0 32 32"
+        >
+          <path
+            fill={color}
+            d="M22 3v2h3.563l-3.375 3.406A6.962 6.962 0 0 0 18 7c-1.87 0-3.616.74-4.938 2.063a6.94 6.94 0 0 0 .001 9.875c.87.87 1.906 1.495 3.062 1.812c.114-.087.242-.178.344-.28a3.45 3.45 0 0 0 .874-1.532a4.906 4.906 0 0 1-2.875-1.407C13.524 16.588 13 15.336 13 14s.525-2.586 1.47-3.53C15.412 9.523 16.664 9 18 9s2.587.525 3.53 1.47A4.956 4.956 0 0 1 23 14c0 .865-.245 1.67-.656 2.406c.096.516.156 1.058.156 1.594c0 .498-.042.99-.125 1.47c.2-.163.378-.348.563-.532C24.26 17.614 25 15.87 25 14c0-1.53-.504-2.984-1.406-4.188L27 6.438V10h2V3h-7zm-6.125 8.25c-.114.087-.242.178-.344.28c-.432.434-.714.96-.874 1.533c1.09.14 2.085.616 2.875 1.406c.945.943 1.47 2.195 1.47 3.53s-.525 2.586-1.47 3.53C16.588 22.477 15.336 23 14 23s-2.587-.525-3.53-1.47A4.948 4.948 0 0 1 9 18c0-.865.245-1.67.656-2.406A8.789 8.789 0 0 1 9.5 14c0-.498.042-.99.125-1.47c-.2.163-.377.348-.563.533C7.742 14.384 7 16.13 7 18c0 1.53.504 2.984 1.406 4.188L6.72 23.875l-2-2l-1.44 1.406l2 2l-2 2l1.44 1.44l2-2l2 2l1.405-1.44l-2-2l1.688-1.686A6.932 6.932 0 0 0 14 25c1.87 0 3.616-.74 4.938-2.063C20.26 21.616 21 19.87 21 18s-.74-3.614-2.063-4.938c-.87-.87-1.906-1.495-3.062-1.812z"
           />
         </svg>
       )
@@ -666,45 +743,3 @@ export default function Icon({
     }
   }
 }
-
-export type IconName =
-  | 'Phone'
-  | 'Setting'
-  | 'Key'
-  | 'QR'
-  | 'Plane'
-  | 'Xmark'
-  | 'Search'
-  | 'Racket'
-  | 'Shoe'
-  | 'Skirt'
-  | 'Backpack'
-  | 'Products'
-  | 'Hamburger'
-  | 'Minus'
-  | 'Plus'
-  | 'Cart'
-  | 'Shipping'
-  | 'Chart'
-  | 'Wallet'
-  | 'Coin'
-  | 'Logout'
-  | 'I'
-  | 'HeartOutline'
-  | 'Heart'
-  | 'Checked'
-  | 'ChevronDown'
-  | 'ChevronLeft'
-  | 'ChevronLeftThin'
-  | 'ChevronRight'
-  | 'ChevronRightThin'
-  | 'Endow'
-  | 'Star'
-  | 'Trash'
-  | 'Location'
-  | 'Pen'
-  | 'Photo'
-  | 'Ellipsis'
-  | 'ChatOutline'
-  | 'ShareOutline'
-  | 'Bell'

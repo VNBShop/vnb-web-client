@@ -10,9 +10,25 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
+  if (
+    (req.url.includes('/order') ||
+      req.url.includes('/profile') ||
+      req.url.includes('/profile/ordered')) &&
+    !isAuth
+  ) {
+    return NextResponse.redirect(new URL('/signin', req.url))
+  }
+
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/signin', '/signup', '/'],
+  matcher: [
+    '/signin',
+    '/signup',
+    '/',
+    '/order',
+    '/profile',
+    '/profile/ordered',
+  ],
 }

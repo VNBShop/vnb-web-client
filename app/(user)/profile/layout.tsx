@@ -1,11 +1,7 @@
-import { PropsWithChildren, ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 import Header from '@/common/header'
-import Icon from '@/common/icons'
-import Avatar from '@/components/avatar'
-import { Button } from '@/components/ui/button'
-import ProfileHeader from '@/contents/user/header'
-import UserNavigation from '@/contents/user/navigation'
+import ProfileHeader from '@/contents/profile/header'
 
 type UserLayoutProps = {
   children: ReactNode

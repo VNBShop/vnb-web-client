@@ -36,7 +36,7 @@ export default function Nav({ user }: NavProps) {
 
   const { setModal } = useModal((state) => state)
   const { isPending, onSignOut } = useSignout()
-  const { data: carts, isFetching, isLoading } = useFetchCart()
+  const { data: carts } = useFetchCart()
 
   useEffect(() => {
     if (navMobile || cartCont) {

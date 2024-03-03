@@ -1,34 +1,84 @@
 'use client'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
+import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
+
+import { toast } from 'sonner'
 
 import Icon from '@/common/icons'
 import {
   productTypeLabel,
   productTypeLabelProps,
 } from '@/common/product-type-label'
+import Spiner from '@/common/spiner'
+import UpdateOrderInfoForm from '@/components/form/update-order-info'
+import OrderSkeleton from '@/components/skeletons/order-skeleton'
 import { Button } from '@/components/ui/button'
+import { Modal } from '@/components/ui/modal'
 import OrderAction from '@/contents/ecommerce/order/order-action'
+
+import useCreateOrder, {
+  CreateOrderPayload,
+} from '@/hooks/order/useCreateOrder'
+import useFetchUser from '@/hooks/user/useFetchUser'
+
+import { DataResponse } from '../../../types'
+import { Cart } from '../../../types/order'
+import { User } from '../../../types/user'
 
 export default function OrderPage() {
   const deliveryRef = useRef<HTMLDivElement | null>(null)
 
-  const arr = []
+  const {
+    data: user,
+    isFetching: fetchingUser,
+    isLoading: loadingUser,
+  } = useFetchUser()
 
-  for (let i = 0; i < 10; i++) {
-    const fakeData = {
-      id: i + 1,
-      image: '/common/fake.webp',
-      name: `Lining racket HC1200 ${i + 1}`,
-      price: Math.floor(Math.random() * 9900001) + 100000,
-      quantity: 12,
-      type: 'racket',
+  const { loading, onCreateOrder } = useCreateOrder()
+
+  const {
+    data,
+    isLoading: loadingCarts,
+    isFetching: fetchingCarts,
+  } = useQuery<DataResponse>({
+    queryKey: ['get-user-cart'],
+    refetchOnWindowFocus: false,
+  })
+
+  const carts = (data?.data?.metadata as Cart[]) ?? []
+
+  const onSubmit = () => {
+    if (!carts?.length) {
+      toast.error('Your cart is empty, cant not order')
+      return
     }
-    arr.push(fakeData)
+
+    if (!user?.address || !user?.firstName || !user?.phoneNumber) {
+      toast.error('Please fill your information for ordering!')
+      if (deliveryRef.current) {
+        deliveryRef.current.style.borderColor = 'red'
+        deliveryRef.current.scrollIntoView({
+          block: 'end',
+          behavior: 'smooth',
+        })
+      }
+
+      return
+    }
+
+    const payload: CreateOrderPayload = {
+      cartIds: carts.map((cart) => cart.cartId),
+      paymentType: 'CASH',
+    }
+
+    onCreateOrder(payload)
   }
 
-  return (
+  return fetchingCarts || fetchingUser || loadingCarts || loadingUser ? (
+    <OrderSkeleton />
+  ) : (
     <>
       <div className="fixed inset-0 z-[-1] bg-[rgba(244,245,250)]" />
       <section className="mx-auto mt-7 max-w-[1000px] bg-white p-4 lg:rounded-md">
@@ -44,14 +94,21 @@ export default function OrderPage() {
           >
             <Icon name="Location" size={20} />
             <span>Delivery information</span>
-            <OrderAction />
+            <OrderAction user={user as User} />
           </h3>
           <section className="ml-1 mt-2 space-y-1 text-sm text-gray-600">
-            <p>M Dũng</p>
-            <p>(+84) 911710056</p>
-            <p>
-              Số 175, Đường Nguyễn Thị Thập, Phường Tân Phú, Quận 7, TP. Hồ Chí
-              Minh
+            <p className="flex items-center gap-2">
+              <Icon name="User" size={15} />
+              {`${user?.firstName} ${user?.lastName}`}
+            </p>
+            <p className="flex items-center gap-2">
+              <Icon name="Phone" size={15} />
+
+              {user?.phoneNumber ?? '--'}
+            </p>
+            <p className="flex items-center gap-2">
+              <Icon name="Location" size={15} />
+              {user?.address ?? '--'}
             </p>
           </section>
         </header>
@@ -63,16 +120,16 @@ export default function OrderPage() {
 
         <section className="mt-7 flex h-full flex-col items-start gap-7 lg:flex-row">
           <ul className="w-full space-y-4 lg:w-[60%]">
-            {arr.map((cart) => (
+            {carts.map((cart) => (
               <li
-                key={cart.id}
-                className="flex justify-between border-b pb-4 last:border-none"
+                key={cart.cartId}
+                className="flex items-center justify-between border-b pb-4 last:border-none"
               >
-                <figure className="flex gap-2">
+                <figure className="flex items-center gap-2">
                   <Image
-                    alt={cart.name}
-                    title={cart.name}
-                    src={cart.image}
+                    alt={cart?.productName}
+                    title={cart?.productName}
+                    src={cart?.productImage}
                     width="0"
                     height="0"
                     className="h-full w-[70px] object-contain"
@@ -80,18 +137,18 @@ export default function OrderPage() {
                   />
 
                   <figcaption className="flex-1 space-y-2">
-                    <p className="font-medium">{cart.name}</p>
+                    <p className="font-medium">{cart?.productName}</p>
                     <p className="text-sm text-gray-500">
                       Quantity: {cart.quantity}
-                    </p>
-                    <p className="inline-block">
-                      {productTypeLabel(cart.type as productTypeLabelProps)}
                     </p>
                   </figcaption>
                 </figure>
 
                 <p className="text-sm text-secondary" suppressHydrationWarning>
-                  {(cart.price * cart.quantity).toLocaleString()}đ
+                  {cart?.productPriceUnit?.toLocaleString('vi-VI', {
+                    currency: 'VND',
+                    style: 'currency',
+                  })}
                 </p>
               </li>
             ))}
@@ -114,28 +171,35 @@ export default function OrderPage() {
             <div className="flex items-center justify-between text-sm">
               <p>Total: </p>
               <p className=" font-medium text-secondary">
-                {(10000000).toLocaleString()}đ
+                {carts
+                  ?.reduce(
+                    (acc, curr) =>
+                      acc + curr?.quantity * curr?.productPriceUnit,
+                    0
+                  )
+                  ?.toLocaleString('vi-VI', {
+                    currency: 'VND',
+                    style: 'currency',
+                  })}
               </p>
             </div>
 
             <section className="!mt-7 space-y-4">
               <Button
-                className="w-full"
-                onClick={() => {
-                  if (deliveryRef.current) {
-                    deliveryRef.current.style.borderColor = 'red'
-                    deliveryRef.current.scrollIntoView({
-                      block: 'end',
-                      behavior: 'smooth',
-                    })
-                  }
-                }}
+                className="w-full space-x-1"
+                onClick={onSubmit}
+                disabled={loading}
               >
-                Cash on Delivery
+                {loading && <Spiner size={16} />}
+                <span> Cash on Delivery</span>
               </Button>
               <p className="text-center text-sm text-gray-600">Or</p>
 
-              <Button variant="outline" className="flex w-full gap-1">
+              <Button
+                variant="outline"
+                className="flex w-full gap-1"
+                disabled={loading}
+              >
                 <Icon name="QR" size={19} />
                 <p>
                   <span className="text-red-500">VN</span>

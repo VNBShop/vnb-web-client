@@ -17,9 +17,13 @@ export type CreateCartPayload = {
 
 type IProps = {
   isMultiple?: boolean
+  onCloseDrawer?: () => void
 }
 
-export default function useCreateCart({ isMultiple }: IProps = {}) {
+export default function useCreateCart({
+  isMultiple,
+  onCloseDrawer,
+}: IProps = {}) {
   const client = useQueryClient()
   const axios = useAxiosPrivate()
   const router = useRouter()
@@ -39,7 +43,9 @@ export default function useCreateCart({ isMultiple }: IProps = {}) {
     onSuccess: async (res) => {
       if (res?.data?.success) {
         if (isMultiple) {
+          await client.refetchQueries({ queryKey: ['get-user-cart'] })
           router.push('/order')
+          onCloseDrawer?.()
         } else {
           await client.refetchQueries({ queryKey: ['get-user-cart'] })
           toast.success('Add to card successfully!')
@@ -47,9 +53,20 @@ export default function useCreateCart({ isMultiple }: IProps = {}) {
       }
     },
     onError: (err) => {
+      console.log('err', err)
+
       if (isMultiple) {
         toast('Out of stock', {
-          description: 'HEHE',
+          classNames: {
+            title: '!text-red-500',
+          },
+          description: (
+            <section className="text-gray-600">
+              {err?.response?.data?.metadata?.data?.map(
+                (item: string, index: number) => <div key={index}>{item}</div>
+              )}
+            </section>
+          ),
         })
       } else {
         toast.error(
