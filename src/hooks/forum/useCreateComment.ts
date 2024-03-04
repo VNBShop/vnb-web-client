@@ -1,4 +1,9 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  InfiniteData,
+  QueryKey,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query'
 
 import { toast } from 'sonner'
 
@@ -29,11 +34,64 @@ export default function useCreateComment({ onSuccess }: IProps) {
     mutationFn: async (payload) => {
       return await axios.post(`${FORUM_SERVICE}/comments`, payload)
     },
-    onSuccess: (res, payload) => {
+    onSuccess: async (res, payload) => {
       if (res?.data?.success) {
-        client.refetchQueries({
-          queryKey: ['get-comments', payload.postId],
-        })
+        await client.setQueryData(
+          ['get-comments', payload.postId],
+          (oldData?: InfiniteData<Comment[][], unknown>) => {
+            if (!oldData) {
+              if (res?.data?.metadata?.comment) {
+                return {
+                  pages: [[res.data.metadata.comment]],
+                  pageParams: [undefined],
+                }
+              }
+              return null
+            }
+
+            const oldPages = oldData.pages ?? []
+            const newComment = res?.data?.metadata?.comment
+
+            if (newComment) {
+              const newPages = [[newComment], ...oldPages]
+              return {
+                ...oldData,
+                pages: newPages,
+              }
+            }
+
+            return oldData
+          }
+        )
+
+        await client.setQueryData(
+          ['get-posts'],
+          (oldData?: InfiniteData<Post[], unknown>) => {
+            const oldPages: Post[] = oldData?.pages?.flat() ?? []
+            const newCount = res?.data?.metadata?.commentCount
+            const postId = res?.data?.metadata?.postId
+
+            const findIndex = oldPages?.findIndex(
+              (item) => item?.postId === postId
+            )
+
+            if (findIndex !== -1 && newCount && oldPages?.length) {
+              oldPages[findIndex] = {
+                ...oldPages[findIndex],
+                totalComment: newCount,
+              }
+
+              const newPages = [oldPages]
+
+              return {
+                ...oldData,
+                pages: newPages,
+              }
+            }
+
+            return oldData
+          }
+        )
         onSuccess()
       }
     },

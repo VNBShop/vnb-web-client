@@ -1,5 +1,5 @@
 'use client'
-import { createRef, useState } from 'react'
+import { createRef } from 'react'
 
 import Icon from '@/common/icons'
 

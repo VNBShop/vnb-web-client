@@ -48,7 +48,7 @@ export default function CommnentCard({
 
   return (
     <>
-      <article className="inline-flex items-start gap-2">
+      <article className="flex w-fit items-start gap-2">
         <Avatar src={avatar ?? ''} username={name} />
         <section className="flex-1">
           <div className="rounded-2xl bg-gray-100 p-2 px-4">

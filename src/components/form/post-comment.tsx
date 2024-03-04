@@ -70,7 +70,7 @@ export default function PostCommentForm({ postId }: IProps) {
               <FormItem>
                 <textarea
                   placeholder="Write a comment..."
-                  cols={30}
+                  rows={1}
                   maxLength={200}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -87,7 +87,10 @@ export default function PostCommentForm({ postId }: IProps) {
           )}
         />
 
-        <div className="flex justify-end">
+        <div className="flex items-center justify-end gap-2">
+          <p className="text-xs text-gray-500">
+            {watchCommentForm?.length ?? 0}/200
+          </p>
           <Button disabled={!watchCommentForm} variant="ghost" className="p-0">
             {!loading ? (
               <Icon

@@ -3,6 +3,7 @@
 import Empty from '@/common/empty'
 import AddPost from '@/components/add-post'
 import PostItem from '@/components/post/post-item'
+import PostCardSkeleton from '@/components/skeletons/post-card'
 import useFetchPosts from '@/hooks/forum/useFetchPosts'
 
 import { Post } from '../../../../types/forum'
@@ -24,10 +25,13 @@ export default function ForumThreads() {
             )
           : null}
 
-        {/* {(isFetching || isLoading) && !isError && <OrderedCardSketelon />} */}
+        {(isFetching || isLoading) && !isError && <PostCardSkeleton />}
 
         {isError && (
-          <Empty className="mx-auto grid w-[200px]" message="No ordered" />
+          <Empty
+            className="mx-auto mt-16 grid w-[200px]"
+            message="No post yet"
+          />
         )}
       </section>
     </section>
