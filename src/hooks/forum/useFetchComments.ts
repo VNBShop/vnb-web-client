@@ -1,19 +1,17 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
-import { ORDER_SERVICE } from '@/lib/microservice'
+
+import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataResponse } from '../../../types'
-import { Ordered, OrderedStatus } from '../../../types/order'
-
-export type OrderedFilter = {
-  status: OrderedStatus
-}
+import { Post } from '../../../types/forum'
 
 type IProps = {
-  filter: OrderedFilter
+  postId: Post['postId']
 }
-export default function useFetchOrdered({ filter }: IProps) {
+
+export default function useFetchComments({ postId }: IProps) {
   const axios = useAxiosPrivate()
   const {
     data,
@@ -24,16 +22,15 @@ export default function useFetchOrdered({ filter }: IProps) {
     isFetchingNextPage,
     isError,
   } = useInfiniteQuery({
-    queryKey: ['get-ordered', filter],
+    queryKey: ['get-comments', postId],
     queryFn: async ({ pageParam: currentPage, queryKey }) => {
-      const filter = queryKey[1] as OrderedFilter
+      const postId = queryKey[1]
       const res: DataResponse = await axios.get(
-        `${ORDER_SERVICE}/orders/user`,
+        `${FORUM_SERVICE}/comments/${postId}`,
         {
           params: {
             currentPage,
-            pageSize: 10,
-            ...filter,
+            pageSize: 5,
           },
         }
       )
@@ -47,6 +44,8 @@ export default function useFetchOrdered({ filter }: IProps) {
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => allPages?.length + 1,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    enabled: !!postId,
   })
 
   return {

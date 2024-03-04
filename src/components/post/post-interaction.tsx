@@ -1,6 +1,8 @@
 import Icon from '@/common/icons'
+import { usePostItemContext } from '@/context/post-item'
 
 export default function PostInteraction() {
+  const { post, onHandleCommentSection } = usePostItemContext()
   return (
     <section className="mt-4 px-4">
       <section className="flex items-center justify-between">
@@ -8,10 +10,12 @@ export default function PostInteraction() {
           <div className="flex h-5 w-5 items-center justify-center rounded-full bg-[#F36B7E]">
             <Icon name="Heart" size={15} color="white" />
           </div>
-          <p className=" text-gray-500">10k</p>
+          <p className=" text-gray-500">{post?.totalReaction ?? 0}</p>
         </div>
 
-        <p className="text-sm text-gray-500">102 comments</p>
+        <p className="text-sm text-gray-500">
+          {post?.totalComment ?? 0} comments
+        </p>
       </section>
 
       <hr className="mb-1 mt-2" />
@@ -22,7 +26,10 @@ export default function PostInteraction() {
           <span className="text-sm font-medium text-gray-600">Like</span>
         </div>
 
-        <div className="flex flex-1 items-center justify-center gap-1 rounded-md py-[6px] hover:cursor-pointer lg:hover:bg-gray-100">
+        <div
+          onClick={onHandleCommentSection}
+          className="flex flex-1 items-center justify-center gap-1 rounded-md py-[6px] hover:cursor-pointer lg:hover:bg-gray-100"
+        >
           <Icon name="ChatOutline" size={20} />
           <span className="text-sm font-medium text-gray-600">Commnents</span>
         </div>

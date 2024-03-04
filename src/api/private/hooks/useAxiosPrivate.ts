@@ -17,6 +17,10 @@ export default function useAxiosPrivate() {
     const responseIntercept = axiosPrivate.interceptors.response.use(
       (res) => res,
       async (err) => {
+        if (err?.code === 'ERR_NETWORK') {
+          await signOut()
+        }
+
         const prevReq = err.config
         if (err?.response?.status === 401 && !prevReq?.sent) {
           try {

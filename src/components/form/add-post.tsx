@@ -14,7 +14,15 @@ import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem } from '../ui/form'
 import UploadFile, { UploadFileRefProps } from '../ui/upload-file'
 
-type Inputs = z.infer<typeof commentSchema>
+type Inputs = {
+  content: string
+}
+
+const tags = [
+  {
+    label: 'Racket',
+  },
+]
 
 export default function AddPostForm() {
   const photosRef = createRef<UploadFileRefProps>()
@@ -22,19 +30,12 @@ export default function AddPostForm() {
     resolver: zodResolver(commentSchema),
   })
 
-  const watchCommentForm = useWatch({ control: form.control, name: 'comment' })
+  const onSubmit = (values: Inputs) => {
+    const photos = !!photosRef?.current ? photosRef.current.images : []
 
-  const onSubmit = (value: Inputs) => {
-    form.reset()
-    form.setValue('comment', '')
+    if (!values?.content) form.reset()
+    form.setValue('content', '')
   }
-
-  useKeyPress('Enter', () => {
-    if (!watchCommentForm) {
-      return
-    }
-    void onSubmit(form.getValues())
-  })
 
   return (
     <Form {...form}>
@@ -43,7 +44,7 @@ export default function AddPostForm() {
         onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
       >
         <FormField
-          name="comment"
+          name="content"
           control={form.control}
           render={({ field }) => (
             <FormControl>
@@ -52,12 +53,6 @@ export default function AddPostForm() {
                   placeholder="What's on your mind?"
                   rows={4}
                   maxLength={200}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      if (!watchCommentForm) return
-                      e.preventDefault()
-                    }
-                  }}
                   {...field}
                   className="w-full resize-none text-sm focus:outline-none"
                 ></textarea>
@@ -70,9 +65,7 @@ export default function AddPostForm() {
           <UploadFile ref={photosRef} />
         </div>
 
-        <Button disabled={!watchCommentForm} className="h-9 w-full">
-          Create post
-        </Button>
+        <Button className="h-9 w-full">Create post</Button>
       </form>
     </Form>
   )
