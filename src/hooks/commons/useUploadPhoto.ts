@@ -3,7 +3,7 @@ type IProps = {
   keyFolder: string
 }
 
-export default async function useUploadPhoto({ photo, keyFolder }: IProps) {
+const useUploadPhoto = async ({ photo, keyFolder }: IProps) => {
   const data = new FormData()
   data.append('file', photo)
   data.append(
@@ -26,3 +26,5 @@ export default async function useUploadPhoto({ photo, keyFolder }: IProps) {
 
   return response.json()
 }
+
+export default useUploadPhoto

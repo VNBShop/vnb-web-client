@@ -1,5 +1,7 @@
 'use client'
 
+import { createRef } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
 
@@ -10,10 +12,12 @@ import { commentSchema } from '@/lib/validations/product'
 
 import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem } from '../ui/form'
+import UploadFile, { UploadFileRefProps } from '../ui/upload-file'
 
 type Inputs = z.infer<typeof commentSchema>
 
 export default function AddPostForm() {
+  const photosRef = createRef<UploadFileRefProps>()
   const form = useForm<Inputs>({
     resolver: zodResolver(commentSchema),
   })
@@ -62,8 +66,12 @@ export default function AddPostForm() {
           )}
         />
 
+        <div className="my-4">
+          <UploadFile ref={photosRef} />
+        </div>
+
         <Button disabled={!watchCommentForm} className="h-9 w-full">
-          Post
+          Create post
         </Button>
       </form>
     </Form>
