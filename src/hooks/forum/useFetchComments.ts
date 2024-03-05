@@ -1,60 +1,88 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+
+import { useQuery } from '@tanstack/react-query'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
-
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataResponse } from '../../../types'
-import { Post } from '../../../types/forum'
+import { Comment, Post } from '../../../types/forum'
 
 type IProps = {
   postId: Post['postId']
 }
 
+type Filter = {
+  page: number
+  postId: Post['postId']
+}
+
+export type MetaCommentResponse = {
+  data: Comment[]
+  maxPage: number
+  nextPage: number
+  currentPage: number
+  previousPage: number
+  total: number
+}
+
 export default function useFetchComments({ postId }: IProps) {
   const axios = useAxiosPrivate()
-  const {
-    data,
-    isFetching,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isError,
-  } = useInfiniteQuery({
-    queryKey: ['get-comments', postId],
-    queryFn: async ({ pageParam: currentPage, queryKey }) => {
-      const postId = queryKey[1]
+  const [comments, setCommnets] = useState<Comment[]>([])
+  const [page, setPage] = useState(1)
+
+  const { data, isError, isFetching, isLoading } = useQuery({
+    queryKey: [
+      'get-comments',
+      {
+        postId,
+        page,
+      },
+    ],
+    queryFn: async ({ queryKey }) => {
+      const filter = queryKey[1] as Filter
+
       const res: DataResponse = await axios.get(
-        `${FORUM_SERVICE}/comments/${postId}`,
+        `${FORUM_SERVICE}/comments/${filter.postId}`,
         {
           params: {
-            currentPage,
+            currentPage: filter.page,
             pageSize: 5,
           },
         }
       )
 
-      if (res?.data?.metadata && !!res?.data?.metadata?.data?.length) {
-        return res?.data?.metadata?.data
+      if (res?.data?.success) {
+        return res?.data?.metadata as MetaCommentResponse
       } else {
-        throw new Error('')
+        throw new Error('Cant not fetch comment')
       }
     },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => allPages?.length + 1,
-    refetchOnWindowFocus: false,
+    retry: 1,
     refetchOnMount: false,
-    enabled: !!postId,
+    refetchOnWindowFocus: false,
   })
 
+  const onNextPage = () => {
+    setPage((prev) => prev + 1)
+  }
+
+  useEffect(() => {
+    if (data?.data) {
+      setCommnets((prev) => [...prev, ...data?.data])
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(data?.data)])
+
   return {
-    data: data?.pages ?? [],
+    comments,
+    isError,
     isFetching,
     isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isError,
+    hasNextPage: !!data?.nextPage ?? false,
+    onNextPage,
+    setCommnets,
+    page,
   }
 }

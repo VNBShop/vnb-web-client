@@ -1,49 +1,71 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
+
+import { useQuery } from '@tanstack/react-query'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
-
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataResponse } from '../../../types'
+import { Comment, Post } from '../../../types/forum'
+
+type Filter = {
+  page: number
+}
+
+export type MetaPostsResponse = {
+  data: Post[]
+  maxPage: number
+  nextPage: number
+  currentPage: number
+  previousPage: number
+  total: number
+}
 
 export default function useFetchPosts() {
   const axios = useAxiosPrivate()
-  const {
-    data,
-    isFetching,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isError,
-  } = useInfiniteQuery({
-    queryKey: ['get-posts'],
-    queryFn: async ({ pageParam: currentPage, queryKey }) => {
+  const [posts, setPosts] = useState<Post[]>([])
+  const [page, setPage] = useState(1)
+
+  const { data, isError, isFetching, isLoading } = useQuery({
+    queryKey: ['get-commnents', page],
+    queryFn: async ({ queryKey }) => {
       const res: DataResponse = await axios.get(`${FORUM_SERVICE}/posts`, {
         params: {
-          currentPage,
-          pageSize: 10,
+          currentPage: page,
+          pageSize: 7,
         },
       })
 
-      if (res?.data?.metadata && !!res?.data?.metadata?.data?.length) {
-        return res?.data?.metadata?.data
+      if (res?.data?.success) {
+        return res?.data?.metadata as MetaPostsResponse
       } else {
-        throw new Error('')
+        throw new Error('Cant not fetch posts')
       }
     },
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => allPages?.length + 1,
+    retry: 3,
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
   })
 
+  const onNextPage = () => {
+    setPage((prev) => prev + 1)
+  }
+
+  useEffect(() => {
+    if (data?.data) {
+      setPosts((prev) => [...prev, ...data?.data])
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(data?.data)])
+
   return {
-    data: data?.pages ?? [],
+    posts,
+    isError,
     isFetching,
     isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isError,
+    hasNextPage: !!data?.nextPage ?? false,
+    onNextPage,
+    setPosts,
   }
 }

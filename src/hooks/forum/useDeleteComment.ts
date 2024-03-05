@@ -4,14 +4,18 @@ import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
+import { useCommentItemContext } from '@/context/comment-item'
+import { usePostFetchContext } from '@/context/post-fetch'
+import { usePostItemContext } from '@/context/post-item'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
+import { MetaCommentResponse } from './useFetchComments'
+
 import { DataError, DataResponse } from '../../../types'
-import { Comment, Post } from '../../../types/forum'
+import { Comment } from '../../../types/forum'
 
 export type CreateCommentPayload = {
   commnentId: Comment['commentId']
-  postId: Post['postId']
 }
 
 type IProps = {
@@ -19,8 +23,13 @@ type IProps = {
 }
 
 export default function useDeteteComment({ onClose }: IProps) {
-  const client = useQueryClient()
   const axios = useAxiosPrivate()
+
+  const client = useQueryClient()
+  const { setPosts } = usePostFetchContext()
+  const { setCommnets, page } = useCommentItemContext()
+  const { post } = usePostItemContext()
+
   const { isPending, mutate } = useMutation<
     DataResponse,
     DataError,
@@ -31,11 +40,44 @@ export default function useDeteteComment({ onClose }: IProps) {
         `${FORUM_SERVICE}/comments/${payload.commnentId}`
       )
     },
-    onSuccess: (res, payload) => {
+    onSuccess: async (res, payload) => {
       if (res?.data?.success) {
-        client.refetchQueries({
-          queryKey: ['get-comments', payload.postId],
+        setCommnets((prev) =>
+          prev.filter((p) => p.commentId !== payload?.commnentId)
+        )
+        setPosts((prev) => {
+          const findIndex = prev.findIndex((p) => p.postId === post?.postId)
+          if (findIndex !== -1) {
+            const newPosts = [...prev]
+
+            newPosts[findIndex] = {
+              ...newPosts[findIndex],
+              totalComment: newPosts[findIndex]?.totalComment
+                ? newPosts[findIndex].totalComment - 1
+                : 0,
+            }
+
+            return newPosts
+          }
+          return prev
         })
+
+        await client.setQueryData(
+          [
+            'get-comments',
+            {
+              postId: post?.postId,
+              page,
+            },
+          ],
+          (oldMeta: MetaCommentResponse) => {
+            return {
+              ...oldMeta,
+              nextPage: oldMeta?.data?.length > 5,
+            }
+          }
+        )
+
         onClose()
       }
     },

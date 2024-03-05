@@ -32,16 +32,24 @@ export default function PostInteraction() {
           onClick={() =>
             onLike({
               postId: post.postId,
-              reacted: !post?.reacted,
+              reacted: post?.reacted,
             })
           }
-          className={cn(
-            'flex flex-1 items-center justify-center gap-1 rounded-md py-[6px] hover:cursor-pointer lg:hover:bg-gray-100',
-            post?.reacted ? 'text-[#F36B7E]' : ''
-          )}
+          className="flex flex-1 items-center justify-center gap-1 rounded-md py-[6px] hover:cursor-pointer lg:hover:bg-gray-100"
         >
-          <Icon name="HeartOutline" size={20} />
-          <span className="text-sm font-medium text-gray-600">Like</span>
+          <Icon
+            name={post?.reacted ? 'Heart' : 'HeartOutline'}
+            color={post?.reacted ? '#F36B7E' : ''}
+            size={20}
+          />
+          <span
+            className={cn(
+              'text-sm font-medium ',
+              post?.reacted ? 'text-[#F36B7E]' : 'text-gray-600'
+            )}
+          >
+            Like
+          </span>
         </div>
 
         <div

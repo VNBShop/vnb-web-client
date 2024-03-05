@@ -16,6 +16,7 @@ import dayjs from 'dayjs'
 
 // eslint-disable-next-line import/order
 import { useState } from 'react'
+import PostCommentForm from '../form/post-comment'
 
 export type CommnentCardProps = {
   avatar?: string
@@ -37,9 +38,14 @@ export default function CommnentCard({
   postId,
 }: CommnentCardProps) {
   const [modal, setModal] = useState(false)
+  const [editM, setEditM] = useState(false)
 
   const onCloseModal = () => {
     setModal(false)
+  }
+
+  const onCloseEditM = () => {
+    setEditM(false)
   }
 
   const { onDeleteComment, loading } = useDeteteComment({
@@ -60,7 +66,12 @@ export default function CommnentCard({
             <p className="text-xs text-gray-500">{dayjs(createAt).fromNow()}</p>
             {isSelf ? (
               <section className="flex items-center gap-3 text-xs font-medium text-gray-700">
-                <div className="hover:cursor-pointer hover:underline">Edit</div>
+                <div
+                  className="hover:cursor-pointer hover:underline"
+                  onClick={() => setEditM(true)}
+                >
+                  Edit
+                </div>
                 <div
                   className="hover:cursor-pointer hover:underline"
                   onClick={() => setModal(true)}
@@ -94,7 +105,6 @@ export default function CommnentCard({
             onClick={() =>
               onDeleteComment({
                 commnentId: id,
-                postId: postId,
               })
             }
           >
@@ -102,6 +112,18 @@ export default function CommnentCard({
             <span>Delete</span>
           </Button>
         </section>
+      </Modal>
+
+      <Modal
+        show={editM}
+        onCloseModal={onCloseEditM}
+        header="Edit your comment"
+      >
+        <PostCommentForm
+          commentId={id}
+          commented={comment}
+          onClose={onCloseEditM}
+        />
       </Modal>
     </>
   )

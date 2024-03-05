@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
 
@@ -10,20 +12,29 @@ import Spiner from '@/common/spiner'
 import useCreateComment, {
   CreateCommentPayload,
 } from '@/hooks/forum/useCreateComment'
+import useEditComment, {
+  EditCommentPayload,
+} from '@/hooks/forum/useEditComment'
 import useKeyPress from '@/hooks/useKeyDown'
 import { commentSchema } from '@/lib/validations/product'
 
-import { Post } from '../../../types/forum'
+import { Comment, Post } from '../../../types/forum'
 import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem } from '../ui/form'
 
 type Inputs = z.infer<typeof commentSchema>
 
 type IProps = {
-  postId: Post['postId']
+  commentId?: Comment['commentId']
+  commented?: string
+  onClose?: () => void
 }
 
-export default function PostCommentForm({ postId }: IProps) {
+export default function PostCommentForm({
+  commentId,
+  commented,
+  onClose,
+}: IProps = {}) {
   const form = useForm<Inputs>({
     resolver: zodResolver(commentSchema),
   })
@@ -37,24 +48,47 @@ export default function PostCommentForm({ postId }: IProps) {
     },
   })
 
+  const { loading: loadingEdit, onEditComment } = useEditComment({
+    onSuccess: () => {
+      onClose?.()
+      form.reset()
+      form.setValue('comment', '')
+    },
+  })
+
   const onSubmit = (values: Inputs) => {
-    if (!values?.comment && !postId) {
+    if (!values?.comment) {
       return
     }
     const payload: CreateCommentPayload = {
       comment: values.comment,
-      postId,
     }
 
-    onComment(payload)
+    const payloadEdit: EditCommentPayload = {
+      comment: values?.comment,
+      commentId: commentId as number,
+    }
+
+    if (!!commentId) {
+      onEditComment(payloadEdit)
+    } else {
+      onComment(payload)
+    }
   }
 
   useKeyPress('Enter', () => {
-    if (!watchCommentForm || loading) {
+    if (!watchCommentForm || loading || loadingEdit) {
       return
     }
     void onSubmit(form.getValues())
   })
+
+  useEffect(() => {
+    if (!!commentId && !!commented) {
+      form.setValue('comment', commented ?? '')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commented, commentId])
 
   return (
     <Form {...form}>
@@ -75,7 +109,7 @@ export default function PostCommentForm({ postId }: IProps) {
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault()
-                      if (loading) return
+                      if (loading || loadingEdit) return
                       if (!watchCommentForm) return
                     }
                   }}
@@ -91,8 +125,12 @@ export default function PostCommentForm({ postId }: IProps) {
           <p className="text-xs text-gray-500">
             {watchCommentForm?.length ?? 0}/200
           </p>
-          <Button disabled={!watchCommentForm} variant="ghost" className="p-0">
-            {!loading ? (
+          <Button
+            disabled={!watchCommentForm || loading || loadingEdit}
+            variant="ghost"
+            className="p-0"
+          >
+            {!loading || !loadingEdit ? (
               <Icon
                 name="Plane"
                 size={22}

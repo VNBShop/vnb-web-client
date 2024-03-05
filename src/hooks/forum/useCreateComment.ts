@@ -1,21 +1,17 @@
-import {
-  InfiniteData,
-  QueryKey,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
+import { useCommentItemContext } from '@/context/comment-item'
+import { usePostFetchContext } from '@/context/post-fetch'
+import { usePostItemContext } from '@/context/post-item'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataError, DataResponse } from '../../../types'
-import { Post } from '../../../types/forum'
 
 export type CreateCommentPayload = {
-  postId: Post['postId']
   comment: string
 }
 
@@ -24,74 +20,43 @@ type IProps = {
 }
 
 export default function useCreateComment({ onSuccess }: IProps) {
-  const client = useQueryClient()
   const axios = useAxiosPrivate()
+
+  const { setCommnets } = useCommentItemContext()
+  const { setPosts } = usePostFetchContext()
+  const { post } = usePostItemContext()
+
   const { isSuccess, isPending, mutate } = useMutation<
     DataResponse,
     DataError,
     CreateCommentPayload
   >({
     mutationFn: async (payload) => {
-      return await axios.post(`${FORUM_SERVICE}/comments`, payload)
+      return await axios.post(`${FORUM_SERVICE}/comments`, {
+        ...payload,
+        postId: post?.postId,
+      })
     },
-    onSuccess: async (res, payload) => {
+    onSuccess: async (res) => {
       if (res?.data?.success) {
-        await client.setQueryData(
-          ['get-comments', payload.postId],
-          (oldData?: InfiniteData<Comment[][], unknown>) => {
-            if (!oldData) {
-              if (res?.data?.metadata?.comment) {
-                return {
-                  pages: [[res.data.metadata.comment]],
-                  pageParams: [undefined],
-                }
-              }
-              return null
+        setCommnets((prev) => [res?.data?.metadata?.comment, ...prev])
+        setPosts((prev) => {
+          const findIndex = prev.findIndex((p) => p.postId === post?.postId)
+
+          if (findIndex !== -1) {
+            const newPosts = [...prev]
+            newPosts[findIndex] = {
+              ...newPosts[findIndex],
+              totalComment: newPosts[findIndex]?.totalComment
+                ? newPosts[findIndex].totalComment + 1
+                : 0,
             }
 
-            const oldPages = oldData.pages ?? []
-            const newComment = res?.data?.metadata?.comment
-
-            if (newComment) {
-              const newPages = [[newComment], ...oldPages]
-              return {
-                ...oldData,
-                pages: newPages,
-              }
-            }
-
-            return oldData
+            return newPosts
           }
-        )
 
-        await client.setQueryData(
-          ['get-posts'],
-          (oldData?: InfiniteData<Post[], unknown>) => {
-            const oldPages: Post[] = oldData?.pages?.flat() ?? []
-            const newCount = res?.data?.metadata?.commentCount
-            const postId = res?.data?.metadata?.postId
-
-            const findIndex = oldPages?.findIndex(
-              (item) => item?.postId === postId
-            )
-
-            if (findIndex !== -1 && newCount && oldPages?.length) {
-              oldPages[findIndex] = {
-                ...oldPages[findIndex],
-                totalComment: newCount,
-              }
-
-              const newPages = [oldPages]
-
-              return {
-                ...oldData,
-                pages: newPages,
-              }
-            }
-
-            return oldData
-          }
-        )
+          return prev
+        })
         onSuccess()
       }
     },

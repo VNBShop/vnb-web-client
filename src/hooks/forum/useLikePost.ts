@@ -6,6 +6,7 @@ import {
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
+import { usePostFetchContext } from '@/context/post-fetch'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataError, DataResponse } from '../../../types'
@@ -18,63 +19,34 @@ export type LikeActionPayload = {
 
 export default function useLikePost() {
   const axios = useAxiosPrivate()
-  const client = useQueryClient()
+  const { setPosts } = usePostFetchContext()
   const { mutate } = useMutation<DataResponse, DataError, LikeActionPayload>({
     mutationFn: async (payload) => {
       return axios.post(`${FORUM_SERVICE}/reactions`, payload)
     },
     onMutate: async (payload) => {
-      await client.cancelQueries({
-        queryKey: ['get-posts'],
-      })
+      setPosts((prev) => {
+        const findIndex = prev.findIndex(
+          (post) => post?.postId === payload?.postId
+        )
 
-      const previousData = await client.getQueryData(['get-posts'])
+        if (findIndex !== -1) {
+          const newPosts = [...prev]
 
-      await client.setQueryData(
-        ['get-posts'],
-        (oldData: InfiniteData<Post[], unknown>) => {
-          const oldPages: Post[] = oldData?.pages?.flat() ?? []
-
-          const postId = payload?.postId
-
-          const findIndex = oldPages?.findIndex(
-            (item) => item?.postId === postId
-          )
-
-          if (findIndex !== -1 && oldPages?.length) {
-            oldPages[findIndex] = {
-              ...oldPages[findIndex],
-              reacted: true,
-            }
-
-            const newPages = [oldPages]
-
-            return {
-              ...oldData,
-              pages: newPages,
-            }
+          newPosts[findIndex] = {
+            ...newPosts[findIndex],
+            totalReaction: payload?.reacted
+              ? newPosts[findIndex]?.totalReaction - 1
+              : newPosts[findIndex]?.totalReaction + 1,
+            reacted: payload?.reacted ? false : true,
           }
 
-          return oldData
+          return newPosts
         }
-      )
 
-      return {
-        previousData,
-      }
-    },
-    onError: async (
-      _error: DataError,
-      _variables: LikeActionPayload,
-      context: any
-    ) => {
-      await client.setQueryData(['get-posts'], context.previousData)
-    },
-    onSettled: async () => {
-      await client.invalidateQueries({
-        queryKey: ['get-posts'],
-        refetchType: 'none',
+        return prev
       })
+      return {}
     },
   })
 

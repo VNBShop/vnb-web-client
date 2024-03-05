@@ -5,8 +5,11 @@ import { createRef } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
 
+import { toast } from 'sonner'
 import { z } from 'zod'
 
+import Spiner from '@/common/spiner'
+import useCreatePost, { CreatePostPayload } from '@/hooks/forum/useCreatePost'
 import useKeyPress from '@/hooks/useKeyDown'
 import { commentSchema } from '@/lib/validations/product'
 
@@ -18,23 +21,39 @@ type Inputs = {
   content: string
 }
 
-const tags = [
-  {
-    label: 'Racket',
-  },
-]
+type IProps = {
+  onCloseModal: () => void
+}
 
-export default function AddPostForm() {
+export default function AddPostForm({ onCloseModal }: IProps) {
   const photosRef = createRef<UploadFileRefProps>()
-  const form = useForm<Inputs>({
-    resolver: zodResolver(commentSchema),
+  const form = useForm<Inputs>()
+
+  const { loading, onCreatePost } = useCreatePost({
+    onSuccess: () => {
+      form.reset()
+      form.setValue('content', '')
+      onCloseModal()
+    },
   })
 
   const onSubmit = (values: Inputs) => {
     const photos = !!photosRef?.current ? photosRef.current.images : []
 
-    if (!values?.content) form.reset()
-    form.setValue('content', '')
+    if (!photos?.length && values?.content) {
+      toast.error('Please fill in form!')
+      return
+    }
+
+    const createPayload: CreatePostPayload = {
+      content: values.content,
+      postAssets: photos?.map((photo) => ({
+        assetId: photo?.productAssetId,
+        secureUrl: photo?.productAssetUrl,
+      })),
+    }
+
+    onCreatePost(createPayload)
   }
 
   return (
@@ -65,7 +84,10 @@ export default function AddPostForm() {
           <UploadFile ref={photosRef} />
         </div>
 
-        <Button className="h-9 w-full">Create post</Button>
+        <Button disabled={loading} className="h-10 w-full space-x-1">
+          {loading && <Spiner size={16} />}
+          <span>Create post</span>
+        </Button>
       </form>
     </Form>
   )

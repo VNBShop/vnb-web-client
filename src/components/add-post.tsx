@@ -1,17 +1,25 @@
 'use client'
-import { createRef } from 'react'
+import { createRef, useState } from 'react'
 
 import Icon from '@/common/icons'
 
+import { useUserContext } from '@/context/user'
+
+import Avatar from './avatar'
 import AddPostForm from './form/add-post'
 import { Modal, ModalProps } from './ui/modal'
 
 export default function AddPost() {
-  const modalAddPostRef = createRef<ModalProps>()
-
+  const [addPostM, setAddPostM] = useState(false)
   const openAddPostModal = () => {
-    !!modalAddPostRef.current && modalAddPostRef.current.onOpen()
+    setAddPostM(true)
   }
+
+  const onClose = () => {
+    setAddPostM(false)
+  }
+
+  const user = useUserContext()
 
   return (
     <>
@@ -43,20 +51,20 @@ export default function AddPost() {
         </section>
       </section>
 
-      <Modal ref={modalAddPostRef} closeOutside>
-        <section className="inline-flex items-center gap-2">
-          <figure className="h-10 w-10 rounded-full">
-            <p className="textw-white flex h-full w-full items-center justify-center rounded-full bg-black text-xl text-white">
-              D
-            </p>
-          </figure>
+      <Modal show={addPostM} header="Add new post" onCloseModal={onClose}>
+        <section className="mt-4 inline-flex items-center gap-2">
+          <Avatar src={user?.avatar ?? ''} username={user?.firstName} />
           <article>
-            <p className="text-sm font-medium">Dzung</p>
-            <p className="text-xs">@jungjung261</p>
+            <p className="text-sm font-medium">
+              {user?.firstName
+                ? `${user?.firstName} ${user?.lastName}`
+                : user?.email[1]}
+            </p>
+            <p className="text-xs">{user?.email}</p>
           </article>
         </section>
 
-        <AddPostForm />
+        <AddPostForm onCloseModal={onClose} />
       </Modal>
     </>
   )
