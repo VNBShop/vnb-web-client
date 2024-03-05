@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
+import { usePostFetchContext } from '@/context/post-fetch'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataError, DataResponse } from '../../../types'
@@ -23,6 +24,8 @@ export default function useCreatePost({ onSuccess }: IProps) {
   const axios = useAxiosPrivate()
   const client = useQueryClient()
 
+  const { reFetchData } = usePostFetchContext()
+
   const { mutate, isPending } = useMutation<
     DataResponse,
     DataError,
@@ -33,9 +36,7 @@ export default function useCreatePost({ onSuccess }: IProps) {
     },
     onSuccess: async (res) => {
       if (res?.data?.success) {
-        await client.refetchQueries({
-          queryKey: ['get-posts'],
-        })
+        reFetchData()
         onSuccess()
       }
     },

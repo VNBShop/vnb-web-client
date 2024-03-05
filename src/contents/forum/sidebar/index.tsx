@@ -1,17 +1,25 @@
+'use client'
+
 import Image from 'next/image'
 
 import Link from 'next/link'
 
 import Avatar from '@/components/avatar'
+import { useUserContext } from '@/context/user'
 
 export default function ForumSideBar() {
+  const user = useUserContext()
   return (
     <aside className="col-span-1 hidden lg:col-span-1 lg:block">
       <ul className="sticky top-[76px] space-y-4">
         <li>
           <Link href="/user/jungjung261" className="flex items-center gap-3">
-            <Avatar src="/common/avt.jpeg" username="D" />
-            <h3 className="text-sm font-medium">Dzung payme</h3>
+            <Avatar src={user?.avatar ?? ''} username={user?.firstName ?? ''} />
+            <h3 className="text-sm font-medium">
+              {user?.firstName && user?.lastName
+                ? `${user?.firstName} ${user.lastName}`
+                : user?.email}
+            </h3>
           </Link>
         </li>
 

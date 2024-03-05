@@ -8,7 +8,7 @@ import { usePostItemContext } from '@/context/post-item'
 import Carousel from '../carousel'
 
 export default function PostMedia() {
-  const [carousel, setCarousel] = useState<any[] | null>(null)
+  const [carousel, setCarousel] = useState<string[]>([])
   const [carouselIndex, setCarouselIndex] = useState(0)
 
   const { post } = usePostItemContext()
@@ -64,7 +64,7 @@ export default function PostMedia() {
 
       <Carousel
         images={carousel}
-        close={() => setCarousel(null)}
+        close={() => setCarousel([])}
         options={{
           startIndex: carouselIndex,
         }}

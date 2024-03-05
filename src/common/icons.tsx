@@ -52,6 +52,7 @@ export type IconName =
   | 'Birthday'
   | 'PhotoPlus'
   | 'Report'
+  | 'Saved'
 
 export default function Icon({
   name,

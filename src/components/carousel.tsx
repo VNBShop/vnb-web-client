@@ -20,12 +20,7 @@ import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
 
 export type CarouselProps = React.HTMLAttributes<HTMLDivElement> & {
-  images:
-    | {
-        id?: string | number
-        url: string
-      }[]
-    | null
+  images: string[]
   options?: EmblaOptionsType
   close: Dispatch<SetStateAction<any>>
 }
@@ -118,8 +113,8 @@ export default function Carousel({
                           role="group"
                           key={index}
                           aria-roledescription="slide"
-                          src={image.url}
-                          alt={image.url}
+                          src={image}
+                          alt={image}
                           fill
                           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           className="object-contain"

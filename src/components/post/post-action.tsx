@@ -27,7 +27,7 @@ export default function PostAction() {
   return (
     <>
       <Menu as="div" className="relative flex items-center justify-center">
-        <Menu.Button>
+        <Menu.Button className="flex h-8 w-8 items-center justify-center rounded-full hover:cursor-pointer lg:hover:bg-gray-100">
           <Icon name="Ellipsis" size={20} />
         </Menu.Button>
         <Transition
@@ -40,16 +40,27 @@ export default function PostAction() {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute -right-4 top-[120%] z-10 grid min-w-[270px]  gap-[6px] rounded-lg bg-white p-2 shadow-box">
-            {
-              <Menu.Item
-                as="div"
-                onClick={() => setModalDeletePost(true)}
-                className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
-              >
-                <Icon name="Trash" size={18} />
-                Delete
-              </Menu.Item>
-            }
+            {post?.yourPost && (
+              <>
+                <Menu.Item
+                  as="div"
+                  onClick={() => setModalDeletePost(true)}
+                  className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                >
+                  <Icon name="Coin" size={18} />
+                  Save
+                </Menu.Item>
+
+                <Menu.Item
+                  as="div"
+                  onClick={() => setModalDeletePost(true)}
+                  className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                >
+                  <Icon name="Trash" size={18} />
+                  Delete
+                </Menu.Item>
+              </>
+            )}
             <Menu.Item
               as="div"
               className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"

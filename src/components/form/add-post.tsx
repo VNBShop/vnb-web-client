@@ -40,7 +40,7 @@ export default function AddPostForm({ onCloseModal }: IProps) {
   const onSubmit = (values: Inputs) => {
     const photos = !!photosRef?.current ? photosRef.current.images : []
 
-    if (!photos?.length && values?.content) {
+    if (!photos?.length && !values?.content) {
       toast.error('Please fill in form!')
       return
     }

@@ -44,7 +44,7 @@ export default function PostComment() {
               ))
             : null}
         </ul>
-        {(props?.isFetching || props?.isLoading) && !isError && (
+        {(props?.isFetching || props?.isLoading) && !props?.isError && (
           <CommentCardSkeleton />
         )}
 

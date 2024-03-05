@@ -26,7 +26,7 @@ export default function useFetchPosts() {
   const [posts, setPosts] = useState<Post[]>([])
   const [page, setPage] = useState(1)
 
-  const { data, isError, isFetching, isLoading } = useQuery({
+  const { data, isError, isFetching, isLoading, refetch } = useQuery({
     queryKey: ['get-commnents', page],
     queryFn: async ({ queryKey }) => {
       const res: DataResponse = await axios.get(`${FORUM_SERVICE}/posts`, {
@@ -51,6 +51,12 @@ export default function useFetchPosts() {
     setPage((prev) => prev + 1)
   }
 
+  const reFetchData = () => {
+    setPage(1)
+    setPosts([])
+    refetch()
+  }
+
   useEffect(() => {
     if (data?.data) {
       setPosts((prev) => [...prev, ...data?.data])
@@ -67,5 +73,6 @@ export default function useFetchPosts() {
     hasNextPage: !!data?.nextPage ?? false,
     onNextPage,
     setPosts,
+    reFetchData,
   }
 }

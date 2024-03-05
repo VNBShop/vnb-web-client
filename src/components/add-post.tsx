@@ -58,7 +58,7 @@ export default function AddPost() {
             <p className="text-sm font-medium">
               {user?.firstName
                 ? `${user?.firstName} ${user?.lastName}`
-                : user?.email[1]}
+                : user?.email?.charAt(0)}
             </p>
             <p className="text-xs">{user?.email}</p>
           </article>

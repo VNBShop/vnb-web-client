@@ -28,9 +28,7 @@ export default function PostHeader() {
         </div>
       </section>
 
-      <div className="flex h-8 w-8 items-center justify-center rounded-full hover:cursor-pointer lg:hover:bg-gray-100">
-        <PostAction />
-      </div>
+      <PostAction />
     </header>
   )
 }

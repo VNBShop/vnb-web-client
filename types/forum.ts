@@ -9,6 +9,7 @@ export type Post = {
   totalReaction: number
   totalComment: number
   reacted: boolean
+  yourPost: boolean
 }
 
 export type Comment = {
