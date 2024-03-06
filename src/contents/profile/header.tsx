@@ -39,7 +39,7 @@ export default function ProfileHeader() {
             <div className="flex flex-col items-center gap-5 md:flex-row">
               <div className=" relative rounded-full">
                 <Avatar
-                  src={data?.avatar as string}
+                  src={data?.avatar ?? ''}
                   username={data?.firstName ?? 'Z'}
                   className="h-[110px] w-[110px]"
                   nameSize={36}
@@ -53,7 +53,11 @@ export default function ProfileHeader() {
               </div>
 
               <article className=" space-y-1 text-center md:text-left">
-                <p className=" text-2xl font-semibold">{`${data?.firstName} ${data?.lastName}`}</p>
+                <p className=" text-2xl font-semibold">
+                  {data?.firstName && data?.lastName
+                    ? `${data?.firstName} ${data?.lastName}`
+                    : data?.email}
+                </p>
                 <p className="text-sm text-gray-500">@{data?.email ?? '-'}</p>
               </article>
             </div>

@@ -3,6 +3,8 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 import Image from 'next/image'
 
+import { useRouter } from 'next/navigation'
+
 import { colorsOrderedStatus } from '@/lib/contants'
 
 import { cn } from '@/lib/utils'
@@ -16,6 +18,7 @@ type IProps = {
 }
 
 export default function OrderedCard({ ordered }: IProps) {
+  const router = useRouter()
   return (
     <section className="w-full bg-white px-4 py-3 shadow-sm md:rounded-md">
       <section className="flex items-center justify-between">
@@ -44,19 +47,33 @@ export default function OrderedCard({ ordered }: IProps) {
             className="flex w-full items-center justify-between"
           >
             <section className="flex items-center gap-4">
-              <figure className="relative h-[100px] w-[100px] rounded-md">
+              <figure
+                className="group relative h-[100px] w-[100px] overflow-hidden rounded-md hover:cursor-pointer"
+                onClick={() =>
+                  router.push(`/product/${prod?.productId}`, {
+                    scroll: false,
+                  })
+                }
+              >
                 <Image
                   src={prod?.productImage}
                   alt={prod?.productName}
                   title={prod?.productName}
                   fill
-                  className=" object-contain "
+                  className=" object-contain transition-all duration-300 ease-in-out group-hover:scale-110"
                   sizes="100vw"
                 />
               </figure>
 
               <section className="space-y-1">
-                <p className="text-[15px] font-medium text-gray-700">
+                <p
+                  className="text-[15px] font-medium text-gray-700 hover:underline"
+                  onClick={() =>
+                    router.push(`/product/${prod?.productId}`, {
+                      scroll: false,
+                    })
+                  }
+                >
                   {prod?.productName}
                 </p>
                 {!!prod?.productSizeName && (

@@ -40,11 +40,8 @@ export default async function ProductPage({ params }: IProps) {
   }
 
   const product: ProductDetail = result?.data?.metadata ?? {}
-
-  console.log('product', product)
-
   return (
-    <section className="mx-auto mt-5 max-w-main space-y-7 px-4">
+    <section className="mx-auto mt-5 max-w-main space-y-7 px-4 lg:px-[120px]">
       <Breadcrumbs
         segments={[
           {

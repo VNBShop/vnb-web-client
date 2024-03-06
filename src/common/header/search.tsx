@@ -25,16 +25,21 @@ export default function Search() {
 
   const searchValDebounce = useDebounce(searchVal, 1500)
 
-  const { data, isError, isPending } = useQuery<Products[]>({
+  const { data, isError, isPending } = useQuery({
     queryKey: ['productSearch', searchValDebounce],
-    queryFn: ({ queryKey }) =>
-      getProducts({
+    queryFn: async ({ queryKey }) => {
+      return await getProducts({
         currentPage: 1,
         pageSize: 7,
         filter: { search: queryKey[1] },
-      }),
+      })
+    },
     enabled: !!searchValDebounce,
   })
+
+  console.log('data', data)
+
+  const products: Products[] = data?.products ?? []
 
   const handleOpenSearchPopup = () => {
     !!modalSearchRef.current && modalSearchRef.current.onOpen()
@@ -72,9 +77,9 @@ export default function Search() {
             </figure>
           </section>
 
-          {!!data?.length ? (
+          {!!products?.length ? (
             <section className="mt-4 space-y-4">
-              {data.map((product) => {
+              {products.map((product) => {
                 return (
                   <Link
                     href={`/product/${product?.productId}`}
@@ -111,7 +116,7 @@ export default function Search() {
             </section>
           ) : null}
 
-          {!data?.length && isPending && !!searchVal ? (
+          {!products?.length && isPending && !!searchVal ? (
             <section className="mt-4 space-y-4">
               {Array.from({ length: 7 }).map((item, index) => {
                 return (
@@ -131,7 +136,7 @@ export default function Search() {
             </section>
           ) : null}
 
-          {!isPending && isError && !data?.length && !!searchVal && (
+          {!isPending && isError && !products?.length && !!searchVal && (
             <Empty className="mx-auto w-[150px]" message="No product found!" />
           )}
         </>

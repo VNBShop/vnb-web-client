@@ -61,7 +61,7 @@ export default function useCreateCart({
       }
     },
     onError: (err) => {
-      console.log('err', err)
+      console.log('err add cart', err)
 
       if (isMultiple) {
         toast('Out of stock', {
@@ -78,7 +78,8 @@ export default function useCreateCart({
         })
       } else {
         toast.error(
-          err?.response?.data?.metadata ?? 'Cant not add to cart this product!'
+          err?.response?.data?.metadata?.message ??
+            'Cant not add to cart this product!'
         )
       }
     },
