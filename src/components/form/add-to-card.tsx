@@ -51,7 +51,7 @@ export default function AddToCardForm({
     },
   })
 
-  const onSubmit = (values: Inputs) => {
+  const onSubmit = (values: Inputs, isBuynow?: boolean) => {
     if (!user?.accessToken) {
       router.push('/signin')
       return
@@ -62,6 +62,7 @@ export default function AddToCardForm({
     const payload: CreateCartPayload = {
       ...values,
       productSizeId: numeral(values.productSizeId).value() as number,
+      isBuyNow: !!isBuynow,
     }
 
     onAddToCart(payload)
@@ -80,7 +81,7 @@ export default function AddToCardForm({
   return (
     <>
       <Form {...form}>
-        <form onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}>
+        <form onSubmit={form.handleSubmit((value) => onSubmit(value))}>
           <div hidden={!productIsHaveSize}>
             <FormField
               control={form.control}
@@ -205,14 +206,29 @@ export default function AddToCardForm({
             </section>
           </section>
 
-          <Button
-            disabled={loading}
-            type="submit"
-            className="h-10 space-x-1 bg-black text-white"
-          >
-            {loading && <Spiner size={16} />}
-            <span> Add to cart</span>
-          </Button>
+          <section className="flex items-center gap-2">
+            <Button
+              disabled={loading}
+              type="submit"
+              variant="ghost"
+              className="h-10 space-x-1"
+            >
+              {loading && <Spiner size={16} />}
+              <Icon name="Cart" size={25} />
+            </Button>
+
+            <Button
+              className="h-10 space-x-1"
+              type="button"
+              disabled={loading}
+              onClick={() =>
+                form.handleSubmit((value) => onSubmit(value, true))()
+              }
+            >
+              {loading && <Spiner size={16} />}
+              <span>Buying now</span>
+            </Button>
+          </section>
         </form>
       </Form>
     </>

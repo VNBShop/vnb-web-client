@@ -8,9 +8,7 @@ export default function UserProfilePage() {
       <UserInfo />
       <section className="flex-1">
         <AddPost />
-        <section className="mt-5">
-          <PostItem />
-        </section>
+        <section className="mt-5">{/* <PostItem /> */}</section>
       </section>
     </section>
   )

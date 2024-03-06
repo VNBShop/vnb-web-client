@@ -1,10 +1,10 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
-import { ORDER_SERVICE, USER_SERVICE } from '@/lib/microservice'
+import { ORDER_SERVICE } from '@/lib/microservice'
 
 import { DataError, DataResponse } from '../../../types'
 import { PaymentType } from '../../../types/order'
@@ -15,7 +15,7 @@ export type CreateOrderPayload = {
 }
 
 export default function useCreateOrder() {
-  const client = useQueryClient()
+  // const client = useQueryClient()
   const axios = useAxiosPrivate()
   const router = useRouter()
 
@@ -29,9 +29,9 @@ export default function useCreateOrder() {
     },
     onSuccess: async (res) => {
       if (res?.data?.success) {
-        await client.refetchQueries({
-          queryKey: ['get-user-cart'],
-        })
+        // await client.refetchQueries({
+        //   queryKey: ['get-user-cart'],
+        // })
         router.push('/profile/ordered')
       }
     },

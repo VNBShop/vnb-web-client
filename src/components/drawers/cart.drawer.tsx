@@ -169,7 +169,10 @@ const CartDrawer = ({ cartCont, setCartCont, carts: cartsOut }: IProps) => {
             </section>
           </>
         ) : (
-          <Empty message="Your cart is empty" />
+          <Empty
+            className="mx-auto my-auto w-[150px]"
+            message="Your cart is empty"
+          />
         )}
       </Transition.Child>
     </Transition>

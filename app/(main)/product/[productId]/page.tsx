@@ -11,6 +11,8 @@ import AddToCardForm from '@/components/form/add-to-card'
 import CommentForm from '@/components/form/product-comment'
 import CommnentCard from '@/components/ui/card.comment'
 
+import ProductComments from '@/contents/ecommerce/product/comment-section'
+import useFetchCart from '@/hooks/cart/useFetchCart'
 import { authOptions } from '@/lib/authOptions'
 
 import { cn } from '@/lib/utils'
@@ -26,9 +28,12 @@ type IProps = {
 export default async function ProductPage({ params }: IProps) {
   const id = Number(params?.productId)
 
-  const result = await getProductDetail({ id })
-
   const session = await getServerSession(authOptions)
+
+  const result = await getProductDetail({
+    id,
+    accessToken: session?.user?.accessToken,
+  })
 
   if (!result?.data?.success) {
     notFound()
@@ -193,25 +198,13 @@ export default async function ProductPage({ params }: IProps) {
           </section>
           <hr className="w-full" />
           <section className="mt-4 w-full">
-            <CommentForm />
+            {session?.user?.accessToken && product?.canComment && (
+              <CommentForm productId={product?.productId} />
+            )}
 
-            <ul className="mt-10 max-w-[500px] space-y-7">
-              {!!product?.productComments?.length ? (
-                product.productComments.map((comment, index) => (
-                  <li key={index}>
-                    <CommnentCard
-                      comment={comment.commentContent}
-                      name={comment.commentAuthor}
-                      avatar={comment.commentAuthorAvatar}
-                    />
-                  </li>
-                ))
-              ) : (
-                <p className="text-center text-sm text-gray-500">
-                  This product didnt have comment yet!
-                </p>
-              )}
-            </ul>
+            <section className="mt-10 max-w-[500px]">
+              <ProductComments productId={product?.productId} />
+            </section>
           </section>
         </section>
 

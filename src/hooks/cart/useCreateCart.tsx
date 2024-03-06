@@ -13,6 +13,7 @@ import { ProductStock } from '../../../types/products'
 export type CreateCartPayload = {
   productSizeId: ProductStock['productStockId']
   quantity: number
+  isBuyNow?: boolean
 }
 
 type IProps = {
@@ -38,9 +39,12 @@ export default function useCreateCart({
         ? await axios.post(`${ORDER_SERVICE}/carts/multiple`, {
             carts: payload,
           })
-        : await axios.post(`${ORDER_SERVICE}/carts`, payload)
+        : await axios.post(`${ORDER_SERVICE}/carts`, {
+            productSizeId: (payload as CreateCartPayload)?.productSizeId,
+            quantity: (payload as CreateCartPayload).quantity,
+          })
     },
-    onSuccess: async (res) => {
+    onSuccess: async (res, payload) => {
       if (res?.data?.success) {
         if (isMultiple) {
           await client.refetchQueries({ queryKey: ['get-user-cart'] })
@@ -48,7 +52,11 @@ export default function useCreateCart({
           onCloseDrawer?.()
         } else {
           await client.refetchQueries({ queryKey: ['get-user-cart'] })
-          toast.success('Add to card successfully!')
+          if ((payload as CreateCartPayload)?.isBuyNow) {
+            router.push('/order')
+          } else {
+            toast.success('Add to card successfully!')
+          }
         }
       }
     },

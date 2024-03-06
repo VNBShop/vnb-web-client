@@ -36,10 +36,19 @@ export async function getProducts({
   }
 }
 
-export async function getProductDetail({ id }: { id: number }) {
+export async function getProductDetail({
+  id,
+  accessToken,
+}: {
+  id: number
+  accessToken?: string
+}) {
   try {
-    const res = await axiosProduct.get(`/products/${id}`)
-
+    const res = await axiosProduct.get(`/products/${id}`, {
+      headers: {
+        Authorization: accessToken ? `Bearer ${accessToken}` : null,
+      },
+    })
     return res
   } catch (error) {
     console.error('Error fetching or parsing product data:', error)

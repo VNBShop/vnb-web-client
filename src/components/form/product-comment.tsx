@@ -6,28 +6,50 @@ import { useForm, useWatch } from 'react-hook-form'
 import { z } from 'zod'
 
 import Icon from '@/common/icons'
+import Spiner from '@/common/spiner'
+import useCreateProductCmt, {
+  CreateProductCmtPayload,
+} from '@/hooks/product/useCreateComment'
 import useKeyPress from '@/hooks/useKeyDown'
 import { commentSchema } from '@/lib/validations/product'
 
+import { ProductDetail } from '../../../types/products'
 import { Button } from '../ui/button'
 import { Form, FormControl, FormField, FormItem } from '../ui/form'
 
 type Inputs = z.infer<typeof commentSchema>
 
-export default function ProductCommentForm() {
+type IProps = {
+  productId: ProductDetail['productId']
+}
+
+export default function ProductCommentForm({ productId }: IProps) {
   const form = useForm<Inputs>({
     resolver: zodResolver(commentSchema),
   })
 
   const watchCommentForm = useWatch({ control: form.control, name: 'comment' })
 
+  const { loading, onCreateCmt } = useCreateProductCmt({
+    onSuccess: () => {
+      form.reset()
+      form.setValue('comment', '')
+    },
+  })
+
   const onSubmit = (value: Inputs) => {
-    form.reset()
-    form.setValue('comment', '')
+    if (!productId) return
+
+    const payload: CreateProductCmtPayload = {
+      comment: value.comment,
+      productId,
+    }
+
+    onCreateCmt(payload)
   }
 
   useKeyPress('Enter', () => {
-    if (!watchCommentForm) {
+    if (!watchCommentForm || loading) {
       return
     }
     void onSubmit(form.getValues())
@@ -51,8 +73,9 @@ export default function ProductCommentForm() {
                   maxLength={200}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      if (!watchCommentForm) return
                       e.preventDefault()
+
+                      if (!watchCommentForm || loading) return
                     }
                   }}
                   {...field}
@@ -64,12 +87,20 @@ export default function ProductCommentForm() {
         />
 
         <div className="flex justify-end">
-          <Button disabled={!watchCommentForm} variant="ghost" className="p-0">
-            <Icon
-              name="Plane"
-              size={22}
-              color={!!watchCommentForm ? 'black' : 'gray'}
-            />
+          <Button
+            disabled={!watchCommentForm || loading}
+            variant="ghost"
+            className="p-0"
+          >
+            {loading ? (
+              <Spiner size={20} />
+            ) : (
+              <Icon
+                name="Plane"
+                size={22}
+                color={!!watchCommentForm ? 'black' : 'gray'}
+              />
+            )}
           </Button>
         </div>
       </form>

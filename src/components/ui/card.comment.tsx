@@ -1,3 +1,4 @@
+'use client'
 import relativeTime from 'dayjs/plugin/relativeTime'
 
 dayjs.extend(relativeTime)
