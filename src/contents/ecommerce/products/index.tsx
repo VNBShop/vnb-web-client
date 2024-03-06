@@ -1,7 +1,11 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import { useInfiniteQuery } from '@tanstack/react-query'
 import Link from 'next/link'
+
+import { useInView } from 'react-intersection-observer'
 
 import { getProducts } from '@/api/public/product'
 import Empty from '@/common/empty'
@@ -35,7 +39,7 @@ export default function Products({
   filter,
 }: ProductPageProps) {
   const {
-    data: productsData,
+    data,
     isPending,
     fetchNextPage,
     hasNextPage,
@@ -46,9 +50,28 @@ export default function Products({
     queryFn: ({ pageParam: currentPage, queryKey }) =>
       getProducts({ currentPage, filter: queryKey[1] }),
     initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => allPages?.length + 1,
+    getNextPageParam: (lastPage, allPages) => {
+      if (Math.ceil(lastPage.total / 10) > allPages.length)
+        return allPages.length + 1
+      return undefined
+    },
     refetchOnWindowFocus: false,
   })
+
+  const products =
+    (data?.pages?.flatMap(({ products }) => products) as Products[]) ?? []
+
+  const { ref, inView } = useInView({
+    delay: 1000,
+  })
+
+  useEffect(() => {
+    if (hasNextPage && inView) {
+      fetchNextPage()
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasNextPage, inView])
 
   return (
     <>
@@ -57,33 +80,24 @@ export default function Products({
         <ProductAction brands={brands} stores={stores} />
       </section>
       <ul className=" mt-7 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
-        {!!productsData?.pages?.length
-          ? productsData?.pages?.map((products: any) => {
-              if (!products?.length) return null
-              return products.map((product: Products) => {
-                return (
-                  <li key={product.productId}>
-                    <Link href={`/product/${product.productId}`}>
-                      <ProductCard
-                        name={product.productName}
-                        image={product.productImages[0]}
-                        price={product.productPrice}
-                      />
-                    </Link>
-                  </li>
-                )
-              })
-            })
+        {!!products?.length && !isError
+          ? products.map((product) => (
+              <li key={product.productId}>
+                <Link href={`/product/${product.productId}`}>
+                  <ProductCard
+                    name={product.productName}
+                    image={product.productImages[0]}
+                    price={product.productPrice}
+                  />
+                </Link>
+              </li>
+            ))
           : null}
         {(isPending || isFetchingNextPage) && <ProductsSkeleton />}
       </ul>
 
       {hasNextPage && !isError && !isPending && !isFetchingNextPage && (
-        <section className="mt-16 flex items-center justify-center">
-          <Button variant="outline" onClick={() => fetchNextPage()}>
-            Load more
-          </Button>
-        </section>
+        <div ref={ref}></div>
       )}
 
       {isError && !isPending ? <Empty message="No product" /> : null}

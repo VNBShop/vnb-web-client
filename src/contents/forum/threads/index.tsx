@@ -20,7 +20,9 @@ export default function ForumThreads() {
     posts,
   } = useFetchPosts()
 
-  const { ref, inView } = useInView()
+  const { ref, inView } = useInView({
+    delay: 1000,
+  })
 
   useEffect(() => {
     if (hasNextPage && inView) {

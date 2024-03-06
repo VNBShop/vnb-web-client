@@ -30,7 +30,10 @@ export async function getProducts({
   })
 
   if (res?.data?.metadata && !!res?.data?.metadata?.data?.length) {
-    return res?.data?.metadata?.data
+    return {
+      products: res?.data?.metadata?.data,
+      total: res?.data?.metadata?.total,
+    }
   } else {
     throw new Error('')
   }
