@@ -24,8 +24,6 @@ export default function useCreatePost({ onSuccess }: IProps) {
   const axios = useAxiosPrivate()
   const client = useQueryClient()
 
-  const { reFetchData } = usePostFetchContext()
-
   const { mutate, isPending } = useMutation<
     DataResponse,
     DataError,
@@ -36,7 +34,9 @@ export default function useCreatePost({ onSuccess }: IProps) {
     },
     onSuccess: async (res) => {
       if (res?.data?.success) {
-        reFetchData()
+        await client.refetchQueries({
+          queryKey: ['get-posts'],
+        })
         onSuccess()
       }
     },

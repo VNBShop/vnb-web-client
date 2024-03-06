@@ -90,9 +90,12 @@ export default function CommnentCard({
         onCloseModal={onCloseModal}
         show={modal}
       >
-        <p className="my-4">Are you sure you want to delete this comment?</p>
+        <p className="my-4 text-sm">
+          Are you sure you want to delete this comment?
+        </p>
         <section className="flex items-center justify-end gap-2">
           <Button
+            size="sm"
             disabled={loading}
             onClick={onCloseModal}
             variant="ghost"
@@ -101,8 +104,9 @@ export default function CommnentCard({
             Cancel
           </Button>
           <Button
+            size="sm"
             disabled={loading}
-            className="h-10 space-x-1"
+            className="h-10 space-x-1 bg-danger hover:bg-danger/70"
             onClick={() =>
               onDeleteComment({
                 commnentId: id,

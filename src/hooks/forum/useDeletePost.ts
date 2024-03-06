@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { toast } from 'sonner'
 
@@ -16,8 +16,8 @@ type IProps = {
 
 export default function useDetetePost({ onClose }: IProps) {
   const axios = useAxiosPrivate()
+  const client = useQueryClient()
 
-  const { setPosts } = usePostFetchContext()
   const { post } = usePostItemContext()
 
   const { isPending, mutate } = useMutation<DataResponse, DataError>({
@@ -26,7 +26,9 @@ export default function useDetetePost({ onClose }: IProps) {
     },
     onSuccess: async (res) => {
       if (res?.data?.success) {
-        setPosts((prev) => prev.filter((p) => p?.postId !== post?.postId))
+        await client.invalidateQueries({
+          queryKey: ['get-posts'],
+        })
 
         onClose()
       }

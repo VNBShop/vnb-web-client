@@ -4,12 +4,8 @@ import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
-import { useCommentItemContext } from '@/context/comment-item'
-import { usePostFetchContext } from '@/context/post-fetch'
 import { usePostItemContext } from '@/context/post-item'
 import { FORUM_SERVICE } from '@/lib/microservice'
-
-import { MetaCommentResponse } from './useFetchComments'
 
 import { DataError, DataResponse } from '../../../types'
 import { Comment } from '../../../types/forum'
@@ -26,8 +22,6 @@ export default function useDeteteComment({ onClose }: IProps) {
   const axios = useAxiosPrivate()
 
   const client = useQueryClient()
-  const { setPosts } = usePostFetchContext()
-  const { setCommnets, page } = useCommentItemContext()
   const { post } = usePostItemContext()
 
   const { isPending, mutate } = useMutation<
@@ -40,47 +34,18 @@ export default function useDeteteComment({ onClose }: IProps) {
         `${FORUM_SERVICE}/comments/${payload.commnentId}`
       )
     },
-    onSuccess: async (res, payload) => {
+    onSuccess: async (res) => {
       if (res?.data?.success) {
-        setCommnets((prev) =>
-          prev.filter((p) => p.commentId !== payload?.commnentId)
-        )
-        setPosts((prev) => {
-          const findIndex = prev.findIndex((p) => p.postId === post?.postId)
-          if (findIndex !== -1) {
-            const newPosts = [...prev]
-
-            newPosts[findIndex] = {
-              ...newPosts[findIndex],
-              totalComment: newPosts[findIndex]?.totalComment
-                ? newPosts[findIndex].totalComment - 1
-                : 0,
-            }
-
-            return newPosts
-          }
-          return prev
+        await client.invalidateQueries({
+          queryKey: ['get-comments', post?.postId],
         })
-
-        await client.setQueryData(
-          [
-            'get-comments',
-            {
-              postId: post?.postId,
-              page,
-            },
-          ],
-          (oldMeta: MetaCommentResponse) => {
-            return {
-              ...oldMeta,
-              nextPage: oldMeta?.data?.length > 5,
-            }
-          }
-        )
-
         onClose()
+        await client.invalidateQueries({
+          queryKey: ['get-posts'],
+        })
       }
     },
+
     onError: (err) => {
       toast.error(
         err?.response?.data?.metadata ?? 'Cant not delete this comment!'

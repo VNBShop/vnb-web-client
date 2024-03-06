@@ -25,11 +25,7 @@ export default function AddPost() {
     <>
       <section className="space-y-3 border-b bg-white p-4 py-3 md:rounded-md md:shadow-box lg:border-none">
         <section className="flex items-center gap-2">
-          <figure className="h-10 w-10 rounded-full">
-            <p className="textw-white flex h-full w-full items-center justify-center rounded-full bg-black text-xl text-white">
-              D
-            </p>
-          </figure>
+          <Avatar src={user?.avatar ?? ''} username={user?.firstName ?? 'Z'} />
           <div
             className="flex-1 rounded-full bg-gray-100 p-2 pl-4 hover:cursor-pointer lg:hover:bg-gray-200"
             onClick={openAddPostModal}
@@ -53,7 +49,7 @@ export default function AddPost() {
 
       <Modal show={addPostM} header="Add new post" onCloseModal={onClose}>
         <section className="mt-4 inline-flex items-center gap-2">
-          <Avatar src={user?.avatar ?? ''} username={user?.firstName} />
+          <Avatar src={user?.avatar ?? ''} username={user?.firstName ?? 'Z'} />
           <article>
             <p className="text-sm font-medium">
               {user?.firstName

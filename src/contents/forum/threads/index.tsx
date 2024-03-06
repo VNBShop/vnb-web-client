@@ -1,42 +1,57 @@
 'use client'
 
+import { useEffect } from 'react'
+
+import { useInView } from 'react-intersection-observer'
+
 import Empty from '@/common/empty'
 import AddPost from '@/components/add-post'
 import PostItem from '@/components/post/post-item'
 import PostCardSkeleton from '@/components/skeletons/post-card'
-import { PostFetchContext } from '@/context/post-fetch'
 import useFetchPosts from '@/hooks/forum/useFetchPosts'
 
 export default function ForumThreads() {
-  const props = useFetchPosts()
+  const {
+    fetchNextPage,
+    hasNextPage,
+    isError,
+    isFetchingNextPage,
+    isPending,
+    posts,
+  } = useFetchPosts()
+
+  const { ref, inView } = useInView()
+
+  useEffect(() => {
+    if (hasNextPage && inView) {
+      fetchNextPage()
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasNextPage, inView])
 
   return (
-    <PostFetchContext.Provider value={props}>
-      <section className="col-span-4 h-full lg:col-span-2 lg:px-10">
-        <AddPost />
+    <section className="col-span-4 h-full lg:col-span-2 lg:px-10">
+      <AddPost />
 
-        <section className="mt-7">
-          {props?.posts?.length &&
-          !props?.isError &&
-          !props?.isFetching &&
-          !props?.isLoading
-            ? props?.posts?.map((post) => (
-                <PostItem key={post?.postId} post={post} />
-              ))
-            : null}
+      <section className="mt-7">
+        {posts.length && !isError
+          ? posts?.map((post) => <PostItem key={post?.postId} post={post} />)
+          : null}
 
-          {(props?.isFetching || props?.isLoading) && !props?.isError && (
-            <PostCardSkeleton />
-          )}
+        {(isPending || isFetchingNextPage) && <PostCardSkeleton />}
 
-          {props?.isError && (
-            <Empty
-              className="mx-auto mt-16 grid w-[200px]"
-              message="No post yet"
-            />
-          )}
-        </section>
+        {(isError || !posts?.length) && !isFetchingNextPage && !isPending && (
+          <Empty
+            className="mx-auto mt-16 grid w-[200px]"
+            message="No post yet"
+          />
+        )}
+
+        {hasNextPage && !isError && !isPending && !isFetchingNextPage && (
+          <div ref={ref}></div>
+        )}
       </section>
-    </PostFetchContext.Provider>
+    </section>
   )
 }

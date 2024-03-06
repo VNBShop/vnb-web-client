@@ -130,7 +130,7 @@ export default function PostCommentForm({
             variant="ghost"
             className="p-0"
           >
-            {!loading || !loadingEdit ? (
+            {!loading && !loadingEdit ? (
               <Icon
                 name="Plane"
                 size={22}

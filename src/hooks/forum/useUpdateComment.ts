@@ -35,9 +35,9 @@ export default function useUpdateComment({ onSuccess }: IProps) {
         }
       )
     },
-    onSuccess: (res, payload) => {
+    onSuccess: async (res, payload) => {
       if (res?.data?.success) {
-        client.refetchQueries({
+        await client.invalidateQueries({
           queryKey: ['get-comments', payload.postId],
         })
         onSuccess()

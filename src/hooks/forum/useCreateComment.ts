@@ -21,9 +21,8 @@ type IProps = {
 
 export default function useCreateComment({ onSuccess }: IProps) {
   const axios = useAxiosPrivate()
+  const client = useQueryClient()
 
-  const { setCommnets } = useCommentItemContext()
-  const { setPosts } = usePostFetchContext()
   const { post } = usePostItemContext()
 
   const { isSuccess, isPending, mutate } = useMutation<
@@ -39,25 +38,14 @@ export default function useCreateComment({ onSuccess }: IProps) {
     },
     onSuccess: async (res) => {
       if (res?.data?.success) {
-        setCommnets((prev) => [res?.data?.metadata?.comment, ...prev])
-        setPosts((prev) => {
-          const findIndex = prev.findIndex((p) => p.postId === post?.postId)
-
-          if (findIndex !== -1) {
-            const newPosts = [...prev]
-            newPosts[findIndex] = {
-              ...newPosts[findIndex],
-              totalComment: newPosts[findIndex]?.totalComment
-                ? newPosts[findIndex].totalComment + 1
-                : 0,
-            }
-
-            return newPosts
-          }
-
-          return prev
+        await client.refetchQueries({
+          queryKey: ['get-comments', post?.postId],
         })
         onSuccess()
+
+        await client.invalidateQueries({
+          queryKey: ['get-posts'],
+        })
       }
     },
     onError: (err) => {

@@ -1,10 +1,11 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
 import { useCommentItemContext } from '@/context/comment-item'
+import { usePostItemContext } from '@/context/post-item'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataError, DataResponse } from '../../../types'
@@ -21,8 +22,9 @@ type IProps = {
 
 export default function useEditComment({ onSuccess }: IProps) {
   const axios = useAxiosPrivate()
+  const client = useQueryClient()
 
-  const { setCommnets } = useCommentItemContext()
+  const { post } = usePostItemContext()
 
   const { isPending, mutate } = useMutation<
     DataResponse,
@@ -39,25 +41,9 @@ export default function useEditComment({ onSuccess }: IProps) {
     },
     onSuccess: async (res, payload) => {
       if (res?.data?.success) {
-        setCommnets((prev) => {
-          const findIndex = prev.findIndex(
-            (cmt) => cmt.commentId === payload?.commentId
-          )
-
-          if (findIndex !== -1) {
-            const newCmts = [...prev]
-
-            newCmts[findIndex] = {
-              ...newCmts[findIndex],
-              commentContent: payload.comment,
-            }
-
-            return newCmts
-          }
-
-          return prev
+        await client.invalidateQueries({
+          queryKey: ['get-comments', post?.postId],
         })
-
         onSuccess()
       }
     },
