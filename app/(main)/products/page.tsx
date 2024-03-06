@@ -130,24 +130,15 @@ export default async function ProductsPage({
     },
   ]
 
-  const queryClient = new QueryClient()
-
-  await queryClient.prefetchQuery({
-    queryKey: ['products'],
-    queryFn: () => getProducts({ currentPage: 1 }),
-  })
-
   return (
     <section className="mx-auto mt-10 max-w-main px-4">
-      <HydrationBoundary state={dehydrate(queryClient)}>
-        <Products
-          title="Products"
-          desciption="Buy products from our stores"
-          brands={brands}
-          stores={stores}
-          filter={searchParams}
-        />
-      </HydrationBoundary>
+      <Products
+        title="Products"
+        desciption="Buy products from our stores"
+        brands={brands}
+        stores={stores}
+        filter={searchParams}
+      />
     </section>
   )
 }
