@@ -10,7 +10,7 @@ import {
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -40,6 +40,7 @@ type Inputs = z.infer<typeof loginSchema>
 export default function SignInForm() {
   const [loading, setLoading] = useState(false)
   const [modal, setModal] = useState(false)
+  const pathname = usePathname()
 
   const [verifyPayload, setVerifyPayload] = useState<ModalOTPProps['meta']>(
     {} as ModalOTPProps['meta']
@@ -66,6 +67,7 @@ export default function SignInForm() {
 
     if (result?.ok) {
       toast.success('Login successfully!')
+      router.push('/')
       router.refresh()
     } else {
       toast.error(result?.error)
