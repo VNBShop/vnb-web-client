@@ -67,8 +67,6 @@ export default function useUpdateUser({ onCloseModal }: IProps = {}) {
         }
 
         if (payload?.avatar?.secureUrl) {
-          console.log('run >>>')
-
           await update({
             ...session,
             user: {
