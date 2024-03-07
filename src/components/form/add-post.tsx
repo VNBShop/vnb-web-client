@@ -23,9 +23,10 @@ type Inputs = {
 
 type IProps = {
   onCloseModal: () => void
+  pageKey: string
 }
 
-export default function AddPostForm({ onCloseModal }: IProps) {
+export default function AddPostForm({ onCloseModal, pageKey }: IProps) {
   const photosRef = createRef<UploadFileRefProps>()
   const form = useForm<Inputs>()
 
@@ -35,6 +36,7 @@ export default function AddPostForm({ onCloseModal }: IProps) {
       form.setValue('content', '')
       onCloseModal()
     },
+    pageKey,
   })
 
   const onSubmit = (values: Inputs) => {

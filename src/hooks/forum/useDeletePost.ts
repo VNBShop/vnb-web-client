@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
-import { usePostFetchContext } from '@/context/post-fetch'
 import { usePostItemContext } from '@/context/post-item'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
@@ -18,7 +17,7 @@ export default function useDetetePost({ onClose }: IProps) {
   const axios = useAxiosPrivate()
   const client = useQueryClient()
 
-  const { post } = usePostItemContext()
+  const { post, pageKey } = usePostItemContext()
 
   const { isPending, mutate } = useMutation<DataResponse, DataError>({
     mutationFn: async () => {
@@ -27,7 +26,7 @@ export default function useDetetePost({ onClose }: IProps) {
     onSuccess: async (res) => {
       if (res?.data?.success) {
         await client.invalidateQueries({
-          queryKey: ['get-posts'],
+          queryKey: [pageKey],
         })
 
         onClose()

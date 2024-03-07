@@ -69,7 +69,7 @@ export default function useAxiosPrivate() {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session])
+  }, [JSON.stringify(session ?? {})])
 
   return axiosPrivate
 }

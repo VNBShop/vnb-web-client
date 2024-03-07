@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
-import { usePostFetchContext } from '@/context/post-fetch'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataError, DataResponse } from '../../../types'
@@ -12,6 +11,7 @@ import { Photo } from '../../../types/user'
 
 type IProps = {
   onSuccess: () => void
+  pageKey: string
 }
 
 export type CreatePostPayload = {
@@ -20,7 +20,7 @@ export type CreatePostPayload = {
   postAssets: Photo[]
 }
 
-export default function useCreatePost({ onSuccess }: IProps) {
+export default function useCreatePost({ onSuccess, pageKey }: IProps) {
   const axios = useAxiosPrivate()
   const client = useQueryClient()
 
@@ -35,7 +35,7 @@ export default function useCreatePost({ onSuccess }: IProps) {
     onSuccess: async (res) => {
       if (res?.data?.success) {
         await client.refetchQueries({
-          queryKey: ['get-posts'],
+          queryKey: [pageKey],
         })
         onSuccess()
       }

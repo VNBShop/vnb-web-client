@@ -1,12 +1,3 @@
-import {
-  HydrationBoundary,
-  QueryClient,
-  dehydrate,
-} from '@tanstack/react-query'
-
-import { getProducts } from '@/api/public/product'
-
-import getStores from '@/api/public/store'
 import Products from '@/contents/ecommerce/products'
 
 import { ProductBrand, ProductStore } from '../../../types/products'

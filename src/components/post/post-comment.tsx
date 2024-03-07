@@ -1,6 +1,6 @@
-import { CommentItemContext } from '@/context/comment-item'
 import { usePostItemContext } from '@/context/post-item'
 
+import { useUserContext } from '@/context/user'
 import useFetchComments from '@/hooks/forum/useFetchComments'
 
 import Avatar from '../avatar'
@@ -21,10 +21,12 @@ export default function PostComment() {
     isPending,
   } = useFetchComments()
 
+  const user = useUserContext()
+
   return (
     <section className="mt-4 px-4">
       <section className="flex items-start gap-2">
-        <Avatar src="/common/avt.jpeg" username="D" />
+        <Avatar src={user?.avatar ?? ''} username={user?.firstName ?? 'Z'} />
         <PostCommentForm />
       </section>
       <ul className="mb-7 mt-5 space-y-4">

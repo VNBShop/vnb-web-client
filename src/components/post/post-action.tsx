@@ -47,7 +47,7 @@ export default function PostAction() {
                   onClick={() => setModalDeletePost(true)}
                   className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
                 >
-                  <Icon name="Coin" size={18} />
+                  <Icon name="Saved" size={18} />
                   Save
                 </Menu.Item>
 

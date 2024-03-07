@@ -9,7 +9,11 @@ import Avatar from './avatar'
 import AddPostForm from './form/add-post'
 import { Modal, ModalProps } from './ui/modal'
 
-export default function AddPost() {
+type IProps = {
+  pageKey: string
+}
+
+export default function AddPost({ pageKey }: IProps) {
   const [addPostM, setAddPostM] = useState(false)
   const openAddPostModal = () => {
     setAddPostM(true)
@@ -60,7 +64,7 @@ export default function AddPost() {
           </article>
         </section>
 
-        <AddPostForm onCloseModal={onClose} />
+        <AddPostForm onCloseModal={onClose} pageKey={pageKey} />
       </Modal>
     </>
   )

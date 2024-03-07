@@ -5,6 +5,7 @@ import { Post } from '../../types/forum'
 export type PostItemContextProps = {
   post: Post
   onHandleCommentSection: () => void
+  pageKey: string
 }
 
 export const PostItemContext = createContext<PostItemContextProps>(

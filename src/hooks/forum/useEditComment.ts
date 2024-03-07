@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
-import { useCommentItemContext } from '@/context/comment-item'
 import { usePostItemContext } from '@/context/post-item'
 import { FORUM_SERVICE } from '@/lib/microservice'
 

@@ -34,11 +34,13 @@ export default function ForumThreads() {
 
   return (
     <section className="col-span-4 h-full lg:col-span-2 lg:px-10">
-      <AddPost />
+      <AddPost pageKey="get-posts" />
 
       <section className="mt-7">
         {posts.length && !isError
-          ? posts?.map((post) => <PostItem key={post?.postId} post={post} />)
+          ? posts?.map((post) => (
+              <PostItem key={post?.postId} post={post} pageKey="get-posts" />
+            ))
           : null}
 
         {(isPending || isFetchingNextPage) && <PostCardSkeleton />}

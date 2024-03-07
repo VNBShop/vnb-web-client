@@ -22,7 +22,7 @@ export default function useDeteteComment({ onClose }: IProps) {
   const axios = useAxiosPrivate()
 
   const client = useQueryClient()
-  const { post } = usePostItemContext()
+  const { post, pageKey } = usePostItemContext()
 
   const { isPending, mutate } = useMutation<
     DataResponse,
@@ -41,7 +41,7 @@ export default function useDeteteComment({ onClose }: IProps) {
         })
         onClose()
         await client.invalidateQueries({
-          queryKey: ['get-posts'],
+          queryKey: [pageKey],
         })
       }
     },

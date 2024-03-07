@@ -8,6 +8,7 @@ import {
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
+import { usePostItemContext } from '@/context/post-item'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataError, DataResponse } from '../../../types'
@@ -26,6 +27,8 @@ type IProps = {
 export default function useLikePost({ setReact, setTotalReaction }: IProps) {
   const axios = useAxiosPrivate()
   const client = useQueryClient()
+
+  const { pageKey } = usePostItemContext()
 
   const { mutate } = useMutation<DataResponse, DataError, LikeActionPayload>({
     mutationFn: async (payload) => {
@@ -51,7 +54,7 @@ export default function useLikePost({ setReact, setTotalReaction }: IProps) {
     },
     onSettled: async () => {
       await client.invalidateQueries({
-        queryKey: ['get-posts'],
+        queryKey: [pageKey],
       })
     },
   })

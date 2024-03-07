@@ -4,8 +4,6 @@ import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
-import { useCommentItemContext } from '@/context/comment-item'
-import { usePostFetchContext } from '@/context/post-fetch'
 import { usePostItemContext } from '@/context/post-item'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
@@ -23,7 +21,7 @@ export default function useCreateComment({ onSuccess }: IProps) {
   const axios = useAxiosPrivate()
   const client = useQueryClient()
 
-  const { post } = usePostItemContext()
+  const { post, pageKey } = usePostItemContext()
 
   const { isSuccess, isPending, mutate } = useMutation<
     DataResponse,
@@ -44,7 +42,7 @@ export default function useCreateComment({ onSuccess }: IProps) {
         onSuccess()
 
         await client.invalidateQueries({
-          queryKey: ['get-posts'],
+          queryKey: [pageKey],
         })
       }
     },

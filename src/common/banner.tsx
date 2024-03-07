@@ -1,4 +1,6 @@
 'use client'
+import { useEffect } from 'react'
+
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 
@@ -10,16 +12,24 @@ const NewAnimateBadge = dynamic(() => import('./new-animate'), { ssr: false })
 
 export default function Banner() {
   const pathname = usePathname()
+
+  useEffect(() => {
+    console.log('mount')
+
+    return () => {
+      console.log('unmount')
+    }
+  }, [])
   return (
     <section className={` bg-black ${pathname !== '/' ? ' hidden' : ''}`}>
       <section className="relative mx-auto flex max-w-main items-center justify-center px-4 py-[6px]">
         <div className="invisible flex items-center gap-1 text-sm text-white lg:visible">
           <div className=" relative hidden lg:block">
-            <NewAnimateBadge />
+            {/* <NewAnimateBadge /> */}
           </div>{' '}
           Big sale, discount upto 50%!{'    '}
           <Link href="/products" className=" ml-1 underline">
-            Shop now!
+            <span>Shop now!</span>
           </Link>
         </div>
 

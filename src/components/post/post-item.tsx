@@ -14,8 +14,9 @@ import { Post } from '../../../types/forum'
 
 type IProps = {
   post: Post
+  pageKey: string
 }
-export default function PostItem({ post }: IProps) {
+export default function PostItem({ post, pageKey }: IProps) {
   const [openCommentSection, setOpenCommentSection] = useState(false)
 
   const onHandleCommentSection = () => {
@@ -26,6 +27,7 @@ export default function PostItem({ post }: IProps) {
       value={{
         post: post,
         onHandleCommentSection,
+        pageKey,
       }}
     >
       <article className="mb-7 bg-white py-3 md:rounded-md md:shadow-box">
