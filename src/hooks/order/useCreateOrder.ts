@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
@@ -27,15 +27,24 @@ export default function useCreateOrder() {
     mutationFn: async (payload) => {
       return axios.post(`${ORDER_SERVICE}/orders/checkout-by-cart`, payload)
     },
-    onSuccess: async (res) => {
+    onSuccess: async (res, payload) => {
+      console.log('check >>', res?.data?.metadata?.paymentUrl)
+
       if (res?.data?.success) {
         // await client.refetchQueries({
         //   queryKey: ['get-user-cart'],
         // })
-        router.push('/profile/ordered')
+
+        if (payload?.paymentType === 'CREDIT') {
+          router.push(res?.data?.metadata?.paymentUrl)
+        } else {
+          router.push('/profile/ordered')
+        }
       }
     },
     onError: (err) => {
+      console.log('err order checkout', err)
+
       toast.error(err?.response?.data?.metadata ?? 'Cant order!')
     },
   })

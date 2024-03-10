@@ -30,8 +30,8 @@ export default function OrderedCard({ ordered }: IProps) {
           className="rounded-full  px-3 py-1 text-[13px] font-medium lowercase first-letter:uppercase"
           style={{
             backgroundColor:
-              colorsOrderedStatus[ordered?.orderStatus].backgroundColor,
-            color: colorsOrderedStatus[ordered?.orderStatus].color,
+              colorsOrderedStatus[ordered?.orderStatus]?.backgroundColor,
+            color: colorsOrderedStatus[ordered?.orderStatus]?.color,
           }}
         >
           {ordered?.orderStatus}

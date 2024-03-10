@@ -70,6 +70,33 @@ export default function OrderPage() {
     onCreateOrder(payload)
   }
 
+  const onCheckoutVNpay = () => {
+    if (!carts?.length) {
+      toast.error('Your cart is empty, cant not order')
+      return
+    }
+
+    if (!user?.address || !user?.firstName || !user?.phoneNumber) {
+      toast.error('Please fill your information for ordering!')
+      if (deliveryRef.current) {
+        deliveryRef.current.style.borderColor = 'red'
+        deliveryRef.current.scrollIntoView({
+          block: 'end',
+          behavior: 'smooth',
+        })
+      }
+
+      return
+    }
+
+    const payload: CreateOrderPayload = {
+      cartIds: carts.map((cart) => cart.cartId),
+      paymentType: 'CREDIT',
+    }
+
+    onCreateOrder(payload)
+  }
+
   return fetchingCarts || fetchingUser || loadingCarts || loadingUser ? (
     <OrderSkeleton />
   ) : (
@@ -193,7 +220,9 @@ export default function OrderPage() {
                 variant="outline"
                 className="flex w-full gap-1"
                 disabled={loading}
+                onClick={onCheckoutVNpay}
               >
+                {loading && <Spiner size={16} />}
                 <Icon name="QR" size={19} />
                 <p>
                   <span className="text-red-500">VN</span>

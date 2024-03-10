@@ -1,9 +1,11 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 
 import { useRouter } from 'next/navigation'
+
+import { io } from 'socket.io-client'
 
 import Icon from '@/common/icons'
 import Avatar from '@/components/avatar'
@@ -25,6 +27,22 @@ export default function Chat({ params }: ChatProps) {
   const [testTyping, setTyping] = useState(false)
 
   const router = useRouter()
+
+  useEffect(() => {
+    const socket = io(
+      `${process.env.NEXT_SERVER_API_SOCKET}/api/v1/messages/${params?.chatId}`
+    )
+
+    socket.on('connect', () => {
+      console.log('is socket connected')
+    })
+
+    return () => {
+      if (socket) {
+        socket.disconnect()
+      }
+    }
+  }, [params?.chatId])
 
   return (
     <section className="flex h-full flex-col overflow-hidden pb-4">
