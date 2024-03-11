@@ -1,7 +1,12 @@
 'use client'
 import { PropsWithChildren, createContext, useContext } from 'react'
 
+import { useRouter } from 'next/navigation'
 import { Session } from 'next-auth'
+
+import { signOut } from 'next-auth/react'
+
+import useSignout from '@/hooks/commons/useSignout'
 
 export type UserContext = Session['user']
 
@@ -9,9 +14,12 @@ const UserContext = createContext<UserContext>({} as UserContext)
 
 export function useUserContext() {
   const context = useContext(UserContext)
+  const router = useRouter()
 
   if (!context) {
-    throw new Error('useUserContext must be use in UserContextProvider')
+    console.log('useUserContext must be use in UserContextProvider')
+    // signOut()
+    router.push('/')
   }
 
   return context

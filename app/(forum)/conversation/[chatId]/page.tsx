@@ -45,13 +45,21 @@ export default function Chat({ params }: ChatProps) {
     if (!room) return
     try {
       const socket = io(`${process.env.NEXT_SERVER_API_SOCKET}`, {
+        withCredentials: true,
         extraHeaders: {
           Authorization: `Bearer ${data?.user?.accessToken}`,
         },
         path: '/chat',
+        addTrailingSlash: false,
         query: {
           room: room,
         },
+        transports: ['websocket', 'polling'],
+      })
+
+      socket.on('connect_error', (params) => {
+        console.log('socket error >>>', params?.cause)
+        // socket.io.opts.transports = ['polling', 'websocket']
       })
 
       socket.on('connect', () => {
