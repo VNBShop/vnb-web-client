@@ -12,7 +12,7 @@ type IProps = {
   chatId: string
 }
 
-export default function useFetchPost({ chatId }: IProps) {
+export default function useFetchChat({ chatId }: IProps) {
   const axios = useAxiosPrivate()
 
   const {
@@ -37,8 +37,8 @@ export default function useFetchPost({ chatId }: IProps) {
       if (res?.data?.success) {
         return {
           messages: res?.data?.metadata?.data as Chat[],
-          total: res?.data?.metadata?.total,
-          room: res?.data?.metadata?.room,
+          total: res?.data?.metadata?.total as number,
+          room: res?.data?.metadata?.room as string,
         }
       } else {
         throw new Error('Cant not fetch this message!')
@@ -54,10 +54,12 @@ export default function useFetchPost({ chatId }: IProps) {
     refetchOnWindowFocus: false,
   })
 
-  console.log('data messages', data)
+  const messages = data?.pages?.flatMap(({ messages }) => messages) ?? []
+  const room = data?.pages[0]?.room ?? null
 
   return {
-    data,
+    messages,
+    room,
     isError,
     isPending,
     isFetchingNextPage,

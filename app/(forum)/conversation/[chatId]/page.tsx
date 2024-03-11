@@ -5,12 +5,14 @@ import Link from 'next/link'
 
 import { useRouter } from 'next/navigation'
 
+import { useSession } from 'next-auth/react'
 import { io } from 'socket.io-client'
 
 import Icon from '@/common/icons'
 import Avatar from '@/components/avatar'
 import ConversationForm from '@/components/form/conversation'
 import ChatList, { ChatListProps } from '@/contents/conversation/chat-list'
+import useFetchChat from '@/hooks/chat/useFetchChat'
 
 export type ChatProps = {
   params: {
@@ -19,30 +21,58 @@ export type ChatProps = {
 }
 
 export default function Chat({ params }: ChatProps) {
-  // if (params.chatId === '1') {
-  //   return notFound()
-  // }
   const [chats, setChats] = useState<ChatListProps[]>(chatlists)
+
+  const { data } = useSession()
 
   const [testTyping, setTyping] = useState(false)
 
   const router = useRouter()
 
+  const {
+    room,
+    messages,
+    fetchNextPage,
+    hasNextPage,
+    isError,
+    isFetchingNextPage,
+    isPending,
+  } = useFetchChat({
+    chatId: params?.chatId,
+  })
+
   useEffect(() => {
-    const socket = io(
-      `${process.env.NEXT_SERVER_API_SOCKET}/api/v1/messages/${params?.chatId}`
-    )
+    if (!room) return
+    try {
+      const socket = io(`${process.env.NEXT_SERVER_API_SOCKET}`, {
+        extraHeaders: {
+          Authorization: `Bearer ${data?.user?.accessToken}`,
+        },
+        path: '/chat',
+        query: {
+          room: room,
+        },
+      })
 
-    socket.on('connect', () => {
-      console.log('is socket connected')
-    })
+      socket.on('connect', () => {
+        console.log('Socket connected')
+      })
 
-    return () => {
-      if (socket) {
-        socket.disconnect()
+      socket.on('error', (error) => {
+        console.error('Socket error:', error)
+        // Handle socket errors here
+      })
+
+      return () => {
+        if (socket) {
+          socket.disconnect()
+        }
       }
+    } catch (error) {
+      console.error('Error connecting to socket:', error)
+      // Handle connection errors here
     }
-  }, [params?.chatId])
+  }, [room, data?.user?.accessToken])
 
   return (
     <section className="flex h-full flex-col overflow-hidden pb-4">
