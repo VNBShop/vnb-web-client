@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
-import { ChatListProps } from '@/contents/conversation/chat-list'
+import { Chat } from '../../types/messenger'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -12,13 +12,13 @@ export function truncate(str: string, length: number) {
 }
 
 export const markConsecutiveDuplicates = (
-  arr: (ChatListProps & { position?: string })[]
+  arr: (Chat & { position?: string })[]
 ) => {
-  const result: (ChatListProps & { position?: string })[] = []
+  const result: (Chat & { position?: string })[] = []
   let consecutiveCount = 1
 
   for (let i = 1; i < arr.length; i++) {
-    if (arr[i]?.sender === arr[i - 1]?.sender) {
+    if (arr[i]?.senderId === arr[i - 1]?.senderId) {
       consecutiveCount++
     } else {
       if (consecutiveCount >= 2) {

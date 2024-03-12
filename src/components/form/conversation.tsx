@@ -2,27 +2,26 @@ import { Dispatch, SetStateAction } from 'react'
 
 import { useForm } from 'react-hook-form'
 
+import { Socket } from 'socket.io-client'
+
 import Icon from '@/common/icons'
-import { ChatListProps } from '@/contents/conversation/chat-list'
 
 import useKeyPress from '@/hooks/useKeyDown'
 
+import { Chat } from '../../../types/messenger'
 import { Form, FormControl, FormField, FormItem } from '../ui/form'
 import { Input } from '../ui/input'
 
-export type ConversationFormProps = {
-  setTyping: Dispatch<SetStateAction<boolean>>
-  setChats: Dispatch<SetStateAction<ChatListProps[]>>
+export type IProps = {
+  setChats: Dispatch<SetStateAction<Chat[]>>
+  socket: Socket
 }
 
 type Inputs = {
   chat: string
 }
 
-export default function ConversationForm({
-  setChats,
-  setTyping,
-}: ConversationFormProps) {
+export default function ConversationForm({ setChats, socket }: IProps) {
   const form = useForm({
     defaultValues: {
       chat: '',
@@ -38,7 +37,6 @@ export default function ConversationForm({
         content: values?.chat,
       },
     ])
-    setTyping(false)
     form.setValue('chat', '')
   }
 

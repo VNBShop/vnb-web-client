@@ -10,3 +10,12 @@ export type Chat = {
   content: string
   isImage: boolean
 }
+
+export type ChatCommunicate = {
+  room: string
+  senderId: number
+  senderName: string
+  receiverId: number
+  receiverName: string
+  content: string
+}

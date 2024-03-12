@@ -34,9 +34,10 @@ export default function useFetchChat({ chatId }: IProps) {
           },
         }
       )
+
       if (res?.data?.success) {
         return {
-          messages: res?.data?.metadata?.data as Chat[],
+          messages: res?.data?.metadata?.messages as Chat[],
           total: res?.data?.metadata?.total as number,
           room: res?.data?.metadata?.room as string,
         }
@@ -56,6 +57,8 @@ export default function useFetchChat({ chatId }: IProps) {
 
   const messages = data?.pages?.flatMap(({ messages }) => messages) ?? []
   const room = data?.pages[0]?.room ?? null
+
+  console.log('data >>', data)
 
   return {
     messages,

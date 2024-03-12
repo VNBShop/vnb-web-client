@@ -1,30 +1,25 @@
 import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react'
 
 import Avatar from '@/components/avatar'
+import { useUserContext } from '@/context/user'
 import { markConsecutiveDuplicates } from '@/lib/utils'
 
-export type ChatListProps = {
-  id?: string
-  sender: string | number
-  receiver: string | number
-  content: string
-  createAt?: string
+import { Chat } from '../../../types/messenger'
+
+type IProps = {
+  chats: Chat[]
 }
 
-function ChatList({
-  chats,
-  isTyping,
-}: {
-  chats: ChatListProps[]
-  isTyping: boolean
-}) {
+function ChatList({ chats }: IProps) {
   const scrollViewRef = useRef<HTMLDivElement>(null)
+
+  const user = useUserContext()
 
   useEffect(() => {
     if (scrollViewRef && scrollViewRef.current) {
       scrollViewRef.current.scrollIntoView()
     }
-  }, [chats, isTyping])
+  }, [chats])
 
   const check = markConsecutiveDuplicates(chats)
 
@@ -32,7 +27,7 @@ function ChatList({
     <section className=" w-full flex-1 overflow-auto px-4 transition-all duration-300 ease-in-out">
       <section className="space-y-[1px] py-4 pb-0">
         {check.map((item, index: number) => {
-          return item.sender === 1 && !!item?.content ? (
+          return item.senderId === user?.userId && !!item?.content ? (
             !!item?.content ? (
               <article key={index} className="flex items-start justify-end">
                 <p
@@ -92,7 +87,7 @@ function ChatList({
             </article>
           ) : null
         })}
-
+        {/* 
         {isTyping ? (
           <article className="flex items-end justify-start gap-2 pb-3">
             <Avatar src="/common/avt.jpeg" username="D" />
@@ -102,7 +97,7 @@ function ChatList({
               <span className="dot three"></span>
             </div>
           </article>
-        ) : null}
+        ) : null} */}
 
         <div ref={scrollViewRef} />
       </section>

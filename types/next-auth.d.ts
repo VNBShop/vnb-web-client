@@ -11,6 +11,7 @@ declare module 'next-auth' {
       avatar: string
       email: string
       provider: 'LOCAL' | 'GOOGLE'
+      userId: number
     }
   }
 }

@@ -58,8 +58,6 @@ export default function Products({
     refetchOnWindowFocus: false,
   })
 
-  console.log('re-render products page')
-
   const products =
     (data?.pages?.flatMap(({ products }) => products) as Products[]) ?? []
 

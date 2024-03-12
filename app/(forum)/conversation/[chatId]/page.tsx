@@ -5,14 +5,18 @@ import Link from 'next/link'
 
 import { useRouter } from 'next/navigation'
 
-import { useSession } from 'next-auth/react'
-import { io } from 'socket.io-client'
+import { Socket, io } from 'socket.io-client'
 
 import Icon from '@/common/icons'
 import Avatar from '@/components/avatar'
 import ConversationForm from '@/components/form/conversation'
-import ChatList, { ChatListProps } from '@/contents/conversation/chat-list'
+import ChatList from '@/contents/conversation/chat-list'
+import { useUserContext } from '@/context/user'
 import useFetchChat from '@/hooks/chat/useFetchChat'
+
+import useSocketChat from '@/hooks/chat/useSocketChat'
+
+import { Chat } from '../../../../types/messenger'
 
 export type ChatProps = {
   params: {
@@ -21,11 +25,9 @@ export type ChatProps = {
 }
 
 export default function Chat({ params }: ChatProps) {
-  const [chats, setChats] = useState<ChatListProps[]>(chatlists)
+  const [chats, setChats] = useState<Chat[]>([])
 
-  const { data } = useSession()
-
-  const [testTyping, setTyping] = useState(false)
+  const user = useUserContext()
 
   const router = useRouter()
 
@@ -41,46 +43,13 @@ export default function Chat({ params }: ChatProps) {
     chatId: params?.chatId,
   })
 
+  const socket = useSocketChat({ room: room as string })
+
   useEffect(() => {
-    if (!room) return
-    try {
-      const socket = io(`${process.env.NEXT_SERVER_API_SOCKET}`, {
-        withCredentials: true,
-        extraHeaders: {
-          Authorization: `Bearer ${data?.user?.accessToken}`,
-        },
-        path: '/chat',
-        addTrailingSlash: false,
-        query: {
-          room: room,
-        },
-        transports: ['websocket', 'polling'],
-      })
-
-      socket.on('connect_error', (params) => {
-        console.log('socket error >>>', params?.cause)
-        // socket.io.opts.transports = ['polling', 'websocket']
-      })
-
-      socket.on('connect', () => {
-        console.log('Socket connected')
-      })
-
-      socket.on('error', (error) => {
-        console.error('Socket error:', error)
-        // Handle socket errors here
-      })
-
-      return () => {
-        if (socket) {
-          socket.disconnect()
-        }
-      }
-    } catch (error) {
-      console.error('Error connecting to socket:', error)
-      // Handle connection errors here
+    if (JSON.stringify(messages) !== JSON.stringify(chats)) {
+      setChats(messages)
     }
-  }, [room, data?.user?.accessToken])
+  }, [chats, messages])
 
   return (
     <section className="flex h-full flex-col overflow-hidden pb-4">
@@ -103,107 +72,9 @@ export default function Chat({ params }: ChatProps) {
         </div>
       </section>
 
-      <ChatList isTyping={testTyping} chats={chats} />
+      <ChatList chats={chats} />
 
-      <ConversationForm setTyping={setTyping} setChats={setChats} />
+      <ConversationForm setChats={setChats} socket={socket as Socket} />
     </section>
   )
 }
-
-const chatlists = [
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 2,
-    receiver: 1,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 2,
-    receiver: 1,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 2,
-    receiver: 1,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content: 'Dzung',
-  },
-  {
-    sender: 2,
-    receiver: 1,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-  {
-    sender: 1,
-    receiver: 2,
-    content:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-  },
-]
