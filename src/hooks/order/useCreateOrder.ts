@@ -28,8 +28,6 @@ export default function useCreateOrder() {
       return axios.post(`${ORDER_SERVICE}/orders/checkout-by-cart`, payload)
     },
     onSuccess: async (res, payload) => {
-      console.log('check >>', res?.data?.metadata?.paymentUrl)
-
       if (res?.data?.success) {
         // await client.refetchQueries({
         //   queryKey: ['get-user-cart'],

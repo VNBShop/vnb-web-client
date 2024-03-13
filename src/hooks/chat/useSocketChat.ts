@@ -28,8 +28,8 @@ export default function useSocketChat({ room }: IProps) {
 
       setSocket(socketIns)
 
-      socketIns.on('connect_error', (params) => {
-        console.log('socket error >>>', params?.cause)
+      socketIns.on('connect_error', (err) => {
+        console.log('socket error >>>', err)
       })
 
       socketIns.on('connect', () => {

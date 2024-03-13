@@ -3,6 +3,8 @@ import Link from 'next/link'
 
 import { categories } from '@/data'
 
+import { errorFallback } from '../../../../public/common'
+
 export default function Categories() {
   return (
     <section className="relative mt-10 py-10 lg:mt-20">
@@ -26,7 +28,7 @@ export default function Categories() {
               <Link href={item.href}>
                 <figure className="absolute inset-0">
                   <Image
-                    src={item.imageSrc}
+                    src={item.imageSrc ?? errorFallback}
                     alt={item.name}
                     title={item.name}
                     fill

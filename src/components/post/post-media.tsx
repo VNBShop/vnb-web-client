@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 import { usePostItemContext } from '@/context/post-item'
 
+import { errorFallback } from '../../../public/common'
 import Carousel from '../carousel'
 
 export default function PostMedia() {
@@ -48,7 +49,7 @@ export default function PostMedia() {
               >
                 <figure className=" absolute inset-0">
                   <Image
-                    src={item}
+                    src={item ?? errorFallback}
                     alt={item}
                     fill
                     className="object-cover transition-all duration-300 hover:cursor-pointer lg:group-hover:scale-105 "

@@ -1,11 +1,14 @@
 import { createContext, useContext } from 'react'
 
+import { QueryKey } from '@tanstack/react-query'
+
 import { Post } from '../../types/forum'
 
 export type PostItemContextProps = {
   post: Post
   onHandleCommentSection: () => void
-  pageKey: string
+  pageKey?: QueryKey
+  isDetail?: boolean
 }
 
 export const PostItemContext = createContext<PostItemContextProps>(

@@ -26,7 +26,7 @@ export default function useDetetePost({ onClose }: IProps) {
     onSuccess: async (res) => {
       if (res?.data?.success) {
         await client.invalidateQueries({
-          queryKey: [pageKey],
+          queryKey: pageKey,
         })
 
         onClose()

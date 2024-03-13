@@ -9,6 +9,7 @@ import { colorsOrderedStatus } from '@/lib/contants'
 
 import { cn } from '@/lib/utils'
 
+import { errorFallback } from '../../public/common'
 import { Ordered, OrderedStatus, ProductOrdered } from '../../types/order'
 
 dayjs.extend(relativeTime)
@@ -56,7 +57,7 @@ export default function OrderedCard({ ordered }: IProps) {
                 }
               >
                 <Image
-                  src={prod?.productImage}
+                  src={prod?.productImage ?? errorFallback}
                   alt={prod?.productName}
                   title={prod?.productName}
                   fill

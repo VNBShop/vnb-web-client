@@ -28,8 +28,6 @@ export default function usePaymentVNpay() {
     },
     onSuccess: async (response) => {
       if (response?.data?.success) {
-        console.log('is run >>>')
-
         toast.success('Ordered has been successfully!')
         router.push('/profile/ordered')
       }

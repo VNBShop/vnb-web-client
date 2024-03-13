@@ -12,7 +12,6 @@ export default function PaymentVNPayRedirect({ paymentInfo }: IProps) {
   const { onPaymentVNPay, isPending } = usePaymentVNpay()
 
   useEffect(() => {
-    console.log('is re-render', paymentInfo?.vnp_TxnRef)
     onPaymentVNPay({
       paymentInfo,
     })

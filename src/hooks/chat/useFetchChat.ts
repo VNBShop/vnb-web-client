@@ -58,7 +58,7 @@ export default function useFetchChat({ chatId }: IProps) {
   const messages = data?.pages?.flatMap(({ messages }) => messages) ?? []
   const room = data?.pages[0]?.room ?? null
 
-  console.log('data >>', data)
+  // console.log('data >>', data)
 
   return {
     messages,

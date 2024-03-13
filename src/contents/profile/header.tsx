@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 
+import Link from 'next/link'
+
 import Icon from '@/common/icons'
 import Avatar from '@/components/avatar'
 import UpdateAvatarForm from '@/components/form/update-avatar'
@@ -63,19 +65,17 @@ export default function ProfileHeader() {
             </div>
 
             <div className=" space-x-2 text-center ">
-              <Button
-                className="h-9 space-x-1"
-                variant="outline"
-                onClick={() => setModal(true)}
-              >
+              <Button className="h-9 space-x-1" onClick={() => setModal(true)}>
                 <Icon name="Pen" size={18} />
                 <span>Edit profile</span>
               </Button>
 
-              <Button className="h-9 space-x-1">
-                <Icon name="Plus" size={18} />
-                <span>Add post</span>
-              </Button>
+              <Link href="/conversation" passHref>
+                <Button className="h-9 space-x-1 bg-white text-black hover:bg-transparent">
+                  <Icon name="Messenger" size={18} />
+                  <span>Messenger</span>
+                </Button>
+              </Link>
             </div>
           </section>
           <hr className="mb-1 mt-4" />

@@ -54,7 +54,7 @@ export default function useLikePost({ setReact, setTotalReaction }: IProps) {
     },
     onSettled: async () => {
       await client.invalidateQueries({
-        queryKey: [pageKey],
+        queryKey: pageKey,
       })
     },
   })

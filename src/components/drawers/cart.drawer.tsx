@@ -17,6 +17,7 @@ import Spiner from '@/common/spiner'
 import useCreateCart, { CreateCartPayload } from '@/hooks/cart/useCreateCart'
 import useDeleteCart from '@/hooks/cart/useDeleteCart'
 
+import { errorFallback } from '../../../public/common'
 import { Cart } from '../../../types/order'
 import UpdateCartForm from '../form/update-cart'
 import { Button } from '../ui/button'
@@ -101,7 +102,7 @@ const CartDrawer = ({ cartCont, setCartCont, carts: cartsOut }: IProps) => {
                     >
                       <figure className="flex flex-1 items-center gap-2">
                         <Image
-                          src={cart?.productImage}
+                          src={cart?.productImage ?? errorFallback}
                           alt={cart?.productName}
                           title={cart?.productName}
                           width="0"

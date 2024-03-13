@@ -17,9 +17,7 @@ export default function OrderForm() {
     resolver: zodResolver(orderSchema),
   })
 
-  const onSubmit = (values: Inputs) => {
-    console.log('value', values)
-  }
+  const onSubmit = (values: Inputs) => {}
 
   return (
     <Form {...form}>
@@ -27,7 +25,7 @@ export default function OrderForm() {
         <div className="flex justify-end">
           <Button className="h-9">Order</Button>
         </div>
-        <section className=" space-x-5 flex">
+        <section className=" flex space-x-5">
           <section className="w-[55%] space-y-4">
             <FormField
               name="fullname"

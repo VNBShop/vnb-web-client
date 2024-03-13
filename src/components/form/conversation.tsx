@@ -1,42 +1,62 @@
-import { Dispatch, SetStateAction } from 'react'
+import { ComponentPropsWithoutRef, Dispatch, SetStateAction } from 'react'
 
 import { useForm } from 'react-hook-form'
 
 import { Socket } from 'socket.io-client'
 
+import { run } from 'node:test'
+
 import Icon from '@/common/icons'
 
+import { useUserContext } from '@/context/user'
 import useKeyPress from '@/hooks/useKeyDown'
 
-import { Chat } from '../../../types/messenger'
+import { ChatProps } from '../../../app/(forum)/conversation/[chatId]/page'
+import { Chat, ChatCommunicate, ChatResponse } from '../../../types/messenger'
+import { Account } from '../../../types/user'
 import { Form, FormControl, FormField, FormItem } from '../ui/form'
 import { Input } from '../ui/input'
 
-export type IProps = {
+export type IProps = ComponentPropsWithoutRef<'form'> & {
   setChats: Dispatch<SetStateAction<Chat[]>>
   socket: Socket
+  userAccount: Account
+  receiverId: string | number
+  room: ChatResponse['room']
 }
 
 type Inputs = {
   chat: string
 }
 
-export default function ConversationForm({ setChats, socket }: IProps) {
+export default function ConversationForm({
+  setChats,
+  socket,
+  userAccount,
+  receiverId,
+  room,
+  ...props
+}: IProps) {
   const form = useForm({
     defaultValues: {
       chat: '',
     },
   })
 
+  const user = useUserContext()
+
   const onSubmit = (values: Inputs) => {
-    setChats((prev) => [
-      ...prev,
-      {
-        sender: 1,
-        receiver: 2,
-        content: values?.chat,
-      },
-    ])
+    if (!values?.chat) return
+    const payload: ChatCommunicate = {
+      content: values?.chat,
+      receiverId: receiverId as number,
+      room: room,
+      senderId: user?.userId,
+      isImage: false,
+    }
+
+    socket?.emit('send_message', payload)
+
     form.setValue('chat', '')
   }
 
@@ -49,6 +69,7 @@ export default function ConversationForm({ setChats, socket }: IProps) {
         action=""
         className="flex items-center gap-3 px-2 py-1"
         onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
+        {...props}
       >
         <div className="h-9 w-9 rounded-full p-1 hover:cursor-pointer lg:hover:bg-gray-100">
           <input type="file" className="hidden" id="file" />
@@ -69,8 +90,6 @@ export default function ConversationForm({ setChats, socket }: IProps) {
                 <Input
                   {...field}
                   autoComplete="off"
-                  onKeyDown={() => setTyping(true)}
-                  onBlur={() => setTyping(false)}
                   placeholder="Aa"
                   className="h-auto flex-1 rounded-full bg-gray-100 p-2 px-3 py-2 text-sm"
                 />
@@ -87,7 +106,10 @@ export default function ConversationForm({ setChats, socket }: IProps) {
           className=" focus-within:outline-none"
         /> */}
 
-        <button className="flex h-9 w-9 items-center justify-center rounded-full p-1 lg:hover:bg-gray-100">
+        <button
+          type="submit"
+          className="flex h-9 w-9 items-center justify-center rounded-full p-1 lg:hover:bg-gray-100"
+        >
           <Icon name="Plane" size={20} />
         </button>
       </form>

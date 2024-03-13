@@ -6,5 +6,9 @@
   {
     "url": "/profile/ordered",
     "label": "Order history"
+  },
+  {
+    "url": "/profile/saved",
+    "label": "Saved"
   }
 ]

@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 
+import { QueryKey } from '@tanstack/react-query'
+
 import { PostItemContext } from '@/context/post-item'
 
 import PostComment from './post-comment'
@@ -14,9 +16,10 @@ import { Post } from '../../../types/forum'
 
 type IProps = {
   post: Post
-  pageKey: string
+  pageKey?: QueryKey
+  isDetail?: boolean
 }
-export default function PostItem({ post, pageKey }: IProps) {
+export default function PostItem({ post, pageKey, isDetail }: IProps) {
   const [openCommentSection, setOpenCommentSection] = useState(false)
 
   const onHandleCommentSection = () => {
@@ -28,6 +31,7 @@ export default function PostItem({ post, pageKey }: IProps) {
         post: post,
         onHandleCommentSection,
         pageKey,
+        isDetail,
       }}
     >
       <article className="mb-7 bg-white py-3 md:rounded-md md:shadow-box">

@@ -41,7 +41,7 @@ export default function useDeteteComment({ onClose }: IProps) {
         })
         onClose()
         await client.invalidateQueries({
-          queryKey: [pageKey],
+          queryKey: pageKey,
         })
       }
     },

@@ -14,8 +14,7 @@ export type Chat = {
 export type ChatCommunicate = {
   room: string
   senderId: number
-  senderName: string
   receiverId: number
-  receiverName: string
   content: string
+  isImage: boolean
 }

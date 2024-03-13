@@ -37,7 +37,7 @@ export default function ProfilePosts() {
             <PostItem
               key={post?.postId}
               post={post}
-              pageKey="get-posts-profile"
+              pageKey={['get-posts-profile']}
             />
           ))
         : null}

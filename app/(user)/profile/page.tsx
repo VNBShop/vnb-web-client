@@ -1,5 +1,4 @@
 import AddPost from '@/components/add-post'
-import PostItem from '@/components/post/post-item'
 import ProfilePosts from '@/contents/profile/profile-posts'
 import UserInfo from '@/contents/profile/user-info'
 

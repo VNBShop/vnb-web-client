@@ -83,6 +83,15 @@ export const authOptions: NextAuthOptions = {
         const data = await verifyWithBE?.json()
 
         if (data?.success) {
+          const info = jwtDecode(data?.metadata?.accessToken)
+
+          if (!!info) {
+            return {
+              ...info,
+              ...data?.metadata,
+            }
+          }
+
           return data?.metadata
         }
       }

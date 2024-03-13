@@ -17,6 +17,7 @@ import { authOptions } from '@/lib/authOptions'
 
 import { cn } from '@/lib/utils'
 
+import { errorFallback } from '../../../../public/common'
 import { ProductDetail } from '../../../../types/products'
 
 type IProps = {
@@ -64,7 +65,11 @@ export default async function ProductPage({ params }: IProps) {
           <section className="flex w-full flex-col items-start gap-x-10 lg:flex-row">
             <figure className="w-full lg:w-[45%]">
               <Image
-                src={product?.productImages?.[0]}
+                src={
+                  !!product?.productImages?.[0]?.includes('/')
+                    ? product?.productImages?.[0]
+                    : errorFallback
+                }
                 alt={product?.productName}
                 title={product?.productName}
                 width="0"

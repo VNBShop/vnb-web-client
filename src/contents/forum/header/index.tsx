@@ -100,13 +100,15 @@ export default function ForumHeader() {
                     </Menu.Item>
                   </Link>
 
-                  <Menu.Item
-                    as="div"
-                    className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
-                  >
-                    <Icon name="Coin" size={18} />
-                    Saved
-                  </Menu.Item>
+                  <Link href="/profile/saved" passHref>
+                    <Menu.Item
+                      as="div"
+                      className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                    >
+                      <Icon name="Coin" size={18} />
+                      Saved
+                    </Menu.Item>
+                  </Link>
 
                   <Menu.Item
                     as="div"

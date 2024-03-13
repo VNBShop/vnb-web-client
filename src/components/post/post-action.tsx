@@ -8,6 +8,11 @@ import Spiner from '@/common/spiner'
 import { usePostItemContext } from '@/context/post-item'
 import useDetetePost from '@/hooks/forum/useDeletePost'
 
+import useReportPost from '@/hooks/forum/useReportPost'
+import useSavePost from '@/hooks/forum/useSavePost'
+import useUnsavePost from '@/hooks/forum/useUnsavePost'
+import { cn } from '@/lib/utils'
+
 import { Button } from '../ui/button'
 import { Modal } from '../ui/modal'
 
@@ -18,10 +23,24 @@ export default function PostAction() {
     setModalDeletePost(false)
   }
 
-  const { post } = usePostItemContext()
+  const { post, isDetail } = usePostItemContext()
 
   const { loading, onDeletePost } = useDetetePost({
     onClose: onCloseModalDeletePost,
+  })
+
+  const { loading: loadingSave, onSavePost } = useSavePost({
+    onSuccess: () => {},
+    isDetail,
+  })
+
+  const { loadingUnsave, onUnsavePost } = useUnsavePost({
+    onSuccess: () => {},
+    pageKey: ['get-post', post?.postId],
+  })
+
+  const { loadingReport, onReportPost } = useReportPost({
+    onSuccess: () => {},
   })
 
   return (
@@ -40,34 +59,58 @@ export default function PostAction() {
           leaveTo="transform opacity-0 scale-95"
         >
           <Menu.Items className="absolute -right-4 top-[120%] z-10 grid min-w-[270px]  gap-[6px] rounded-lg bg-white p-2 shadow-box">
-            {post?.yourPost && (
+            {!post?.yourPost && (
               <>
                 <Menu.Item
+                  disabled={loadingSave || loadingUnsave}
                   as="div"
-                  onClick={() => setModalDeletePost(true)}
-                  className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                  onClick={() =>
+                    post?.saved
+                      ? onUnsavePost({
+                          postId: post?.postId,
+                        })
+                      : onSavePost({
+                          postId: post?.postId,
+                        })
+                  }
+                  className={cn(
+                    'flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100',
+                    post?.saved ? 'text-success' : 'text-black'
+                  )}
                 >
                   <Icon name="Saved" size={18} />
-                  Save
+                  {post?.saved ? 'Unsave' : 'Save'}
                 </Menu.Item>
 
                 <Menu.Item
                   as="div"
-                  onClick={() => setModalDeletePost(true)}
-                  className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                  disabled={post?.reported || loadingReport}
+                  onClick={() =>
+                    onReportPost({
+                      postId: post?.postId,
+                    })
+                  }
+                  className={cn(
+                    'flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100',
+                    post?.reported ? 'text-success' : 'text-black'
+                  )}
                 >
-                  <Icon name="Trash" size={18} />
-                  Delete
+                  <Icon name="Report" size={18} />
+                  Report
                 </Menu.Item>
               </>
             )}
-            <Menu.Item
-              as="div"
-              className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
-            >
-              <Icon name="Report" size={18} />
-              Report
-            </Menu.Item>
+
+            {post?.yourPost && (
+              <Menu.Item
+                as="div"
+                onClick={() => setModalDeletePost(true)}
+                className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+              >
+                <Icon name="Trash" size={18} />
+                Delete
+              </Menu.Item>
+            )}
           </Menu.Items>
         </Transition>
       </Menu>

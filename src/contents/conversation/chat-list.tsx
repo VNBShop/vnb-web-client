@@ -87,17 +87,6 @@ function ChatList({ chats }: IProps) {
             </article>
           ) : null
         })}
-        {/* 
-        {isTyping ? (
-          <article className="flex items-end justify-start gap-2 pb-3">
-            <Avatar src="/common/avt.jpeg" username="D" />
-            <div className="space-x-[3px] rounded-[18px] bg-gray-200 p-4 py-1">
-              <span className="dot one"></span>
-              <span className="dot two"></span>
-              <span className="dot three"></span>
-            </div>
-          </article>
-        ) : null} */}
 
         <div ref={scrollViewRef} />
       </section>

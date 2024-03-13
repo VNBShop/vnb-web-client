@@ -12,8 +12,8 @@ export default function NotFound() {
       <Image
         src="/common/404.png"
         alt="404 not found"
-        width={300}
-        height={300}
+        width={200}
+        height={200}
       />
 
       <section className="flex flex-col items-center">

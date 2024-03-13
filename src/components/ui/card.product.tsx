@@ -5,6 +5,8 @@ import Image from 'next/image'
 import Icon from '@/common/icons'
 import { cn } from '@/lib/utils'
 
+import { errorFallback } from '../../../public/common'
+
 export type ProductCardProps = HTMLAttributes<HTMLDivElement> & {
   name: string
   image: string
@@ -29,7 +31,7 @@ export default function ProductCard({
       <section className="relative w-full overflow-hidden rounded-lg pb-[100%]">
         <figure className="absolute inset-0">
           <Image
-            src={image}
+            src={image ?? errorFallback}
             alt={name}
             title={name}
             fill

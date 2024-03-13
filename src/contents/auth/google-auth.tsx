@@ -14,8 +14,6 @@ export default function GoogleOAuth() {
     const result = await signIn('google', {
       redirect: false,
     })
-
-    console.log('res >>', result)
   }
 
   return (

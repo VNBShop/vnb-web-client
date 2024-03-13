@@ -42,7 +42,7 @@ export default function useCreateComment({ onSuccess }: IProps) {
         onSuccess()
 
         await client.invalidateQueries({
-          queryKey: [pageKey],
+          queryKey: pageKey,
         })
       }
     },

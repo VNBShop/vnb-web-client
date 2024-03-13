@@ -17,6 +17,7 @@ import useCreateOrder, {
 } from '@/hooks/order/useCreateOrder'
 import useFetchUser from '@/hooks/user/useFetchUser'
 
+import { errorFallback } from '../../../public/common'
 import { DataResponse } from '../../../types'
 import { Cart } from '../../../types/order'
 import { User } from '../../../types/user'
@@ -150,7 +151,7 @@ export default function OrderPage() {
                   <Image
                     alt={cart?.productName}
                     title={cart?.productName}
-                    src={cart?.productImage}
+                    src={cart?.productImage ?? errorFallback}
                     width="0"
                     height="0"
                     className="h-full w-[70px] object-contain"

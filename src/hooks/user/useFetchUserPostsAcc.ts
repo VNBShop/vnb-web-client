@@ -1,25 +1,17 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
-import { usePostItemContext } from '@/context/post-item'
+
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataResponse } from '../../../types'
-import { Comment } from '../../../types/forum'
 
-export type MetaCommentssResponse = {
-  data: Comment[]
-  maxPage: number
-  nextPage: number
-  currentPage: number
-  previousPage: number
-  total: number
+type IProps = {
+  userId: string
 }
 
-export default function useFetchComments() {
+export default function useFetchUserPostsAcc({ userId }: IProps) {
   const axios = useAxiosPrivate()
-
-  const { post } = usePostItemContext()
 
   const {
     data,
@@ -29,21 +21,21 @@ export default function useFetchComments() {
     isFetchingNextPage,
     isError,
   } = useInfiniteQuery({
-    queryKey: ['get-comments', post?.postId],
+    queryKey: ['get-posts-user-acc', userId],
     queryFn: async ({ pageParam: currentPage, queryKey }) => {
       const res: DataResponse = await axios.get(
-        `${FORUM_SERVICE}/comments/${queryKey[1]}`,
+        `${FORUM_SERVICE}/posts/profiles/${userId}`,
         {
           params: {
             currentPage,
-            pageSize: 5,
+            pageSize: 10,
           },
         }
       )
 
       if (res?.data?.metadata && !!res?.data?.metadata?.data?.length) {
         return {
-          comments: res?.data?.metadata?.data,
+          posts: res?.data?.metadata?.data,
           total: res?.data?.metadata?.total,
         }
       } else {
@@ -52,20 +44,18 @@ export default function useFetchComments() {
     },
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
-      if (Math.ceil(lastPage.total / 5) > allPages.length)
+      if (Math.ceil(lastPage.total / 10) > allPages.length)
         return allPages.length + 1
       return undefined
     },
+    enabled: !!userId,
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
-    enabled: !!post?.postId,
-    retry: 1,
   })
 
-  const comments = data?.pages?.flatMap(({ comments }) => comments) ?? []
+  const posts = data?.pages?.flatMap(({ posts }) => posts) ?? []
 
   return {
-    comments,
+    posts,
     isError,
     isPending,
     isFetchingNextPage,

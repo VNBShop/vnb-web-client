@@ -11,11 +11,8 @@ export default function NewBadgeAnimation() {
 
   useEffect(() => {
     !!ref?.current && ref.current?.play()
-    console.log('mount animate')
 
     return () => {
-      console.log('unmout animate')
-
       !!ref?.current && ref.current?.unmounted
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

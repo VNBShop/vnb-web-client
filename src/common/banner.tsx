@@ -13,13 +13,6 @@ const NewAnimateBadge = dynamic(() => import('./new-animate'), { ssr: false })
 export default function Banner() {
   const pathname = usePathname()
 
-  useEffect(() => {
-    console.log('mount')
-
-    return () => {
-      console.log('unmount')
-    }
-  }, [])
   return (
     <section className={` bg-black ${pathname !== '/' ? ' hidden' : ''}`}>
       <section className="relative mx-auto flex max-w-main items-center justify-center px-4 py-[6px]">

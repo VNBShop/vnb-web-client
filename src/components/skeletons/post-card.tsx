@@ -1,5 +1,5 @@
-export default function PostCardSkeleton() {
-  return Array.from({ length: 2 }).map((_, index) => (
+export default function PostCardSkeleton({ length = 2 }) {
+  return Array.from({ length }).map((_, index) => (
     <article
       key={index}
       className="mb-7 animate-pulse bg-white p-4 md:rounded-lg md:shadow-md"

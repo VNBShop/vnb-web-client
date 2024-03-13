@@ -12,6 +12,7 @@ import Spiner from '@/common/spiner'
 import useUploadPhoto from '@/hooks/commons/useUploadPhoto'
 import useUpdateUser from '@/hooks/user/useUpdateUser'
 
+import { errorFallback } from '../../../public/common'
 import { Photo } from '../../../types/user'
 import { Button } from '../ui/button'
 
@@ -105,7 +106,7 @@ export default function UpdateAvatarForm({ onCloseModal }: IProps) {
     <section className="flex flex-col items-center justify-center gap-10">
       <figure className="relative h-[160px] w-[160px] rounded-full">
         <Image
-          src={photo.secureUrl}
+          src={photo.secureUrl ?? errorFallback}
           alt="Avatar"
           title="Avatar"
           fill

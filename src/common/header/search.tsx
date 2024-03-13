@@ -14,6 +14,7 @@ import { Modal, ModalProps } from '@/components/ui/modal'
 
 import { useDebounce } from '@/hooks/useDebounce'
 
+import { errorFallback } from '../../../public/common'
 import { Products } from '../../../types/products'
 import Empty from '../empty'
 import Icon from '../icons'
@@ -36,8 +37,6 @@ export default function Search() {
     },
     enabled: !!searchValDebounce,
   })
-
-  console.log('data', data)
 
   const products: Products[] = data?.products ?? []
 
@@ -94,7 +93,11 @@ export default function Search() {
                       <Image
                         width={0}
                         height={0}
-                        src={product?.productImages?.[0]}
+                        src={
+                          !!product?.productImages?.[0]?.includes('/')
+                            ? product?.productImages?.[0]
+                            : errorFallback
+                        }
                         alt={product?.productName}
                         sizes="100vw"
                         className="h-full w-full rounded-full object-cover [image-rendering:_pixelated]"

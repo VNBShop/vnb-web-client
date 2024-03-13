@@ -39,7 +39,11 @@ export default function ForumThreads() {
       <section className="mt-7">
         {posts.length && !isError
           ? posts?.map((post) => (
-              <PostItem key={post?.postId} post={post} pageKey="get-posts" />
+              <PostItem
+                key={post?.postId}
+                post={post}
+                pageKey={['get-posts']}
+              />
             ))
           : null}
 
