@@ -5,7 +5,7 @@ import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 import { USER_SERVICE } from '@/lib/microservice'
 
 import { DataResponse } from '../../../types'
-import { Account } from '../../../types/user'
+import { User } from '../../../types/user'
 
 type IProps = {
   userId: number | string
@@ -22,7 +22,7 @@ export default function useFetchUserAcc({ userId }: IProps) {
       )
 
       if (res?.data?.success) {
-        return res?.data?.metadata as Account
+        return res?.data?.metadata as User
       } else {
         throw new Error('Cant not fetch user account')
       }

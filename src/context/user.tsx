@@ -1,7 +1,7 @@
 'use client'
 import { PropsWithChildren, createContext, useContext } from 'react'
 
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { Session } from 'next-auth'
 
 import { signOut } from 'next-auth/react'
@@ -19,7 +19,7 @@ export function useUserContext() {
   if (!context) {
     console.log('useUserContext must be use in UserContextProvider')
     // signOut()
-    router.push('/')
+    return redirect('/')
   }
 
   return context

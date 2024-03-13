@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form'
 
 import { Socket } from 'socket.io-client'
 
+import { v4 as uuidv4 } from 'uuid'
+
 import { run } from 'node:test'
 
 import Icon from '@/common/icons'
@@ -13,14 +15,14 @@ import useKeyPress from '@/hooks/useKeyDown'
 
 import { ChatProps } from '../../../app/(forum)/conversation/[chatId]/page'
 import { Chat, ChatCommunicate, ChatResponse } from '../../../types/messenger'
-import { Account } from '../../../types/user'
+import { User } from '../../../types/user'
 import { Form, FormControl, FormField, FormItem } from '../ui/form'
 import { Input } from '../ui/input'
 
 export type IProps = ComponentPropsWithoutRef<'form'> & {
   setChats: Dispatch<SetStateAction<Chat[]>>
   socket: Socket
-  userAccount: Account
+  userAccount: User
   receiverId: string | number
   room: ChatResponse['room']
 }
@@ -55,6 +57,16 @@ export default function ConversationForm({
       isImage: false,
     }
 
+    setChats((prev) => [
+      ...prev,
+      {
+        messageId: uuidv4() as any,
+        content: values.chat,
+        isImage: false,
+        recipientId: receiverId as number,
+        senderId: user?.userId,
+      },
+    ])
     socket?.emit('send_message', payload)
 
     form.setValue('chat', '')

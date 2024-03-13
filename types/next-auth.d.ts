@@ -12,6 +12,7 @@ declare module 'next-auth' {
       email: string
       provider: 'LOCAL' | 'GOOGLE'
       userId: number
+      notificationRoom: string
     }
   }
 }

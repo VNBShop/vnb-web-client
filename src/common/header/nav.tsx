@@ -128,6 +128,18 @@ export default function Nav({ user }: NavProps) {
                   : user?.email.split('@')[0]}
               </Menu.Item>
 
+              <Link href="/conversation" passHref>
+                <Menu.Item
+                  as="div"
+                  className="flex items-center gap-2 rounded-md p-2 py-1 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                >
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
+                    <Icon name="Messenger" size={18} />
+                  </div>
+                  Messenger
+                </Menu.Item>
+              </Link>
+
               {user?.provider !== 'GOOGLE' ? (
                 <Menu.Item
                   as="div"
@@ -140,6 +152,30 @@ export default function Nav({ user }: NavProps) {
                   Change password
                 </Menu.Item>
               ) : null}
+
+              <Link href="/order" passHref>
+                <Menu.Item
+                  as="div"
+                  className="flex items-center gap-2 rounded-md p-2 py-1 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                >
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
+                    <Icon name="Cart" size={18} />
+                  </div>
+                  Checkout
+                </Menu.Item>
+              </Link>
+
+              <Link href="/profile/ordered" passHref>
+                <Menu.Item
+                  as="div"
+                  className="flex items-center gap-2 rounded-md p-2 py-1 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
+                >
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gray-200">
+                    <Icon name="Wallet" size={18} />
+                  </div>
+                  Ordered
+                </Menu.Item>
+              </Link>
 
               <Menu.Item
                 as="div"

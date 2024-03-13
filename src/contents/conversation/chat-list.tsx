@@ -5,12 +5,14 @@ import { useUserContext } from '@/context/user'
 import { markConsecutiveDuplicates } from '@/lib/utils'
 
 import { Chat } from '../../../types/messenger'
+import { User } from '../../../types/user'
 
 type IProps = {
   chats: Chat[]
+  userAccount: User
 }
 
-function ChatList({ chats }: IProps) {
+function ChatList({ chats, userAccount }: IProps) {
   const scrollViewRef = useRef<HTMLDivElement>(null)
 
   const user = useUserContext()
@@ -21,7 +23,7 @@ function ChatList({ chats }: IProps) {
     }
   }, [chats])
 
-  const check = markConsecutiveDuplicates(chats)
+  const check = markConsecutiveDuplicates([...chats])
 
   return (
     <section className=" w-full flex-1 overflow-auto px-4 transition-all duration-300 ease-in-out">
@@ -59,7 +61,15 @@ function ChatList({ chats }: IProps) {
             <article key={index} className="flex items-end justify-start gap-2">
               {(item?.position && item?.position === 'last') ||
               !item?.position ? (
-                <Avatar src="/common/avt.jpeg" username="D" />
+                <Avatar
+                  src={userAccount?.avatar ?? ''}
+                  username={
+                    userAccount?.firstName ??
+                    userAccount?.lastName ??
+                    userAccount?.email ??
+                    'Z'
+                  }
+                />
               ) : (
                 <div className="h-9 w-9" />
               )}

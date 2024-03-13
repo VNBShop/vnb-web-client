@@ -6,6 +6,7 @@ import Image from 'next/image'
 
 import { toast } from 'sonner'
 
+import Empty from '@/common/empty'
 import Icon from '@/common/icons'
 import Spiner from '@/common/spiner'
 import OrderSkeleton from '@/components/skeletons/order-skeleton'
@@ -140,99 +141,106 @@ export default function OrderPage() {
           <h2 className="text-xl font-medium">Products</h2>
         </header>
 
-        <section className="mt-7 flex h-full flex-col items-start gap-7 lg:flex-row">
-          <ul className="w-full space-y-4 lg:w-[60%]">
-            {carts.map((cart) => (
-              <li
-                key={cart.cartId}
-                className="flex items-center justify-between border-b pb-4 last:border-none"
-              >
-                <figure className="flex items-center gap-2">
-                  <Image
-                    alt={cart?.productName}
-                    title={cart?.productName}
-                    src={cart?.productImage ?? errorFallback}
-                    width="0"
-                    height="0"
-                    className="h-full w-[70px] object-contain"
-                    sizes="100vw"
-                  />
+        {carts?.length && !loadingCarts && !fetchingCarts ? (
+          <section className="mt-7 flex h-full flex-col items-start gap-7 lg:flex-row">
+            <ul className="w-full space-y-4 lg:w-[60%]">
+              {carts.map((cart) => (
+                <li
+                  key={cart.cartId}
+                  className="flex items-center justify-between border-b pb-4 last:border-none"
+                >
+                  <figure className="flex items-center gap-2">
+                    <Image
+                      alt={cart?.productName}
+                      title={cart?.productName}
+                      src={cart?.productImage ?? errorFallback}
+                      width="0"
+                      height="0"
+                      className="h-full w-[70px] object-contain"
+                      sizes="100vw"
+                    />
 
-                  <figcaption className="flex-1 space-y-2">
-                    <p className="font-medium">{cart?.productName}</p>
-                    <p className="text-sm text-gray-500">
-                      Quantity: {cart.quantity}
-                    </p>
-                  </figcaption>
-                </figure>
+                    <figcaption className="flex-1 space-y-2">
+                      <p className="font-medium">{cart?.productName}</p>
+                      <p className="text-sm text-gray-500">
+                        Quantity: {cart.quantity}
+                      </p>
+                    </figcaption>
+                  </figure>
 
-                <p className="text-sm text-secondary" suppressHydrationWarning>
-                  {cart?.productPriceUnit?.toLocaleString('vi-VI', {
-                    currency: 'VND',
-                    style: 'currency',
-                  })}
+                  <p
+                    className="text-sm text-secondary"
+                    suppressHydrationWarning
+                  >
+                    {cart?.productPriceUnit?.toLocaleString('vi-VI', {
+                      currency: 'VND',
+                      style: 'currency',
+                    })}
+                  </p>
+                </li>
+              ))}
+            </ul>
+
+            <div className="top-[60px] hidden h-[300px] w-[1px] bg-gray-200 lg:sticky lg:block"></div>
+
+            <article className="top-[80px] -mt-1 w-full flex-1 space-y-3 lg:sticky">
+              <div className="flex items-center justify-between text-sm">
+                <p>Shiping: </p>
+                <p>Free</p>
+              </div>
+              <div className="flex items-center justify-between text-sm">
+                <p>Tax: </p>
+                <p>VAT</p>
+              </div>
+
+              <hr />
+
+              <div className="flex items-center justify-between text-sm">
+                <p>Total: </p>
+                <p className=" font-medium text-secondary">
+                  {carts
+                    ?.reduce(
+                      (acc, curr) =>
+                        acc + curr?.quantity * curr?.productPriceUnit,
+                      0
+                    )
+                    ?.toLocaleString('vi-VI', {
+                      currency: 'VND',
+                      style: 'currency',
+                    })}
                 </p>
-              </li>
-            ))}
-          </ul>
+              </div>
 
-          <div className="top-[60px] hidden h-[300px] w-[1px] bg-gray-200 lg:sticky lg:block"></div>
+              <section className="!mt-7 space-y-4">
+                <Button
+                  className="w-full space-x-1"
+                  onClick={onSubmit}
+                  disabled={loading}
+                >
+                  {loading && <Spiner size={16} />}
+                  <span> Cash on Delivery</span>
+                </Button>
+                <p className="text-center text-sm text-gray-600">Or</p>
 
-          <article className="top-[80px] -mt-1 w-full flex-1 space-y-3 lg:sticky">
-            <div className="flex items-center justify-between text-sm">
-              <p>Shiping: </p>
-              <p>Free</p>
-            </div>
-            <div className="flex items-center justify-between text-sm">
-              <p>Tax: </p>
-              <p>VAT</p>
-            </div>
-
-            <hr />
-
-            <div className="flex items-center justify-between text-sm">
-              <p>Total: </p>
-              <p className=" font-medium text-secondary">
-                {carts
-                  ?.reduce(
-                    (acc, curr) =>
-                      acc + curr?.quantity * curr?.productPriceUnit,
-                    0
-                  )
-                  ?.toLocaleString('vi-VI', {
-                    currency: 'VND',
-                    style: 'currency',
-                  })}
-              </p>
-            </div>
-
-            <section className="!mt-7 space-y-4">
-              <Button
-                className="w-full space-x-1"
-                onClick={onSubmit}
-                disabled={loading}
-              >
-                {loading && <Spiner size={16} />}
-                <span> Cash on Delivery</span>
-              </Button>
-              <p className="text-center text-sm text-gray-600">Or</p>
-
-              <Button
-                variant="outline"
-                className="flex w-full gap-1"
-                disabled={loading}
-                onClick={onCheckoutVNpay}
-              >
-                {loading && <Spiner size={16} />}
-                <Icon name="QR" size={19} />
-                <p>
-                  <span className="text-red-500">VN</span>
-                  <span className="text-blue-500">PAY</span>
-                </p>
-              </Button>
-            </section>
-          </article>
-        </section>
+                <Button
+                  variant="outline"
+                  className="flex w-full gap-1"
+                  disabled={loading}
+                  onClick={onCheckoutVNpay}
+                >
+                  {loading && <Spiner size={16} />}
+                  <Icon name="QR" size={19} />
+                  <p>
+                    <span className="text-red-500">VN</span>
+                    <span className="text-blue-500">PAY</span>
+                  </p>
+                </Button>
+              </section>
+            </article>
+          </section>
+        ) : (
+          <Empty message="Your cart is empty" className="mx-auto w-[100px]" />
+        )}
       </section>
     </>
   )

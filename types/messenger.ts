@@ -18,3 +18,11 @@ export type ChatCommunicate = {
   content: string
   isImage: boolean
 }
+
+export type ChatCard = {
+  latestMessage: string
+  latestMessageAt: Date
+  receiverId: number
+  receiverAvatar: string
+  receiverName: string
+}

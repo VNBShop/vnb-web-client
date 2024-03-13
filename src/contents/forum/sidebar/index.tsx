@@ -13,7 +13,7 @@ export default function ForumSideBar() {
     <aside className="col-span-1 hidden lg:col-span-1 lg:block">
       <ul className="sticky top-[76px] space-y-4">
         <li>
-          <Link href="/user/jungjung261" className="flex items-center gap-3">
+          <Link href="/profile" className="flex items-center gap-3">
             <Avatar src={user?.avatar ?? ''} username={user?.firstName ?? ''} />
             <h3 className="text-sm font-medium">
               {user?.firstName && user?.lastName
@@ -24,7 +24,7 @@ export default function ForumSideBar() {
         </li>
 
         <li>
-          <Link href="forum/saved" className="flex items-center gap-3">
+          <Link href="/profile/saved" className="flex items-center gap-3">
             <Image
               src="/forum/bookmark.png"
               alt="bookmark"

@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 
-import { useRouter } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 
 import { Socket, io } from 'socket.io-client'
+
+import { isError } from 'util'
 
 import Icon from '@/common/icons'
 import Avatar from '@/components/avatar'
@@ -22,7 +24,7 @@ import useFetchUserAcc from '@/hooks/user/useFetchUserAcc'
 import { cn } from '@/lib/utils'
 
 import { Chat } from '../../../../types/messenger'
-import { Account } from '../../../../types/user'
+import { User } from '../../../../types/user'
 
 export type ChatProps = {
   params: {
@@ -47,27 +49,39 @@ export default function Chat({ params }: ChatProps) {
     chatId: params?.chatId,
   })
 
-  const { loading, userAccount } = useFetchUserAcc({
+  const {
+    loading,
+    userAccount,
+    isError: isErrorFetchUser,
+  } = useFetchUserAcc({
     userId: params?.chatId,
   })
 
   const socket = useSocketChat({ room: room as string })
 
-  socket?.on('read_message', (message: Chat) => {
-    console.log('message', message)
-    // setChats(prev => [
-    //   ...prev,
-    //   {
-
-    //   }
-    // ])
-  })
-
   useEffect(() => {
     if (JSON.stringify(messages) !== JSON.stringify(chats)) {
-      setChats(messages)
+      setChats((prev) => [...messages, ...prev])
     }
-  }, [chats, messages])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetchingNextPage, isPending])
+
+  useEffect(() => {
+    const handleMessageRead = (message: Chat) => {
+      setChats((prevChats) => [...prevChats, message])
+    }
+
+    socket?.on('read_message', handleMessageRead)
+
+    return () => {
+      socket?.off('read_message', handleMessageRead)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket])
+
+  if (isErrorFetchUser || isError) {
+    return notFound()
+  }
 
   return (
     <section className="flex h-full flex-col overflow-hidden pb-4">
@@ -83,7 +97,7 @@ export default function Chat({ params }: ChatProps) {
             </div>
           ) : (
             <Link
-              href="/user/jungjung261"
+              href={`/user/${params?.chatId}`}
               className="flex items-center gap-2 rounded-md p-1 px-2 lg:hover:bg-gray-100"
             >
               <Avatar
@@ -103,15 +117,13 @@ export default function Chat({ params }: ChatProps) {
             </Link>
           )}
         </div>
-
-        <div className="flex h-5 w-5 items-center justify-center rounded-full bg-black text-white">
-          <Icon name="I" size={16} />
-        </div>
       </section>
 
       {!isError && (isFetchingNextPage || isPending) && <ChatSkeleton />}
 
-      {!!chats?.length && !isError && <ChatList chats={chats} />}
+      {!!chats?.length && !isError && (
+        <ChatList userAccount={userAccount as User} chats={chats} />
+      )}
 
       {(isError || !chats?.length) && !isFetchingNextPage && !isPending && (
         <section className="-mt-16 flex flex-1 flex-col items-center justify-center gap-2">
@@ -140,7 +152,7 @@ export default function Chat({ params }: ChatProps) {
         className={cn(isPending ? 'invisible' : 'flex')}
         setChats={setChats}
         socket={socket as Socket}
-        userAccount={userAccount as Account}
+        userAccount={userAccount as User}
         receiverId={params?.chatId}
         room={room as string}
       />
