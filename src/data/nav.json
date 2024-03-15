@@ -9,18 +9,22 @@
   },
   {
     "title": "Racket",
-    "url": "/products/racket"
+    "url": "/products?type=RACKET"
   },
   {
     "title": "Shoe",
-    "url": "/products/shoe"
+    "url": "/products?type=SHOE"
   },
   {
-    "title": "Skirt",
-    "url": "/products/shirt"
+    "title": "Clothes",
+    "url": "/products?type=CLOTHES"
   },
   {
-    "title": "Backpack",
-    "url": "/products/bag"
+    "title": "Ball",
+    "url": "/products?type=BALL"
+  },
+  {
+    "title": "Accessories",
+    "url": "/products?type=ACCESSORIES"
   }
 ]

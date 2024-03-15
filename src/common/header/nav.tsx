@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from 'react'
 
 import { Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import { Session } from 'next-auth'
 
@@ -30,6 +30,11 @@ type NavProps = {
 export default function Nav({ user }: NavProps) {
   const pathname = usePathname()
   const router = useRouter()
+  const searchParam = useSearchParams()
+
+  const type = searchParam.getAll('type')
+
+  console.log('joe', `${pathname}${!!type?.[0] && `?${type[0]}`}`)
 
   const [navMobile, setOpenNavMobile] = useState(false)
   const [cartCont, setCartCont] = useState(false)
@@ -72,7 +77,8 @@ export default function Nav({ user }: NavProps) {
               </Link>
 
               <div className="absolute bottom-[-18px] left-0 right-0 hidden h-[2px] w-full bg-black group-hover:block" />
-              {pathname === item.url && (
+              {`${pathname}${!!type?.[0] ? `?type=${type[0]}` : ''}` ===
+                item.url && (
                 <div className="absolute bottom-[-18px] left-0 right-0 h-[2px] w-full bg-black" />
               )}
             </li>

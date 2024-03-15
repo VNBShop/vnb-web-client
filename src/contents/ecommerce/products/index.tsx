@@ -100,8 +100,14 @@ export default function Products({
         <div ref={ref}></div>
       )}
 
-      {(isError || !products?.length) && !isPending && isFetchingNextPage ? (
-        <Empty message="No product" />
+      {(isError || !products?.length) && !isPending && !isFetchingNextPage ? (
+        <Empty
+          message="No product"
+          style={{
+            width: 150,
+            marginInline: 'auto',
+          }}
+        />
       ) : null}
     </>
   )
