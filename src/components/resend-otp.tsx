@@ -1,10 +1,32 @@
 import { useEffect, useState } from 'react'
 
 import Spiner from '@/common/spiner'
+import useResendOTP, { ResendOTPPayload } from '@/hooks/user/useResendOTP'
 
-export default function ResendOTP() {
-  const [minutes, setMinutes] = useState(1)
-  const [seconds, setSeconds] = useState(30)
+type IProps = {
+  type: 'REGISTER' | 'RESET_PASSWORD'
+  email: string
+}
+
+export default function ResendOTP({ email, type }: IProps) {
+  const [minutes, setMinutes] = useState(0)
+  const [seconds, setSeconds] = useState(60)
+
+  const { loading, onResendOTP } = useResendOTP({
+    onSuccess: () => {
+      setMinutes(0)
+      setSeconds(60)
+    },
+  })
+
+  const onResend = () => {
+    const payload: ResendOTPPayload = {
+      email,
+      type,
+    }
+
+    onResendOTP(payload)
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -37,9 +59,12 @@ export default function ResendOTP() {
       ) : (
         <p className="flex items-center text-sm text-gray-500">
           Didn&apos;t recieve code?
-          <button className="ml-2 font-medium text-secondary lg:hover:underline">
-            <Spiner size={16} />
-            {/* Resend */}
+          <button
+            onClick={onResend}
+            disabled={loading}
+            className="ml-2 font-medium text-secondary lg:hover:underline"
+          >
+            {loading ? <Spiner size={16} /> : ' Resend'}
           </button>
         </p>
       )}

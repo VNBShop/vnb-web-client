@@ -102,6 +102,7 @@ export default function SignUpForm() {
   return (
     <>
       <ModalOTP
+        type="REGISTER"
         open={modalVerify}
         onClose={() => setModalVerify(false)}
         meta={verifyPayload}

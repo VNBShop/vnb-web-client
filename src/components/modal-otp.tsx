@@ -21,6 +21,7 @@ export type ModalOTPProps = {
   isPending?: boolean
   open: boolean
   onClose: () => void
+  type: 'REGISTER' | 'RESET_PASSWORD'
 }
 
 type Inputs = z.infer<typeof OTPSchema>
@@ -46,6 +47,7 @@ export default function ModalOTP({
   isPending,
   open,
   onClose,
+  type,
 }: ModalOTPProps) {
   const {
     control,
@@ -70,10 +72,10 @@ export default function ModalOTP({
 
       <p className=" mt-3 text-sm text-gray-600">
         We just send an OTP to{' '}
-        <span className="text-success font-medium">{meta.email}</span>
+        <span className="font-medium text-success">{meta.email}</span>
       </p>
 
-      <ResendOTP />
+      <ResendOTP type={type} email={meta?.email} />
 
       <form
         className="mt-8"
