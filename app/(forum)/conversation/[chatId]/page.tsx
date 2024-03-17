@@ -5,16 +5,13 @@ import Link from 'next/link'
 
 import { notFound, useRouter } from 'next/navigation'
 
-import { Socket, io } from 'socket.io-client'
-
-import { isError } from 'util'
+import { Socket } from 'socket.io-client'
 
 import Icon from '@/common/icons'
 import Avatar from '@/components/avatar'
 import ConversationForm from '@/components/form/conversation'
 import ChatSkeleton from '@/components/skeletons/chat-skeleton'
 import ChatList from '@/contents/conversation/chat-list'
-import { useUserContext } from '@/context/user'
 import useFetchChat from '@/hooks/chat/useFetchChat'
 
 import useSocketChat from '@/hooks/chat/useSocketChat'

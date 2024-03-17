@@ -17,6 +17,7 @@ import { useUserContext } from '@/context/user'
 
 import useSignout from '@/hooks/commons/useSignout'
 
+import Notification from './notification'
 import ForumSearch from './search'
 
 export default function ForumHeader() {
@@ -46,12 +47,7 @@ export default function ForumHeader() {
         </section>
 
         <section className="flex items-center gap-4">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 hover:cursor-pointer lg:hover:bg-gray-200">
-            <Icon name="Bell" size={23} />
-            <div className="absolute -right-1 -top-1 flex h-4 w-4  items-center justify-center rounded-full bg-secondary text-[10px] text-white">
-              12
-            </div>
-          </div>
+          <Notification />
 
           {!pathname.startsWith('/conversation') ? (
             <Link

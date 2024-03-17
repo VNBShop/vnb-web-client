@@ -24,4 +24,11 @@ export type Comment = {
   yourComment: boolean
 }
 
-//
+export type Notification = {
+  notificationId: number
+  actorName: string
+  content: string
+  postId: Post['postId']
+  isRead: boolean
+  actorAvatar: string
+}
