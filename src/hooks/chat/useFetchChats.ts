@@ -46,10 +46,6 @@ export default function useFetchChats() {
 
   const messages = data?.pages?.flatMap(({ messages }) => messages) ?? []
 
-  console.log('mess >>>', messages)
-
-  // console.log('data >>', data)
-
   return {
     messages,
     isError,

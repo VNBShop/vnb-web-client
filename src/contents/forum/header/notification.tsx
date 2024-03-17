@@ -12,7 +12,7 @@ import useFetchNotify from '@/hooks/forum/useFetchNotify'
 import useSocketNotify from '@/hooks/forum/useSocketNotify'
 
 import { logo } from '../../../../public/common'
-import { Notification } from '../../../../types/forum'
+import { Notification, Post } from '../../../../types/forum'
 
 export default function Notification() {
   const router = useRouter()
@@ -20,12 +20,18 @@ export default function Notification() {
   const { notifys, hasNextPage, onFetchNextPage, isPending, setNotifys } =
     useFetchNotify()
 
-  const socket = useSocketNotify()
+  // const socket = useSocketNotify()
 
-  const onRead = (id: Notification['notificationId']) => {
+  const onRead = ({
+    id,
+    postId,
+  }: {
+    id: Notification['notificationId']
+    postId: Post['postId']
+  }) => {
     if (!id) return
 
-    socket?.emit('read_notification', id)
+    // socket?.emit('read_notification', id)
 
     setNotifys((prev) => {
       const findIndex = prev.findIndex((i) => i?.notificationId === id)
@@ -43,23 +49,23 @@ export default function Notification() {
       return prev
     })
 
-    router.push(`/forum/${id}`)
+    router.push(`/forum/${postId}`)
   }
 
-  useEffect(() => {
-    const onReceiveNoti = (notify: Notification) => {
-      console.log('notify >>>>', notify)
+  // useEffect(() => {
+  //   const onReceiveNoti = (notify: Notification) => {
+  //     console.log('notify >>>>', notify)
 
-      setNotifys((prev) => [...prev, notify])
-    }
+  //     setNotifys((prev) => [notify, ...prev])
+  //   }
 
-    socket?.on('receive_notification', onReceiveNoti)
+  //   socket?.on('receive_notification', onReceiveNoti)
 
-    return () => {
-      socket?.off('receive_notification', onReceiveNoti)
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [socket])
+  //   return () => {
+  //     socket?.off('receive_notification', onReceiveNoti)
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [socket])
 
   return (
     <Menu as="div" className="relative flex items-center justify-center">
@@ -88,7 +94,10 @@ export default function Notification() {
               <Menu.Item
                 key={noti?.notificationId}
                 onClick={() => {
-                  onRead(noti?.notificationId)
+                  onRead({
+                    id: noti?.notificationId,
+                    postId: noti?.postId,
+                  })
                 }}
                 as="div"
                 className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 
@@ -15,22 +15,24 @@ type IProps = {
 export default function useFetchChat({ chatId }: IProps) {
   const axios = useAxiosPrivate()
 
-  const {
-    data,
-    isPending,
-    isError,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['get-message', chatId],
-    queryFn: async ({ pageParam: currentPage }) => {
+  const [page, setPage] = useState(1)
+  const [chats, setChats] = useState<Chat[]>([])
+
+  const { data, isPending, isError } = useQuery({
+    queryKey: [
+      'get-message',
+      {
+        chatId,
+        page,
+      },
+    ],
+    queryFn: async ({ queryKey }) => {
       const res: DataResponse = await axios.get(
         `${MESSAGE_SERVICE}/messages/${chatId}`,
         {
           params: {
-            currentPage,
-            pageSize: 10,
+            currentPage: (queryKey[1] as { page: number })?.page,
+            pageSize: 2,
           },
         }
       )
@@ -38,7 +40,7 @@ export default function useFetchChat({ chatId }: IProps) {
       if (res?.data?.success) {
         return {
           messages: res?.data?.metadata?.messages as Chat[],
-          total: res?.data?.metadata?.total as number,
+          hasNextPage: !!res?.data?.metadata?.nextPage ?? false,
           room: res?.data?.metadata?.room as string,
         }
       } else {
@@ -46,27 +48,24 @@ export default function useFetchChat({ chatId }: IProps) {
       }
     },
     enabled: !!chatId,
-    initialPageParam: 1,
-    getNextPageParam: (lastPage, allPages) => {
-      if (Math.ceil(lastPage.total / 10) > allPages.length)
-        return allPages.length + 1
-      return undefined
-    },
     refetchOnWindowFocus: false,
   })
 
-  const messages = data?.pages?.flatMap(({ messages }) => messages) ?? []
-  const room = data?.pages[0]?.room ?? null
+  const onFetchNextPage = () => {
+    setPage((prev) => prev + 1)
+  }
 
-  // console.log('data >>', data)
+  useEffect(() => {
+    setChats((prev) => [...(data?.messages ?? []), ...prev])
+  }, [data?.messages])
 
   return {
-    messages,
-    room,
+    chats,
+    room: data?.room ?? null,
     isError,
     isPending,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
+    hasNextPage: data?.hasNextPage,
+    onFetchNextPage,
+    setChats,
   }
 }

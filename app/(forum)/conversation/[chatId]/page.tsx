@@ -30,18 +30,16 @@ export type ChatProps = {
 }
 
 export default function Chat({ params }: ChatProps) {
-  const [chats, setChats] = useState<Chat[]>([])
-
   const router = useRouter()
 
   const {
     room,
-    messages,
-    fetchNextPage,
+    chats,
     hasNextPage,
+    onFetchNextPage,
     isError,
-    isFetchingNextPage,
     isPending,
+    setChats,
   } = useFetchChat({
     chatId: params?.chatId,
   })
@@ -57,14 +55,9 @@ export default function Chat({ params }: ChatProps) {
   const socket = useSocketChat({ room: room as string })
 
   useEffect(() => {
-    if (JSON.stringify(messages) !== JSON.stringify(chats)) {
-      setChats((prev) => [...messages, ...prev])
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFetchingNextPage, isPending])
-
-  useEffect(() => {
     const handleMessageRead = (message: Chat) => {
+      console.log('messs >>>', message)
+
       setChats((prevChats) => [...prevChats, message])
     }
 
@@ -116,13 +109,18 @@ export default function Chat({ params }: ChatProps) {
         </div>
       </section>
 
-      {!isError && (isFetchingNextPage || isPending) && <ChatSkeleton />}
-
-      {!!chats?.length && !isError && (
-        <ChatList userAccount={userAccount as User} chats={chats} />
+      {!isPending && hasNextPage && (
+        <div
+          onClick={onFetchNextPage}
+          className="text-center font-medium text-blue-500 hover:cursor-pointer hover:underline"
+        >
+          Load more...
+        </div>
       )}
 
-      {(isError || !chats?.length) && !isFetchingNextPage && !isPending && (
+      {!isError && isPending && <ChatSkeleton />}
+
+      {(isError || !chats?.length) && !isPending && (
         <section className="-mt-16 flex flex-1 flex-col items-center justify-center gap-2">
           <Avatar
             src={userAccount?.avatar ?? ''}
@@ -143,6 +141,10 @@ export default function Chat({ params }: ChatProps) {
 
           <p className="text-sm text-gray-500">Let&apos; start conversation!</p>
         </section>
+      )}
+
+      {!!chats?.length && !isError && (
+        <ChatList userAccount={userAccount as User} chats={chats} />
       )}
 
       <ConversationForm

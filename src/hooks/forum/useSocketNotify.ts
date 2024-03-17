@@ -16,6 +16,7 @@ export default function useSocketNotify() {
           withCredentials: true,
           query: {
             token: user?.accessToken,
+            room: user?.notificationRoom,
           },
           transports: ['websocket', 'polling'],
         }
