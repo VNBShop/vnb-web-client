@@ -1,18 +1,19 @@
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect } from 'react'
 
 import { Menu, Transition } from '@headlessui/react'
 
 import Image from 'next/image'
-import Link from 'next/link'
 
 import { useRouter } from 'next/navigation'
 
 import Icon from '@/common/icons'
+import { useSocketContext } from '@/context/socket'
 import useFetchNotify from '@/hooks/forum/useFetchNotify'
-import useSocketNotify from '@/hooks/forum/useSocketNotify'
+
+import useSocket from '@/hooks/forum/useSocket'
 
 import { logo } from '../../../../public/common'
-import { Notification, Post } from '../../../../types/forum'
+import { Notification, Post, SocketProps } from '../../../../types/forum'
 
 export default function Notification() {
   const router = useRouter()
@@ -20,7 +21,7 @@ export default function Notification() {
   const { notifys, hasNextPage, onFetchNextPage, isPending, setNotifys } =
     useFetchNotify()
 
-  // const socket = useSocketNotify()
+  const socket = useSocketContext()
 
   const onRead = ({
     id,
@@ -52,20 +53,21 @@ export default function Notification() {
     router.push(`/forum/${postId}`)
   }
 
-  // useEffect(() => {
-  //   const onReceiveNoti = (notify: Notification) => {
-  //     console.log('notify >>>>', notify)
+  useEffect(() => {
+    const onReceiveNoti = (notify: SocketProps<Notification>) => {
+      console.log('notify >>>>', notify)
 
-  //     setNotifys((prev) => [notify, ...prev])
-  //   }
+      if (notify?.type === 'NOTIFICATION')
+        setNotifys((prev) => [notify?.data, ...prev])
+    }
 
-  //   socket?.on('receive_notification', onReceiveNoti)
+    socket?.on('receive_notification', onReceiveNoti)
 
-  //   return () => {
-  //     socket?.off('receive_notification', onReceiveNoti)
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [socket])
+    return () => {
+      socket?.off('receive_notification', onReceiveNoti)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket])
 
   return (
     <Menu as="div" className="relative flex items-center justify-center">

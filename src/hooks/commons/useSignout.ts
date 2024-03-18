@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 
+import { redirect } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 import { toast } from 'sonner'
 
@@ -22,6 +23,7 @@ export default function useSignout() {
     onSuccess: (res) => {
       if (res?.data?.success) {
         signOut()
+        return redirect('/')
       }
     },
     onError: (error) => {

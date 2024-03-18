@@ -1,5 +1,8 @@
-import { memo, useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef } from 'react'
 
+import { useInView } from 'react-intersection-observer'
+
+import Spiner from '@/common/spiner'
 import Avatar from '@/components/avatar'
 import { useUserContext } from '@/context/user'
 import { markConsecutiveDuplicates } from '@/lib/utils'
@@ -10,9 +13,18 @@ import { User } from '../../../types/user'
 type IProps = {
   chats: Chat[]
   userAccount: User
+  hasNextPage: boolean
+  loading: boolean
+  onFetchNextPage: () => void
 }
 
-function ChatList({ chats, userAccount }: IProps) {
+function ChatList({
+  chats,
+  userAccount,
+  loading,
+  hasNextPage,
+  onFetchNextPage,
+}: IProps) {
   const scrollViewRef = useRef<HTMLDivElement>(null)
 
   const user = useUserContext()
@@ -21,13 +33,34 @@ function ChatList({ chats, userAccount }: IProps) {
     if (scrollViewRef && scrollViewRef.current) {
       scrollViewRef.current.scrollIntoView()
     }
-  }, [chats])
+  }, [])
 
   const check = markConsecutiveDuplicates([...chats])
 
+  const { ref, inView } = useInView({
+    delay: 1300,
+    threshold: 0.5,
+  })
+
+  useEffect(() => {
+    if (hasNextPage && inView) {
+      onFetchNextPage()
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasNextPage, inView])
+
   return (
-    <section className=" w-full flex-1 overflow-auto px-4 transition-all duration-300 ease-in-out">
+    <section className=" w-full flex-1 overflow-auto px-4 pb-2 transition-all duration-300 ease-in-out">
       <section className="space-y-[1px] py-4 pb-0">
+        {!loading && hasNextPage && <div ref={ref}></div>}
+
+        {loading && !!check?.length && (
+          <div className="flex items-center justify-center">
+            <Spiner size={20} />
+          </div>
+        )}
+
         {check.map((item, index: number) => {
           return item.senderId === user?.userId && !!item?.content ? (
             !!item?.content ? (

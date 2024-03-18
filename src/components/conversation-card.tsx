@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -22,9 +22,10 @@ dayjs.extend(relativeTime)
 
 type IProps = {
   chat: ChatCard
+  setMessages: Dispatch<SetStateAction<ChatCard[]>>
 }
 
-export default function ConversationCard({ chat }: IProps) {
+export default function ConversationCard({ chat, setMessages }: IProps) {
   const pathname = usePathname()
 
   const [modal, setModal] = useState(false)
@@ -32,6 +33,9 @@ export default function ConversationCard({ chat }: IProps) {
   const { loading, onDeleteMessage } = useDeleteChat({
     onSuccess: () => {
       setModal(false)
+      setMessages((prev) =>
+        prev.filter((i) => i?.receiverId !== chat?.receiverId)
+      )
     },
   })
 

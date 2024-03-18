@@ -1,25 +1,23 @@
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import Link from 'next/link'
 
 import { notFound, useRouter } from 'next/navigation'
-
-import { Socket } from 'socket.io-client'
 
 import Icon from '@/common/icons'
 import Avatar from '@/components/avatar'
 import ConversationForm from '@/components/form/conversation'
 import ChatSkeleton from '@/components/skeletons/chat-skeleton'
 import ChatList from '@/contents/conversation/chat-list'
+import { useSocketContext } from '@/context/socket'
 import useFetchChat from '@/hooks/chat/useFetchChat'
-
-import useSocketChat from '@/hooks/chat/useSocketChat'
 
 import useFetchUserAcc from '@/hooks/user/useFetchUserAcc'
 
 import { cn } from '@/lib/utils'
 
+import { SocketProps } from '../../../../types/forum'
 import { Chat } from '../../../../types/messenger'
 import { User } from '../../../../types/user'
 
@@ -52,19 +50,19 @@ export default function Chat({ params }: ChatProps) {
     userId: params?.chatId,
   })
 
-  const socket = useSocketChat({ room: room as string })
+  const socket = useSocketContext()
 
   useEffect(() => {
-    const handleMessageRead = (message: Chat) => {
-      console.log('messs >>>', message)
-
-      setChats((prevChats) => [...prevChats, message])
+    const handleMessageRead = (message: SocketProps<Chat>) => {
+      if (message?.type === 'CHAT') {
+        setChats((prevChats) => [...prevChats, message?.data])
+      }
     }
 
-    socket?.on('read_message', handleMessageRead)
+    socket?.on('receive_message', handleMessageRead)
 
     return () => {
-      socket?.off('read_message', handleMessageRead)
+      socket?.off('receive_message', handleMessageRead)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket])
@@ -109,16 +107,7 @@ export default function Chat({ params }: ChatProps) {
         </div>
       </section>
 
-      {!isPending && hasNextPage && (
-        <div
-          onClick={onFetchNextPage}
-          className="text-center font-medium text-blue-500 hover:cursor-pointer hover:underline"
-        >
-          Load more...
-        </div>
-      )}
-
-      {!isError && isPending && <ChatSkeleton />}
+      {!isError && isPending && !chats?.length && <ChatSkeleton />}
 
       {(isError || !chats?.length) && !isPending && (
         <section className="-mt-16 flex flex-1 flex-col items-center justify-center gap-2">
@@ -144,13 +133,18 @@ export default function Chat({ params }: ChatProps) {
       )}
 
       {!!chats?.length && !isError && (
-        <ChatList userAccount={userAccount as User} chats={chats} />
+        <ChatList
+          userAccount={userAccount as User}
+          hasNextPage={hasNextPage as boolean}
+          loading={isPending}
+          chats={chats}
+          onFetchNextPage={onFetchNextPage}
+        />
       )}
 
       <ConversationForm
         className={cn(isPending ? 'invisible' : 'flex')}
         setChats={setChats}
-        socket={socket as Socket}
         userAccount={userAccount as User}
         receiverId={params?.chatId}
         room={room as string}

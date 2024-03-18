@@ -32,3 +32,8 @@ export type Notification = {
   isRead: boolean
   actorAvatar: string
 }
+
+export type SocketProps<T> = {
+  type: 'NOTIFICATION' | 'CHAT' | 'CHAT_LIST'
+  data: T
+}

@@ -34,8 +34,6 @@ export default function Nav({ user }: NavProps) {
 
   const type = searchParam.getAll('type')
 
-  console.log('joe', `${pathname}${!!type?.[0] && `?${type[0]}`}`)
-
   const [navMobile, setOpenNavMobile] = useState(false)
   const [cartCont, setCartCont] = useState(false)
 

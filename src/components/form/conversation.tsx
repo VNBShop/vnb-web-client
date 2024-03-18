@@ -10,6 +10,7 @@ import { run } from 'node:test'
 
 import Icon from '@/common/icons'
 
+import { useSocketContext } from '@/context/socket'
 import { useUserContext } from '@/context/user'
 import useKeyPress from '@/hooks/useKeyDown'
 
@@ -21,7 +22,6 @@ import { Input } from '../ui/input'
 
 export type IProps = ComponentPropsWithoutRef<'form'> & {
   setChats: Dispatch<SetStateAction<Chat[]>>
-  socket: Socket
   userAccount: User
   receiverId: string | number
   room: ChatResponse['room']
@@ -33,7 +33,6 @@ type Inputs = {
 
 export default function ConversationForm({
   setChats,
-  socket,
   userAccount,
   receiverId,
   room,
@@ -47,12 +46,13 @@ export default function ConversationForm({
 
   const user = useUserContext()
 
+  const socket = useSocketContext()
+
   const onSubmit = (values: Inputs) => {
     if (!values?.chat) return
     const payload: ChatCommunicate = {
       content: values?.chat,
       receiverId: receiverId as number,
-      room: room,
       senderId: user?.userId,
       isImage: false,
     }
@@ -60,7 +60,6 @@ export default function ConversationForm({
     setChats((prev) => [
       ...prev,
       {
-        messageId: uuidv4() as any,
         content: values.chat,
         isImage: false,
         recipientId: receiverId as number,

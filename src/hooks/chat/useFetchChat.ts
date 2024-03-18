@@ -32,7 +32,7 @@ export default function useFetchChat({ chatId }: IProps) {
         {
           params: {
             currentPage: (queryKey[1] as { page: number })?.page,
-            pageSize: 2,
+            pageSize: 15,
           },
         }
       )
