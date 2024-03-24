@@ -114,6 +114,7 @@ export default function SignInForm() {
   return (
     <>
       <ModalOTP
+        type="REGISTER"
         meta={verifyPayload}
         onSubmit={onSubmitVerify}
         open={modal}

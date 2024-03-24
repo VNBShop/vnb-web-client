@@ -147,6 +147,7 @@ export default function ForgotPasswordForm() {
     <>
       <ModalOTP
         open={modalOTP}
+        type="RESET_PASSWORD"
         onClose={() => setModalOTP(false)}
         meta={payloadVerify}
         onSubmit={onSubmitVerify}
