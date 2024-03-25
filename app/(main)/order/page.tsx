@@ -25,7 +25,7 @@ import {
 import { Input } from '@/components/ui/input'
 import OrderAction from '@/contents/ecommerce/order/order-action'
 
-import useAddVoucher from '@/hooks/order/useAddVoucher'
+import useAddVoucher, { Voucher } from '@/hooks/order/useAddVoucher'
 import useCreateOrder, {
   CreateOrderPayload,
 } from '@/hooks/order/useCreateOrder'
@@ -136,27 +136,25 @@ export default function OrderPage() {
   }
 
   const { loadingAddVoucher, onAddVoucher } = useAddVoucher({
-    onSuccess: ({
-      percent,
-      voucherCode,
-    }: {
-      percent: number
-      voucherCode: string
-    }) => {
+    onSuccess: (
+      payload: Pick<Voucher, 'maxDiscount' | 'voucherCode' | 'voucherPercent'>
+    ) => {
+      const totalTemp =
+        carts?.reduce(
+          (acc, curr) => acc + curr?.quantity * curr?.productPriceUnit,
+          0
+        ) ?? 0
+      const discountF = totalTemp * payload?.voucherPercent
       const discountAmount =
-        carts?.reduce(
-          (acc, curr) => acc + curr?.quantity * curr?.productPriceUnit,
-          0
-        ) * (percent ?? 0)
+        totalTemp -
+        (discountF > payload?.maxDiscount ? payload?.maxDiscount : discountF)
 
-      const totalFinal =
-        carts?.reduce(
-          (acc, curr) => acc + curr?.quantity * curr?.productPriceUnit,
-          0
-        ) - discountAmount
-      setTotal(totalFinal)
-      setDiscount(discountAmount)
-      setVoucherCode(voucherCode)
+      setDiscount(
+        discountF > payload?.maxDiscount ? payload?.maxDiscount : discountF
+      )
+
+      setTotal(discountAmount)
+      setVoucherCode(payload?.voucherCode)
       toast.success('Apply voucher successfully!')
     },
   })
@@ -331,7 +329,7 @@ export default function OrderPage() {
               <div className="flex items-center justify-between text-sm">
                 <p>Discount: </p>
                 <p className={cn(discout > 0 && 'text-success')}>
-                  -{' '}
+                  -
                   {discout?.toLocaleString('vi-VI', {
                     currency: 'VND',
                     style: 'currency',

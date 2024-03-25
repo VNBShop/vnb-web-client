@@ -13,13 +13,20 @@ type AddVoucherPayload = {
 }
 
 type IProps = {
-  onSuccess: ({
-    percent,
-    voucherCode,
-  }: {
-    percent: number
-    voucherCode: string
-  }) => void
+  onSuccess: (
+    payload: Pick<Voucher, 'maxDiscount' | 'voucherCode' | 'voucherPercent'>
+  ) => void
+}
+
+export type Voucher = {
+  voucherId: number
+  voucherCode: string
+  maxDiscount: number
+  voucherAmount: number
+  quantity: number
+  voucherPercent: number
+  startedAt: string
+  expiredAt: string
 }
 
 export default function useAddVoucher({ onSuccess }: IProps) {
@@ -38,8 +45,9 @@ export default function useAddVoucher({ onSuccess }: IProps) {
     onSuccess: (response) => {
       if (response?.data?.success) {
         onSuccess({
-          percent: response?.data?.metadata?.voucherPercent ?? 0,
+          voucherPercent: response?.data?.metadata?.voucherPercent ?? 0,
           voucherCode: response?.data?.metadata?.voucherCode ?? '',
+          maxDiscount: response?.data?.metadata?.maxDiscount ?? 0,
         })
       }
     },

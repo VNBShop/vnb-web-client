@@ -110,9 +110,21 @@ export default function OrderedCard({ ordered }: IProps) {
             {' '}
             Payment type: {ordered?.paymentType}
           </p>
+          <p>
+            Discount:{' '}
+            <span className="text-success">
+              -
+              {(ordered?.totalDiscount ?? 0).toLocaleString('vi-VI', {
+                currency: 'VND',
+                style: 'currency',
+              })}
+            </span>
+          </p>
           <p className="font-medium text-secondary">
             Total:{' '}
-            {ordered?.totalPrice?.toLocaleString('vi-VI', {
+            {(
+              ordered?.totalPrice - (ordered?.totalDiscount ?? 0)
+            )?.toLocaleString('vi-VI', {
               currency: 'VND',
               style: 'currency',
             })}

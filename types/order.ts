@@ -22,6 +22,7 @@ export type Ordered = {
   totalPrice: number
   products: ProductOrdered[]
   orderDate: Date
+  totalDiscount: number
 }
 
 export type ProductOrdered = {
