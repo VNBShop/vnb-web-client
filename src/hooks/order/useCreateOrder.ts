@@ -12,6 +12,7 @@ import { PaymentType } from '../../../types/order'
 export type CreateOrderPayload = {
   cartIds: number[]
   paymentType: PaymentType
+  voucherCode?: string
 }
 
 export default function useCreateOrder() {

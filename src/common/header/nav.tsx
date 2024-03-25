@@ -64,7 +64,7 @@ export default function Nav({ user }: NavProps) {
               className=" group relative flex items-center px-4"
             >
               <Link
-                className={`flex items-center gap-1 text-sm font-medium ${
+                className={`flex items-center gap-1 text-[13px] font-medium ${
                   item.url === '/forum'
                     ? ' bg-messenger bg-clip-text font-semibold text-transparent'
                     : ''

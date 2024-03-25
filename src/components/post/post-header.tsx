@@ -1,8 +1,10 @@
+'use client'
+
 import dayjs from 'dayjs'
 
 import relativeTime from 'dayjs/plugin/relativeTime'
 
-import Icon from '@/common/icons'
+import Link from 'next/link'
 
 import { usePostItemContext } from '@/context/post-item'
 
@@ -15,7 +17,7 @@ export default function PostHeader() {
   const { post } = usePostItemContext()
   return (
     <header className="flex items-center justify-between px-4">
-      <section className="flex gap-2">
+      <Link href={`/user/${post?.postAuthorId}`} className="flex gap-2">
         <Avatar
           src={post?.postAuthorAvatar ?? ''}
           username={post?.postAuthorName}
@@ -26,7 +28,7 @@ export default function PostHeader() {
             {dayjs(post?.createdAt).fromNow()}
           </p>
         </div>
-      </section>
+      </Link>
 
       <PostAction />
     </header>

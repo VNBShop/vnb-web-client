@@ -1,30 +1,64 @@
 'use client'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
 
+import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+
+import { z } from 'zod'
 
 import Empty from '@/common/empty'
 import Icon from '@/common/icons'
 import Spiner from '@/common/spiner'
 import OrderSkeleton from '@/components/skeletons/order-skeleton'
 import { Button } from '@/components/ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
 import OrderAction from '@/contents/ecommerce/order/order-action'
 
+import useAddVoucher from '@/hooks/order/useAddVoucher'
 import useCreateOrder, {
   CreateOrderPayload,
 } from '@/hooks/order/useCreateOrder'
 import useFetchUser from '@/hooks/user/useFetchUser'
+
+import { cn } from '@/lib/utils'
 
 import { errorFallback } from '../../../public/common'
 import { DataResponse } from '../../../types'
 import { Cart } from '../../../types/order'
 import { User } from '../../../types/user'
 
+const VoucherSchema = z.object({
+  voucherCode: z.string().min(1, {
+    message: 'Please enter voucher code!',
+  }),
+})
+
+type InputVoucher = z.infer<typeof VoucherSchema>
+
 export default function OrderPage() {
   const deliveryRef = useRef<HTMLDivElement | null>(null)
+
+  const [total, setTotal] = useState(0)
+  const [discout, setDiscount] = useState(0)
+  const [voucherCode, setVoucherCode] = useState('')
+
+  const form = useForm<InputVoucher>({
+    resolver: zodResolver(VoucherSchema),
+    defaultValues: {
+      voucherCode: '',
+    },
+  })
 
   const {
     data: user,
@@ -67,6 +101,7 @@ export default function OrderPage() {
     const payload: CreateOrderPayload = {
       cartIds: carts.map((cart) => cart.cartId),
       paymentType: 'CASH',
+      voucherCode: voucherCode,
     }
 
     onCreateOrder(payload)
@@ -94,10 +129,55 @@ export default function OrderPage() {
     const payload: CreateOrderPayload = {
       cartIds: carts.map((cart) => cart.cartId),
       paymentType: 'CREDIT',
+      voucherCode: voucherCode,
     }
 
     onCreateOrder(payload)
   }
+
+  const { loadingAddVoucher, onAddVoucher } = useAddVoucher({
+    onSuccess: ({
+      percent,
+      voucherCode,
+    }: {
+      percent: number
+      voucherCode: string
+    }) => {
+      const discountAmount =
+        carts?.reduce(
+          (acc, curr) => acc + curr?.quantity * curr?.productPriceUnit,
+          0
+        ) * (percent ?? 0)
+
+      const totalFinal =
+        carts?.reduce(
+          (acc, curr) => acc + curr?.quantity * curr?.productPriceUnit,
+          0
+        ) - discountAmount
+      setTotal(totalFinal)
+      setDiscount(discountAmount)
+      setVoucherCode(voucherCode)
+      toast.success('Apply voucher successfully!')
+    },
+  })
+
+  const onSubmitAddVoucher = ({ voucherCode }: InputVoucher) => {
+    if (!voucherCode) return
+    onAddVoucher({
+      voucherCode,
+    })
+  }
+
+  useEffect(() => {
+    if (!!carts?.length) {
+      const total = carts?.reduce(
+        (acc, curr) => acc + curr?.quantity * curr?.productPriceUnit,
+        0
+      )
+
+      setTotal(total)
+    }
+  }, [carts])
 
   return fetchingCarts || fetchingUser || loadingCarts || loadingUser ? (
     <OrderSkeleton />
@@ -184,6 +264,45 @@ export default function OrderPage() {
             <div className="top-[60px] hidden h-[300px] w-[1px] bg-gray-200 lg:sticky lg:block"></div>
 
             <article className="top-[80px] -mt-1 w-full flex-1 space-y-3 lg:sticky">
+              <Form {...form}>
+                <form
+                  onSubmit={form.handleSubmit(onSubmitAddVoucher)}
+                  className="flex items-center gap-2"
+                >
+                  <FormField
+                    control={form.control}
+                    name="voucherCode"
+                    render={({ field }) => (
+                      <FormItem className="flex-1">
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Add voucher"
+                            className="h-10 flex-1 text-sm focus:ring-1"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <div>
+                    <Button
+                      disabled={loadingAddVoucher || loading}
+                      size="sm"
+                      type="submit"
+                      variant="outline"
+                      className="h-10 space-x-1 rounded-lg px-5"
+                    >
+                      {loadingAddVoucher && <Spiner size={16} />}
+                      <span> Add</span>
+                    </Button>
+                    {!!form?.formState?.errors?.voucherCode?.message && (
+                      <div> &nbsp;</div>
+                    )}
+                  </div>
+                </form>
+              </Form>
               <div className="flex items-center justify-between text-sm">
                 <p>Shiping: </p>
                 <p>Free</p>
@@ -193,11 +312,9 @@ export default function OrderPage() {
                 <p>VAT</p>
               </div>
 
-              <hr />
-
               <div className="flex items-center justify-between text-sm">
-                <p>Total: </p>
-                <p className=" font-medium text-secondary">
+                <p>Total temp: </p>
+                <p>
                   {carts
                     ?.reduce(
                       (acc, curr) =>
@@ -211,11 +328,34 @@ export default function OrderPage() {
                 </p>
               </div>
 
+              <div className="flex items-center justify-between text-sm">
+                <p>Discount: </p>
+                <p className={cn(discout > 0 && 'text-success')}>
+                  -{' '}
+                  {discout?.toLocaleString('vi-VI', {
+                    currency: 'VND',
+                    style: 'currency',
+                  })}
+                </p>
+              </div>
+
+              <hr />
+
+              <div className="flex items-center justify-between text-sm">
+                <p>Total: </p>
+                <p className=" font-medium text-secondary">
+                  {total?.toLocaleString('vi-VI', {
+                    currency: 'VND',
+                    style: 'currency',
+                  })}
+                </p>
+              </div>
+
               <section className="!mt-7 space-y-4">
                 <Button
                   className="w-full space-x-1"
                   onClick={onSubmit}
-                  disabled={loading}
+                  disabled={loading || loadingAddVoucher}
                 >
                   {loading && <Spiner size={16} />}
                   <span> Cash on Delivery</span>
@@ -225,7 +365,7 @@ export default function OrderPage() {
                 <Button
                   variant="outline"
                   className="flex w-full gap-1"
-                  disabled={loading}
+                  disabled={loading || loadingAddVoucher}
                   onClick={onCheckoutVNpay}
                 >
                   {loading && <Spiner size={16} />}

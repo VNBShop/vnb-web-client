@@ -54,9 +54,9 @@ export default function ProductCard({
               : null}
           </p>
 
-          <section className="flex items-center gap-2">
+          {/* <section className="flex items-center gap-2">
             <Icon name="HeartOutline" size={23} />
-          </section>
+          </section> */}
         </section>
       </section>
     </article>

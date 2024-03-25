@@ -153,12 +153,10 @@ export default function ProductAction({ brands }: ProductActionProps) {
             variant="outline"
             size="sm"
             onClick={() => {
-              if (typeof window !== 'undefined') {
-                window.history.replaceState(null, '', pathname)
-              }
               setBrandIds(null)
               setPriceRange([0, 1000])
               setStoreIds(null)
+              router.push(pathname)
             }}
           >
             Clear filter

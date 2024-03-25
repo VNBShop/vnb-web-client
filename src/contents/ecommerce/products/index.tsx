@@ -79,7 +79,7 @@ export default function Products({
         <ProductHeader title={title} desciption={desciption} />
         <ProductAction brands={brands} stores={stores} />
       </section>
-      <ul className=" mt-7 grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-5">
+      <ul className=" mt-7 grid grid-cols-2 gap-10 md:grid-cols-3 lg:grid-cols-5">
         {!!products?.length && !isError
           ? products.map((product) => (
               <li key={product.productId}>

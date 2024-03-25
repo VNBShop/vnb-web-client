@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+
+import { toast } from 'sonner'
+
 import Icon from '@/common/icons'
 import { usePostItemContext } from '@/context/post-item'
 import useLikePost from '@/hooks/forum/useLikePost'
@@ -85,10 +89,15 @@ export default function PostInteraction() {
           <span className="text-sm font-medium text-gray-600">Commnents</span>
         </div>
 
-        <div className="flex flex-1 items-center justify-center gap-1 rounded-md py-[6px] hover:cursor-pointer lg:hover:bg-gray-100">
-          <Icon name="ShareOutline" size={20} />
-          <span className="text-sm font-medium text-gray-600">Share</span>
-        </div>
+        <CopyToClipboard
+          text={`http://localhost:3000/forum/${post?.postId}`}
+          onCopy={() => toast.success('Link post has copied!')}
+        >
+          <div className="flex flex-1 items-center justify-center gap-1 rounded-md py-[6px] hover:cursor-pointer lg:hover:bg-gray-100">
+            <Icon name="ShareOutline" size={20} />
+            <span className="text-sm font-medium text-gray-600">Share</span>
+          </div>
+        </CopyToClipboard>
       </section>
 
       <hr className="mt-1" />
