@@ -55,6 +55,7 @@ export type IconName =
   | 'PhotoPlus'
   | 'Report'
   | 'Saved'
+  | 'CommentFill'
 
 export default function Icon({
   name,
@@ -74,6 +75,46 @@ export default function Icon({
             fill={color}
             d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24c1.12.37 2.33.57 3.57.57c.55 0 1 .45 1 1V20c0 .55-.45 1-1 1c-9.39 0-17-7.61-17-17c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1c0 1.25.2 2.45.57 3.57c.11.35.03.74-.25 1.02l-2.2 2.2z"
           />
+        </svg>
+      )
+    }
+
+    case 'CommentFill': {
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={size}
+          height={size}
+          viewBox="0 0 24 24"
+        >
+          <g
+            fillOpacity="0"
+            stroke={color}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+          >
+            <path
+              fill={color}
+              strokeDasharray="68"
+              strokeDashoffset="68"
+              d="M3 19.5V4C3 3.44772 3.44772 3 4 3H20C20.5523 3 21 3.44772 21 4V16C21 16.5523 20.5523 17 20 17H5.5z"
+            >
+              <animate
+                fill="freeze"
+                attributeName="stroke-dashoffset"
+                dur="0.6s"
+                values="68;0"
+              />
+              <animate
+                fill="freeze"
+                attributeName="fill-opacity"
+                begin="0.6s"
+                dur="0.5s"
+                values="0;1"
+              />
+            </path>
+          </g>
         </svg>
       )
     }

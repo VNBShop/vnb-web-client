@@ -17,6 +17,7 @@ import { useUserContext } from '@/context/user'
 
 import useSignout from '@/hooks/commons/useSignout'
 
+import ChatNoti from './chat'
 import Notification from './notification'
 import ForumSearch from './search'
 
@@ -49,17 +50,7 @@ export default function ForumHeader() {
         <section className="flex items-center gap-4">
           <Notification />
 
-          {!pathname.startsWith('/conversation') ? (
-            <Link
-              href="/conversation"
-              className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 hover:cursor-pointer lg:hover:bg-gray-200"
-            >
-              <Icon name="Plane" size={23} />
-              <div className="absolute -right-1 -top-1 flex h-4 w-4  items-center justify-center rounded-full bg-secondary text-[10px] text-white">
-                12
-              </div>
-            </Link>
-          ) : null}
+          <ChatNoti />
           <div className="relative h-10 w-10 rounded-full hover:cursor-pointer ">
             <Menu
               as="div"

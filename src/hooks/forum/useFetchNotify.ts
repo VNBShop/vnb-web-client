@@ -29,7 +29,8 @@ export default function useFetchNotify() {
 
       if (res?.data?.success) {
         return {
-          notifications: res?.data?.metadata?.messages?.notifications,
+          notifications: res?.data?.metadata?.messages
+            ?.notifications as Notification[],
           hasNextPage: !!res?.data?.metadata?.nextPage ?? false,
         }
       } else {
@@ -37,6 +38,9 @@ export default function useFetchNotify() {
       }
     },
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
+    refetchIntervalInBackground: false,
   })
 
   const onFetchNextPage = () => {
@@ -44,8 +48,11 @@ export default function useFetchNotify() {
   }
 
   useEffect(() => {
+    console.log('re-render')
+
     setNotifys((prev) => [...prev, ...(data?.notifications ?? [])])
-  }, [data?.notifications])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.notifications?.length])
 
   return {
     notifys,

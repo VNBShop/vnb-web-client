@@ -57,8 +57,11 @@ export default function Notification() {
     const onReceiveNoti = (notify: SocketProps<Notification>) => {
       console.log('notify >>>>', notify)
 
-      if (notify?.type === 'NOTIFICATION')
-        setNotifys((prev) => [notify?.data, ...prev])
+      if (notify?.type === 'NOTIFICATION') {
+        setNotifys((prev) => {
+          return [...([notify?.data] ?? []), ...prev]
+        })
+      }
     }
 
     socket?.on('receive_notification', onReceiveNoti)
@@ -104,14 +107,38 @@ export default function Notification() {
                 as="div"
                 className="flex items-center gap-2 rounded-md p-2 text-sm font-medium hover:cursor-pointer hover:bg-gray-100"
               >
-                <figure className=" relative h-11 w-11 overflow-hidden rounded-full">
+                <figure className=" relative h-11 w-11 rounded-full">
                   <Image
                     alt="avt"
                     src={noti?.actorAvatar ?? logo}
                     fill
                     sizes="100vw"
-                    className=" object-cover"
+                    className=" rounded-full object-cover"
                   />
+
+                  {
+                    <div
+                      className="absolute -bottom-1 -right-[6px] flex h-5 w-5 items-center justify-center rounded-full bg-success text-white"
+                      style={{
+                        backgroundColor: noti?.content?.includes('commented')
+                          ? '#4BB543'
+                          : noti?.content?.includes('reacted')
+                          ? '#ff2461'
+                          : '#40A2D8',
+                      }}
+                    >
+                      <Icon
+                        name={
+                          noti?.content?.includes('commented')
+                            ? 'CommentFill'
+                            : noti?.content?.includes('reacted')
+                            ? 'Heart'
+                            : 'Bell'
+                        }
+                        size={12}
+                      />
+                    </div>
+                  }
                 </figure>
                 <div className="flex-1">
                   <span>{noti?.actorName ?? 'VNB'}</span>
