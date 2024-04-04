@@ -27,7 +27,6 @@ export default function PostSaved() {
 
   const { loadingUnsave, onUnsavePost } = useUnsavePost({
     onSuccess() {},
-    pageKey: ['get-posts-saved'],
   })
 
   const { ref, inView } = useInView({

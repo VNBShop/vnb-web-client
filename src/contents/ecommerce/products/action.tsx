@@ -68,7 +68,7 @@ export default function ProductAction({ brands }: ProductActionProps) {
 
   const [filterContainer, setFilterContainer] = useState(false)
 
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000])
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000000])
   const [brandIds, setBrandIds] = useState<number[] | null>(
     brand_ids?.split('.').map(Number) ?? null
   )

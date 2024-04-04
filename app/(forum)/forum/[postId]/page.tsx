@@ -25,7 +25,9 @@ export default function PostDetail({ params: { postId } }: IProps) {
 
   return (
     <section className=" mx-auto mt-10 max-w-[650px]">
-      {!!post && <PostItem isDetail post={post} />}
+      {!!post && (
+        <PostItem isDetail post={post} pageKey={['get-post', postId]} />
+      )}
       {isPending && !post && <PostCardSkeleton length={1} />}
     </section>
   )

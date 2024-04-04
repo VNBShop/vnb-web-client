@@ -78,51 +78,35 @@ export default function ConversationForm({
     <Form {...form}>
       <form
         action=""
-        className="flex items-center gap-3 px-2 py-1"
+        className="w-full"
         onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
         {...props}
       >
-        <div className="h-9 w-9 rounded-full p-1 hover:cursor-pointer lg:hover:bg-gray-100">
-          <input type="file" className="hidden" id="file" />
-          <label
-            htmlFor="file"
-            className="flex h-full w-full items-center justify-center hover:cursor-pointer"
+        <section className="flex w-full items-center gap-3 px-2 py-1">
+          <FormField
+            name="chat"
+            control={form.control}
+            render={({ field }) => (
+              <FormControl>
+                <FormItem className="flex-1">
+                  <Input
+                    {...field}
+                    autoComplete="off"
+                    placeholder="Aa"
+                    className="h-auto flex-1 rounded-full bg-gray-100 p-2 px-3 py-2 text-sm"
+                  />
+                </FormItem>
+              </FormControl>
+            )}
+          />
+
+          <button
+            type="submit"
+            className="flex h-9 w-9 items-center justify-center rounded-full p-1 lg:hover:bg-gray-100"
           >
-            <Icon name="Photo" size={20} />
-          </label>
-        </div>
-
-        <FormField
-          name="chat"
-          control={form.control}
-          render={({ field }) => (
-            <FormControl>
-              <FormItem className="flex-1">
-                <Input
-                  {...field}
-                  autoComplete="off"
-                  placeholder="Aa"
-                  className="h-auto flex-1 rounded-full bg-gray-100 p-2 px-3 py-2 text-sm"
-                />
-              </FormItem>
-            </FormControl>
-          )}
-        />
-
-        {/* <input
-          type="text"
-          name="chat"
-          placeholder="Aa"
-          {...form.control}
-          className=" focus-within:outline-none"
-        /> */}
-
-        <button
-          type="submit"
-          className="flex h-9 w-9 items-center justify-center rounded-full p-1 lg:hover:bg-gray-100"
-        >
-          <Icon name="Plane" size={20} />
-        </button>
+            <Icon name="Plane" size={20} />
+          </button>
+        </section>
       </form>
     </Form>
   )

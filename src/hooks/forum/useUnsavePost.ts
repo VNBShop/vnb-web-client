@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
+import { usePostItemContext } from '@/context/post-item'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataError, DataResponse } from '../../../types'
@@ -15,12 +16,13 @@ type UnsavePostPayload = {
 
 type IProps = {
   onSuccess?: () => void
-  pageKey: QueryKey | undefined
 }
 
-export default function useUnsavePost({ onSuccess, pageKey }: IProps) {
+export default function useUnsavePost({ onSuccess }: IProps) {
   const axios = useAxiosPrivate()
   const client = useQueryClient()
+
+  const { pageKey } = usePostItemContext()
 
   const { mutate, isPending } = useMutation<
     DataResponse,

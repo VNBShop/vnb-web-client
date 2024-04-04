@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 
 import useAxiosPrivate from '@/api/private/hooks/useAxiosPrivate'
 
+import { usePostItemContext } from '@/context/post-item'
 import { FORUM_SERVICE } from '@/lib/microservice'
 
 import { DataError, DataResponse } from '../../../types'
@@ -23,6 +24,8 @@ export default function useReportPost({ onSuccess, isDetail }: IProps = {}) {
   const axios = useAxiosPrivate()
   const client = useQueryClient()
 
+  const { pageKey } = usePostItemContext()
+
   const { mutate, isPending } = useMutation<
     DataResponse,
     DataError,
@@ -33,15 +36,9 @@ export default function useReportPost({ onSuccess, isDetail }: IProps = {}) {
     },
     onSuccess: async (response, payload) => {
       if (response?.data?.success) {
-        if (isDetail) {
-          await client.invalidateQueries({
-            queryKey: ['get-post', payload?.postId],
-          })
-        } else {
-          await client.invalidateQueries({
-            queryKey: ['get-posts'],
-          })
-        }
+        await client.invalidateQueries({
+          queryKey: pageKey,
+        })
 
         toast.success('Post has been reported!')
         onSuccess?.()

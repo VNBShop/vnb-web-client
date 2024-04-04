@@ -34,6 +34,9 @@ export default function useFetchChats() {
       }
     },
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchIntervalInBackground: false,
+    refetchInterval: false,
   })
 
   const onFetchNextPage = () => {
@@ -41,8 +44,25 @@ export default function useFetchChats() {
   }
 
   useEffect(() => {
-    setMessages((prev) => [...prev, ...(data?.messages ?? [])])
-  }, [data?.messages])
+    setMessages((prev) => {
+      const mess = [...prev, ...(data?.messages ?? [])]
+
+      const uniqueIds = new Set()
+
+      const newMess = mess?.filter((m) => {
+        if (!uniqueIds.has(m.receiverId)) {
+          uniqueIds.add(m.receiverId)
+          return true
+        } else {
+          return false
+        }
+      })
+
+      return newMess
+    })
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.messages?.length])
 
   return {
     messages,

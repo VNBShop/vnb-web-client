@@ -23,7 +23,7 @@ export default function PostAction() {
     setModalDeletePost(false)
   }
 
-  const { post, isDetail } = usePostItemContext()
+  const { post, isDetail, pageKey } = usePostItemContext()
 
   const { loading, onDeletePost } = useDetetePost({
     onClose: onCloseModalDeletePost,
@@ -36,7 +36,6 @@ export default function PostAction() {
 
   const { loadingUnsave, onUnsavePost } = useUnsavePost({
     onSuccess: () => {},
-    pageKey: ['get-post', post?.postId],
   })
 
   const { loadingReport, onReportPost } = useReportPost({
